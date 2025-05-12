@@ -1,5 +1,6 @@
 const ROUTES = {
   home: "/",
+  auth: "/auth",
   goals_list: "/goals/list",
   goals_statistics: "/goals/statistics",
   calendar: "/calendar",
