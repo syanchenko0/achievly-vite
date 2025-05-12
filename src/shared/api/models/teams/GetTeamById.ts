@@ -3,16 +3,16 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { TeamDto } from '../TeamDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { TeamDto } from "../TeamDto";
 
-export type GetTeamById200 = TeamDto
+export type GetTeamById200 = TeamDto;
 
-export type GetTeamById400 = BadRequest
+export type GetTeamById400 = BadRequest;
 
-export type GetTeamByIdQueryResponse = GetTeamById200
+export type GetTeamByIdQueryResponse = GetTeamById200;
 
 export type GetTeamByIdQuery = {
-  Response: GetTeamById200
-  Errors: GetTeamById400
-}
+  Response: GetTeamById200;
+  Errors: GetTeamById400;
+};

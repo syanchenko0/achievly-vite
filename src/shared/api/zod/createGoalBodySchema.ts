@@ -3,19 +3,19 @@
  * Do not edit manually.
  */
 
-import { taskDtoSchema } from './taskDtoSchema.ts'
-import { z } from 'zod'
+import { taskDtoSchema } from "./taskDtoSchema";
+import { z } from "zod";
 
 export const createGoalBodySchema = z.object({
-  title: z.string().describe('Заголовок цели'),
-  category: z.string().describe('Категория цели'),
-  deadline_date: z.string().describe('Дата окончания цели').optional(),
-  note: z.string().describe('Примечание к цели').optional(),
+  title: z.string().describe("Заголовок цели"),
+  category: z.string().describe("Категория цели"),
+  deadline_date: z.string().describe("Дата окончания цели").optional(),
+  note: z.string().describe("Примечание к цели").optional(),
   tasks: z
     .array(z.lazy(() => taskDtoSchema))
-    .describe('Задачи цели')
+    .describe("Задачи цели")
     .nullable()
     .nullish(),
-})
+});
 
-export type CreateGoalBodySchema = z.infer<typeof createGoalBodySchema>
+export type CreateGoalBodySchema = z.infer<typeof createGoalBodySchema>;

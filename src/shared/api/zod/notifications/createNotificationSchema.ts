@@ -3,23 +3,35 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { createNotificationBodySchema } from '../createNotificationBodySchema.ts'
-import { notificationDtoSchema } from '../notificationDtoSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { createNotificationBodySchema } from "../createNotificationBodySchema";
+import { notificationDtoSchema } from "../notificationDtoSchema";
+import { z } from "zod";
 
-export const createNotification200Schema = z.lazy(() => notificationDtoSchema)
+export const createNotification200Schema = z.lazy(() => notificationDtoSchema);
 
-export type CreateNotification200Schema = z.infer<typeof createNotification200Schema>
+export type CreateNotification200Schema = z.infer<
+  typeof createNotification200Schema
+>;
 
-export const createNotification400Schema = z.lazy(() => badRequestSchema)
+export const createNotification400Schema = z.lazy(() => badRequestSchema);
 
-export type CreateNotification400Schema = z.infer<typeof createNotification400Schema>
+export type CreateNotification400Schema = z.infer<
+  typeof createNotification400Schema
+>;
 
-export const createNotificationMutationRequestSchema = z.lazy(() => createNotificationBodySchema)
+export const createNotificationMutationRequestSchema = z.lazy(
+  () => createNotificationBodySchema,
+);
 
-export type CreateNotificationMutationRequestSchema = z.infer<typeof createNotificationMutationRequestSchema>
+export type CreateNotificationMutationRequestSchema = z.infer<
+  typeof createNotificationMutationRequestSchema
+>;
 
-export const createNotificationMutationResponseSchema = z.lazy(() => createNotification200Schema)
+export const createNotificationMutationResponseSchema = z.lazy(
+  () => createNotification200Schema,
+);
 
-export type CreateNotificationMutationResponseSchema = z.infer<typeof createNotificationMutationResponseSchema>
+export type CreateNotificationMutationResponseSchema = z.infer<
+  typeof createNotificationMutationResponseSchema
+>;

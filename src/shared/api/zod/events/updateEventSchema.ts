@@ -3,29 +3,39 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { updateEventBodySchema } from '../updateEventBodySchema.ts'
-import { updateResultSchema } from '../updateResultSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { updateEventBodySchema } from "../updateEventBodySchema";
+import { updateResultSchema } from "../updateResultSchema";
+import { z } from "zod";
 
 export const updateEventPathParamsSchema = z.object({
   id: z.string(),
-})
+});
 
-export type UpdateEventPathParamsSchema = z.infer<typeof updateEventPathParamsSchema>
+export type UpdateEventPathParamsSchema = z.infer<
+  typeof updateEventPathParamsSchema
+>;
 
-export const updateEvent200Schema = z.lazy(() => updateResultSchema)
+export const updateEvent200Schema = z.lazy(() => updateResultSchema);
 
-export type UpdateEvent200Schema = z.infer<typeof updateEvent200Schema>
+export type UpdateEvent200Schema = z.infer<typeof updateEvent200Schema>;
 
-export const updateEvent400Schema = z.lazy(() => badRequestSchema)
+export const updateEvent400Schema = z.lazy(() => badRequestSchema);
 
-export type UpdateEvent400Schema = z.infer<typeof updateEvent400Schema>
+export type UpdateEvent400Schema = z.infer<typeof updateEvent400Schema>;
 
-export const updateEventMutationRequestSchema = z.lazy(() => updateEventBodySchema)
+export const updateEventMutationRequestSchema = z.lazy(
+  () => updateEventBodySchema,
+);
 
-export type UpdateEventMutationRequestSchema = z.infer<typeof updateEventMutationRequestSchema>
+export type UpdateEventMutationRequestSchema = z.infer<
+  typeof updateEventMutationRequestSchema
+>;
 
-export const updateEventMutationResponseSchema = z.lazy(() => updateEvent200Schema)
+export const updateEventMutationResponseSchema = z.lazy(
+  () => updateEvent200Schema,
+);
 
-export type UpdateEventMutationResponseSchema = z.infer<typeof updateEventMutationResponseSchema>
+export type UpdateEventMutationResponseSchema = z.infer<
+  typeof updateEventMutationResponseSchema
+>;

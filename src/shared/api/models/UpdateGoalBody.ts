@@ -3,42 +3,42 @@
  * Do not edit manually.
  */
 
-import type { TaskDto } from './TaskDto.ts'
+import type { TaskDto } from "./TaskDto";
 
 export type UpdateGoalBody = {
   /**
    * @description Заголовок цели
    * @type string | undefined
    */
-  title?: string
+  title?: string;
   /**
    * @description Категория цели
    * @type string | undefined
    */
-  category?: string
+  category?: string;
   /**
    * @description Статус цели
    * @type string | undefined
    */
-  status?: string
+  status?: string;
   /**
    * @description Дата окончания цели
    * @type string | undefined
    */
-  deadline_date?: string
+  deadline_date?: string;
   /**
    * @description Примечание к цели
    * @type string | undefined
    */
-  note?: string
+  note?: string;
   /**
    * @description Дата выполнения цели
    * @type string | undefined
    */
-  achieved_date?: string
+  achieved_date?: string;
   /**
    * @description Задачи цели
    * @type array
    */
-  tasks?: TaskDto[] | null
-}
+  tasks?: TaskDto[] | null;
+};

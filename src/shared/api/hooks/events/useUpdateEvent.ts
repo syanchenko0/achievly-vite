@@ -3,34 +3,54 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { UpdateEventMutationRequest, UpdateEventMutationResponse, UpdateEventPathParams, UpdateEvent400 } from '../../models/events/UpdateEvent.ts'
-import { useMutation } from '@tanstack/react-query'
-import { updateEventMutationResponseSchema, updateEventMutationRequestSchema } from '../../zod/events/updateEventSchema.ts'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  UpdateEventMutationRequest,
+  UpdateEventMutationResponse,
+  UpdateEventPathParams,
+  UpdateEvent400,
+} from "../../models/events/UpdateEvent";
+import { useMutation } from "@tanstack/react-query";
+import {
+  updateEventMutationResponseSchema,
+  updateEventMutationRequestSchema,
+} from "../../zod/events/updateEventSchema";
 
-export const updateEventMutationKey = () => [{ url: '/events/{id}' }] as const
+export const updateEventMutationKey = () => [{ url: "/events/{id}" }] as const;
 
-export type UpdateEventMutationKey = ReturnType<typeof updateEventMutationKey>
+export type UpdateEventMutationKey = ReturnType<typeof updateEventMutationKey>;
 
 /**
  * @summary Update event
  * {@link /events/:id}
  */
 export async function updateEvent(
-  { id, data }: { id: UpdateEventPathParams['id']; data: UpdateEventMutationRequest },
-  config: Partial<RequestConfig<UpdateEventMutationRequest>> & { client?: typeof client } = {},
+  {
+    id,
+    data,
+  }: { id: UpdateEventPathParams["id"]; data: UpdateEventMutationRequest },
+  config: Partial<RequestConfig<UpdateEventMutationRequest>> & {
+    client?: typeof client;
+  } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<UpdateEventMutationResponse, ResponseErrorConfig<UpdateEvent400>, UpdateEventMutationRequest>({
-    method: 'PATCH',
+  const res = await request<
+    UpdateEventMutationResponse,
+    ResponseErrorConfig<UpdateEvent400>,
+    UpdateEventMutationRequest
+  >({
+    method: "PATCH",
     url: `/events/${id}`,
     data: updateEventMutationRequestSchema.parse(data),
     ...requestConfig,
-  })
-  return updateEventMutationResponseSchema.parse(res.data)
+  });
+  return updateEventMutationResponseSchema.parse(res.data);
 }
 
 /**
@@ -42,29 +62,31 @@ export function useUpdateEvent<TContext>(
     mutation?: UseMutationOptions<
       UpdateEventMutationResponse,
       ResponseErrorConfig<UpdateEvent400>,
-      { id: UpdateEventPathParams['id']; data: UpdateEventMutationRequest },
+      { id: UpdateEventPathParams["id"]; data: UpdateEventMutationRequest },
       TContext
-    > & { client?: QueryClient }
-    client?: Partial<RequestConfig<UpdateEventMutationRequest>> & { client?: typeof client }
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<UpdateEventMutationRequest>> & {
+      client?: typeof client;
+    };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? updateEventMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? updateEventMutationKey();
 
   return useMutation<
     UpdateEventMutationResponse,
     ResponseErrorConfig<UpdateEvent400>,
-    { id: UpdateEventPathParams['id']; data: UpdateEventMutationRequest },
+    { id: UpdateEventPathParams["id"]; data: UpdateEventMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ id, data }) => {
-        return updateEvent({ id, data }, config)
+        return updateEvent({ id, data }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

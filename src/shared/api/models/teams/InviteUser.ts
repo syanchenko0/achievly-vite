@@ -3,19 +3,19 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { InviteUserBody } from '../InviteUserBody.ts'
+import type { BadRequest } from "../BadRequest";
+import type { InviteUserBody } from "../InviteUserBody";
 
-export type InviteUser200 = unknown
+export type InviteUser200 = unknown;
 
-export type InviteUser400 = BadRequest
+export type InviteUser400 = BadRequest;
 
-export type InviteUserMutationRequest = InviteUserBody
+export type InviteUserMutationRequest = InviteUserBody;
 
-export type InviteUserMutationResponse = InviteUser200
+export type InviteUserMutationResponse = InviteUser200;
 
 export type InviteUserMutation = {
-  Response: InviteUser200
-  Request: InviteUserMutationRequest
-  Errors: InviteUser400
-}
+  Response: InviteUser200;
+  Request: InviteUserMutationRequest;
+  Errors: InviteUser400;
+};

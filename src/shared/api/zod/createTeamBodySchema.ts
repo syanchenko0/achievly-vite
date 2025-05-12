@@ -3,10 +3,14 @@
  * Do not edit manually.
  */
 
-import { z } from 'zod'
+import { z } from "zod";
+import { ZOD_ERROR } from "@/app/constants/errors";
 
 export const createTeamBodySchema = z.object({
-  name: z.string().describe('Наименование команды'),
-})
+  name: z
+    .string(ZOD_ERROR)
 
-export type CreateTeamBodySchema = z.infer<typeof createTeamBodySchema>
+    .describe("Наименование команды"),
+});
+
+export type CreateTeamBodySchema = z.infer<typeof createTeamBodySchema>;

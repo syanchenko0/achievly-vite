@@ -3,26 +3,26 @@
  * Do not edit manually.
  */
 
-import type { UserDto } from './UserDto.ts'
+import type { UserDto } from "./UserDto";
 
 export type TeamDto = {
   /**
    * @description ID команды
    * @type number
    */
-  id: number
+  id: number;
   /**
    * @description Наименование команды
    * @type string
    */
-  name: string
+  name: string;
   /**
    * @description Создатель команды
    */
-  created_by: UserDto
+  created_by: UserDto;
   /**
    * @description Участники команды
    * @type array
    */
-  users: UserDto[]
-}
+  users: UserDto[];
+};

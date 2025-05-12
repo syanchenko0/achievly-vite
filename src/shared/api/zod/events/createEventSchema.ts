@@ -3,23 +3,31 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { createEventBodySchema } from '../createEventBodySchema.ts'
-import { eventDtoSchema } from '../eventDtoSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { createEventBodySchema } from "../createEventBodySchema";
+import { eventDtoSchema } from "../eventDtoSchema";
+import { z } from "zod";
 
-export const createEvent200Schema = z.lazy(() => eventDtoSchema)
+export const createEvent200Schema = z.lazy(() => eventDtoSchema);
 
-export type CreateEvent200Schema = z.infer<typeof createEvent200Schema>
+export type CreateEvent200Schema = z.infer<typeof createEvent200Schema>;
 
-export const createEvent400Schema = z.lazy(() => badRequestSchema)
+export const createEvent400Schema = z.lazy(() => badRequestSchema);
 
-export type CreateEvent400Schema = z.infer<typeof createEvent400Schema>
+export type CreateEvent400Schema = z.infer<typeof createEvent400Schema>;
 
-export const createEventMutationRequestSchema = z.lazy(() => createEventBodySchema)
+export const createEventMutationRequestSchema = z.lazy(
+  () => createEventBodySchema,
+);
 
-export type CreateEventMutationRequestSchema = z.infer<typeof createEventMutationRequestSchema>
+export type CreateEventMutationRequestSchema = z.infer<
+  typeof createEventMutationRequestSchema
+>;
 
-export const createEventMutationResponseSchema = z.lazy(() => createEvent200Schema)
+export const createEventMutationResponseSchema = z.lazy(
+  () => createEvent200Schema,
+);
 
-export type CreateEventMutationResponseSchema = z.infer<typeof createEventMutationResponseSchema>
+export type CreateEventMutationResponseSchema = z.infer<
+  typeof createEventMutationResponseSchema
+>;

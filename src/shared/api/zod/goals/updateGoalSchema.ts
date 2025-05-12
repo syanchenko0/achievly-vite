@@ -3,29 +3,39 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { updateGoalBodySchema } from '../updateGoalBodySchema.ts'
-import { updateResultSchema } from '../updateResultSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { updateGoalBodySchema } from "../updateGoalBodySchema";
+import { updateResultSchema } from "../updateResultSchema";
+import { z } from "zod";
 
 export const updateGoalPathParamsSchema = z.object({
   id: z.string(),
-})
+});
 
-export type UpdateGoalPathParamsSchema = z.infer<typeof updateGoalPathParamsSchema>
+export type UpdateGoalPathParamsSchema = z.infer<
+  typeof updateGoalPathParamsSchema
+>;
 
-export const updateGoal200Schema = z.lazy(() => updateResultSchema)
+export const updateGoal200Schema = z.lazy(() => updateResultSchema);
 
-export type UpdateGoal200Schema = z.infer<typeof updateGoal200Schema>
+export type UpdateGoal200Schema = z.infer<typeof updateGoal200Schema>;
 
-export const updateGoal400Schema = z.lazy(() => badRequestSchema)
+export const updateGoal400Schema = z.lazy(() => badRequestSchema);
 
-export type UpdateGoal400Schema = z.infer<typeof updateGoal400Schema>
+export type UpdateGoal400Schema = z.infer<typeof updateGoal400Schema>;
 
-export const updateGoalMutationRequestSchema = z.lazy(() => updateGoalBodySchema)
+export const updateGoalMutationRequestSchema = z.lazy(
+  () => updateGoalBodySchema,
+);
 
-export type UpdateGoalMutationRequestSchema = z.infer<typeof updateGoalMutationRequestSchema>
+export type UpdateGoalMutationRequestSchema = z.infer<
+  typeof updateGoalMutationRequestSchema
+>;
 
-export const updateGoalMutationResponseSchema = z.lazy(() => updateGoal200Schema)
+export const updateGoalMutationResponseSchema = z.lazy(
+  () => updateGoal200Schema,
+);
 
-export type UpdateGoalMutationResponseSchema = z.infer<typeof updateGoalMutationResponseSchema>
+export type UpdateGoalMutationResponseSchema = z.infer<
+  typeof updateGoalMutationResponseSchema
+>;

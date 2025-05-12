@@ -3,22 +3,30 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { inviteUserBodySchema } from '../inviteUserBodySchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { inviteUserBodySchema } from "../inviteUserBodySchema";
+import { z } from "zod";
 
-export const inviteUser200Schema = z.unknown()
+export const inviteUser200Schema = z.unknown();
 
-export type InviteUser200Schema = z.infer<typeof inviteUser200Schema>
+export type InviteUser200Schema = z.infer<typeof inviteUser200Schema>;
 
-export const inviteUser400Schema = z.lazy(() => badRequestSchema)
+export const inviteUser400Schema = z.lazy(() => badRequestSchema);
 
-export type InviteUser400Schema = z.infer<typeof inviteUser400Schema>
+export type InviteUser400Schema = z.infer<typeof inviteUser400Schema>;
 
-export const inviteUserMutationRequestSchema = z.lazy(() => inviteUserBodySchema)
+export const inviteUserMutationRequestSchema = z.lazy(
+  () => inviteUserBodySchema,
+);
 
-export type InviteUserMutationRequestSchema = z.infer<typeof inviteUserMutationRequestSchema>
+export type InviteUserMutationRequestSchema = z.infer<
+  typeof inviteUserMutationRequestSchema
+>;
 
-export const inviteUserMutationResponseSchema = z.lazy(() => inviteUser200Schema)
+export const inviteUserMutationResponseSchema = z.lazy(
+  () => inviteUser200Schema,
+);
 
-export type InviteUserMutationResponseSchema = z.infer<typeof inviteUserMutationResponseSchema>
+export type InviteUserMutationResponseSchema = z.infer<
+  typeof inviteUserMutationResponseSchema
+>;

@@ -3,14 +3,14 @@
  * Do not edit manually.
  */
 
-import { userDtoSchema } from './userDtoSchema.ts'
-import { z } from 'zod'
+import { userDtoSchema } from "./userDtoSchema";
+import { z } from "zod";
 
 export const teamDtoSchema = z.object({
-  id: z.number().describe('ID команды'),
-  name: z.string().describe('Наименование команды'),
-  created_by: z.lazy(() => userDtoSchema).describe('Создатель команды'),
-  users: z.array(z.lazy(() => userDtoSchema)).describe('Участники команды'),
-})
+  id: z.number().describe("ID команды"),
+  name: z.string().describe("Наименование команды"),
+  created_by: z.lazy(() => userDtoSchema).describe("Создатель команды"),
+  users: z.array(z.lazy(() => userDtoSchema)).describe("Участники команды"),
+});
 
-export type TeamDtoSchema = z.infer<typeof teamDtoSchema>
+export type TeamDtoSchema = z.infer<typeof teamDtoSchema>;

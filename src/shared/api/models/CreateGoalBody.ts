@@ -3,32 +3,32 @@
  * Do not edit manually.
  */
 
-import type { TaskDto } from './TaskDto.ts'
+import type { TaskDto } from "./TaskDto";
 
 export type CreateGoalBody = {
   /**
    * @description Заголовок цели
    * @type string
    */
-  title: string
+  title: string;
   /**
    * @description Категория цели
    * @type string
    */
-  category: string
+  category: string;
   /**
    * @description Дата окончания цели
    * @type string | undefined
    */
-  deadline_date?: string
+  deadline_date?: string;
   /**
    * @description Примечание к цели
    * @type string | undefined
    */
-  note?: string
+  note?: string;
   /**
    * @description Задачи цели
    * @type array
    */
-  tasks?: TaskDto[] | null
-}
+  tasks?: TaskDto[] | null;
+};

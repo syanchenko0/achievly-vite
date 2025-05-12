@@ -3,18 +3,20 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { eventDtoSchema } from '../eventDtoSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { eventDtoSchema } from "../eventDtoSchema";
+import { z } from "zod";
 
-export const getEvents200Schema = z.array(z.lazy(() => eventDtoSchema))
+export const getEvents200Schema = z.array(z.lazy(() => eventDtoSchema));
 
-export type GetEvents200Schema = z.infer<typeof getEvents200Schema>
+export type GetEvents200Schema = z.infer<typeof getEvents200Schema>;
 
-export const getEvents400Schema = z.lazy(() => badRequestSchema)
+export const getEvents400Schema = z.lazy(() => badRequestSchema);
 
-export type GetEvents400Schema = z.infer<typeof getEvents400Schema>
+export type GetEvents400Schema = z.infer<typeof getEvents400Schema>;
 
-export const getEventsQueryResponseSchema = z.lazy(() => getEvents200Schema)
+export const getEventsQueryResponseSchema = z.lazy(() => getEvents200Schema);
 
-export type GetEventsQueryResponseSchema = z.infer<typeof getEventsQueryResponseSchema>
+export type GetEventsQueryResponseSchema = z.infer<
+  typeof getEventsQueryResponseSchema
+>;

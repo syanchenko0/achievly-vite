@@ -3,16 +3,26 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { CreateEventMutationRequest, CreateEventMutationResponse, CreateEvent400 } from '../../models/events/CreateEvent.ts'
-import { useMutation } from '@tanstack/react-query'
-import { createEventMutationResponseSchema, createEventMutationRequestSchema } from '../../zod/events/createEventSchema.ts'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  CreateEventMutationRequest,
+  CreateEventMutationResponse,
+  CreateEvent400,
+} from "../../models/events/CreateEvent";
+import { useMutation } from "@tanstack/react-query";
+import {
+  createEventMutationResponseSchema,
+  createEventMutationRequestSchema,
+} from "../../zod/events/createEventSchema";
 
-export const createEventMutationKey = () => [{ url: '/events' }] as const
+export const createEventMutationKey = () => [{ url: "/events" }] as const;
 
-export type CreateEventMutationKey = ReturnType<typeof createEventMutationKey>
+export type CreateEventMutationKey = ReturnType<typeof createEventMutationKey>;
 
 /**
  * @summary Create event
@@ -20,17 +30,23 @@ export type CreateEventMutationKey = ReturnType<typeof createEventMutationKey>
  */
 export async function createEvent(
   { data }: { data: CreateEventMutationRequest },
-  config: Partial<RequestConfig<CreateEventMutationRequest>> & { client?: typeof client } = {},
+  config: Partial<RequestConfig<CreateEventMutationRequest>> & {
+    client?: typeof client;
+  } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<CreateEventMutationResponse, ResponseErrorConfig<CreateEvent400>, CreateEventMutationRequest>({
-    method: 'POST',
+  const res = await request<
+    CreateEventMutationResponse,
+    ResponseErrorConfig<CreateEvent400>,
+    CreateEventMutationRequest
+  >({
+    method: "POST",
     url: `/events`,
     data: createEventMutationRequestSchema.parse(data),
     ...requestConfig,
-  })
-  return createEventMutationResponseSchema.parse(res.data)
+  });
+  return createEventMutationResponseSchema.parse(res.data);
 }
 
 /**
@@ -39,24 +55,36 @@ export async function createEvent(
  */
 export function useCreateEvent<TContext>(
   options: {
-    mutation?: UseMutationOptions<CreateEventMutationResponse, ResponseErrorConfig<CreateEvent400>, { data: CreateEventMutationRequest }, TContext> & {
-      client?: QueryClient
-    }
-    client?: Partial<RequestConfig<CreateEventMutationRequest>> & { client?: typeof client }
+    mutation?: UseMutationOptions<
+      CreateEventMutationResponse,
+      ResponseErrorConfig<CreateEvent400>,
+      { data: CreateEventMutationRequest },
+      TContext
+    > & {
+      client?: QueryClient;
+    };
+    client?: Partial<RequestConfig<CreateEventMutationRequest>> & {
+      client?: typeof client;
+    };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? createEventMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? createEventMutationKey();
 
-  return useMutation<CreateEventMutationResponse, ResponseErrorConfig<CreateEvent400>, { data: CreateEventMutationRequest }, TContext>(
+  return useMutation<
+    CreateEventMutationResponse,
+    ResponseErrorConfig<CreateEvent400>,
+    { data: CreateEventMutationRequest },
+    TContext
+  >(
     {
       mutationFn: async ({ data }) => {
-        return createEvent({ data }, config)
+        return createEvent({ data }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

@@ -3,22 +3,22 @@
  * Do not edit manually.
  */
 
-import { taskDtoSchema } from './taskDtoSchema.ts'
-import { z } from 'zod'
+import { taskDtoSchema } from "./taskDtoSchema";
+import { z } from "zod";
 
 export const goalDtoSchema = z.object({
-  id: z.number().describe('ID цели'),
-  title: z.string().describe('Заголовок цели'),
-  category: z.string().describe('Категория цели'),
-  status: z.string().describe('Статус цели'),
-  deadline_date: z.string().describe('Дата окончания цели').optional(),
-  note: z.string().describe('Примечание к цели').optional(),
-  achieved_date: z.string().describe('Дата выполнения цели').optional(),
+  id: z.number().describe("ID цели"),
+  title: z.string().describe("Заголовок цели"),
+  category: z.string().describe("Категория цели"),
+  status: z.string().describe("Статус цели"),
+  deadline_date: z.string().describe("Дата окончания цели").optional(),
+  note: z.string().describe("Примечание к цели").optional(),
+  achieved_date: z.string().describe("Дата выполнения цели").optional(),
   tasks: z
     .array(z.lazy(() => taskDtoSchema))
-    .describe('Задачи цели')
+    .describe("Задачи цели")
     .nullable()
     .nullish(),
-})
+});
 
-export type GoalDtoSchema = z.infer<typeof goalDtoSchema>
+export type GoalDtoSchema = z.infer<typeof goalDtoSchema>;

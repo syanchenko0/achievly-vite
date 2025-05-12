@@ -3,56 +3,56 @@
  * Do not edit manually.
  */
 
-import type { EventEntity } from './EventEntity.ts'
-import type { GoalEntity } from './GoalEntity.ts'
-import type { NotificationEntity } from './NotificationEntity.ts'
-import type { ProjectEntity } from './ProjectEntity.ts'
-import type { TeamEntity } from './TeamEntity.ts'
+import type { EventEntity } from "./EventEntity";
+import type { GoalEntity } from "./GoalEntity";
+import type { NotificationEntity } from "./NotificationEntity";
+import type { ProjectEntity } from "./ProjectEntity";
+import type { TeamEntity } from "./TeamEntity";
 
 export type UserDto = {
   /**
    * @description ID пользователя
    * @type number
    */
-  id: number
+  id: number;
   /**
    * @description Имя пользователя
    * @type string
    */
-  username: string
+  username: string;
   /**
    * @description Email пользователя
    * @type string
    */
-  email: string
+  email: string;
   /**
    * @description Изображение пользователя
    * @type string
    */
-  picture_url: string
+  picture_url: string;
   /**
    * @description События в календаре
    * @type array
    */
-  events?: EventEntity[] | null
+  events?: EventEntity[] | null;
   /**
    * @description Цели пользователя
    * @type array
    */
-  goals?: GoalEntity[] | null
+  goals?: GoalEntity[] | null;
   /**
    * @description Уведомления пользователя
    * @type array
    */
-  notifications?: NotificationEntity[] | null
+  notifications?: NotificationEntity[] | null;
   /**
    * @description Проекты пользователя
    * @type array
    */
-  projects?: ProjectEntity[] | null
+  projects?: ProjectEntity[] | null;
   /**
    * @description Команды пользователя
    * @type array
    */
-  teams?: TeamEntity[] | null
-}
+  teams?: TeamEntity[] | null;
+};

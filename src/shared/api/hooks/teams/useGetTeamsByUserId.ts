@@ -3,41 +3,67 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
-import type { GetTeamsByUserIdQueryResponse, GetTeamsByUserId400 } from '../../models/teams/GetTeamsByUserId.ts'
-import { queryOptions, useQuery } from '@tanstack/react-query'
-import { getTeamsByUserIdQueryResponseSchema } from '../../zod/teams/getTeamsByUserIdSchema.ts'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type {
+  QueryKey,
+  QueryClient,
+  QueryObserverOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import type {
+  GetTeamsByUserIdQueryResponse,
+  GetTeamsByUserId400,
+} from "../../models/teams/GetTeamsByUserId";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { getTeamsByUserIdQueryResponseSchema } from "../../zod/teams/getTeamsByUserIdSchema";
 
-export const getTeamsByUserIdQueryKey = () => [{ url: '/teams' }] as const
+export const getTeamsByUserIdQueryKey = () => [{ url: "/teams" }] as const;
 
-export type GetTeamsByUserIdQueryKey = ReturnType<typeof getTeamsByUserIdQueryKey>
+export type GetTeamsByUserIdQueryKey = ReturnType<
+  typeof getTeamsByUserIdQueryKey
+>;
 
 /**
  * @summary Get teams by user id
  * {@link /teams}
  */
-export async function getTeamsByUserId(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const { client: request = client, ...requestConfig } = config
+export async function getTeamsByUserId(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<GetTeamsByUserIdQueryResponse, ResponseErrorConfig<GetTeamsByUserId400>, unknown>({
-    method: 'GET',
+  const res = await request<
+    GetTeamsByUserIdQueryResponse,
+    ResponseErrorConfig<GetTeamsByUserId400>,
+    unknown
+  >({
+    method: "GET",
     url: `/teams`,
     ...requestConfig,
-  })
-  return getTeamsByUserIdQueryResponseSchema.parse(res.data)
+  });
+  return getTeamsByUserIdQueryResponseSchema.parse(res.data);
 }
 
-export function getTeamsByUserIdQueryOptions(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const queryKey = getTeamsByUserIdQueryKey()
-  return queryOptions<GetTeamsByUserIdQueryResponse, ResponseErrorConfig<GetTeamsByUserId400>, GetTeamsByUserIdQueryResponse, typeof queryKey>({
+export function getTeamsByUserIdQueryOptions(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const queryKey = getTeamsByUserIdQueryKey();
+  return queryOptions<
+    GetTeamsByUserIdQueryResponse,
+    ResponseErrorConfig<GetTeamsByUserId400>,
+    GetTeamsByUserIdQueryResponse,
+    typeof queryKey
+  >({
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal
-      return getTeamsByUserId(config)
+      config.signal = signal;
+      return getTeamsByUserId(config);
     },
-  })
+  });
 }
 
 /**
@@ -50,25 +76,40 @@ export function useGetTeamsByUserId<
   TQueryKey extends QueryKey = GetTeamsByUserIdQueryKey,
 >(
   options: {
-    query?: Partial<QueryObserverOptions<GetTeamsByUserIdQueryResponse, ResponseErrorConfig<GetTeamsByUserId400>, TData, TQueryData, TQueryKey>> & {
-      client?: QueryClient
-    }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    query?: Partial<
+      QueryObserverOptions<
+        GetTeamsByUserIdQueryResponse,
+        ResponseErrorConfig<GetTeamsByUserId400>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & {
+      client?: QueryClient;
+    };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? getTeamsByUserIdQueryKey()
+  const {
+    query: { client: queryClient, ...queryOptions } = {},
+    client: config = {},
+  } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getTeamsByUserIdQueryKey();
 
   const query = useQuery(
     {
-      ...(getTeamsByUserIdQueryOptions(config) as unknown as QueryObserverOptions),
+      ...(getTeamsByUserIdQueryOptions(
+        config,
+      ) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetTeamsByUserId400>> & { queryKey: TQueryKey }
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetTeamsByUserId400>> & {
+    queryKey: TQueryKey;
+  };
 
-  query.queryKey = queryKey as TQueryKey
+  query.queryKey = queryKey as TQueryKey;
 
-  return query
+  return query;
 }

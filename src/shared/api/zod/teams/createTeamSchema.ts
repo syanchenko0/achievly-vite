@@ -3,23 +3,31 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { createTeamBodySchema } from '../createTeamBodySchema.ts'
-import { teamDtoSchema } from '../teamDtoSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { createTeamBodySchema } from "../createTeamBodySchema";
+import { teamDtoSchema } from "../teamDtoSchema";
+import { z } from "zod";
 
-export const createTeam200Schema = z.lazy(() => teamDtoSchema)
+export const createTeam200Schema = z.lazy(() => teamDtoSchema);
 
-export type CreateTeam200Schema = z.infer<typeof createTeam200Schema>
+export type CreateTeam200Schema = z.infer<typeof createTeam200Schema>;
 
-export const createTeam400Schema = z.lazy(() => badRequestSchema)
+export const createTeam400Schema = z.lazy(() => badRequestSchema);
 
-export type CreateTeam400Schema = z.infer<typeof createTeam400Schema>
+export type CreateTeam400Schema = z.infer<typeof createTeam400Schema>;
 
-export const createTeamMutationRequestSchema = z.lazy(() => createTeamBodySchema)
+export const createTeamMutationRequestSchema = z.lazy(
+  () => createTeamBodySchema,
+);
 
-export type CreateTeamMutationRequestSchema = z.infer<typeof createTeamMutationRequestSchema>
+export type CreateTeamMutationRequestSchema = z.infer<
+  typeof createTeamMutationRequestSchema
+>;
 
-export const createTeamMutationResponseSchema = z.lazy(() => createTeam200Schema)
+export const createTeamMutationResponseSchema = z.lazy(
+  () => createTeam200Schema,
+);
 
-export type CreateTeamMutationResponseSchema = z.infer<typeof createTeamMutationResponseSchema>
+export type CreateTeamMutationResponseSchema = z.infer<
+  typeof createTeamMutationResponseSchema
+>;

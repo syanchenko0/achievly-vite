@@ -3,15 +3,15 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
+import type { BadRequest } from "../BadRequest";
 
-export type DeleteEvent200 = unknown
+export type DeleteEvent200 = unknown;
 
-export type DeleteEvent400 = BadRequest
+export type DeleteEvent400 = BadRequest;
 
-export type DeleteEventMutationResponse = DeleteEvent200
+export type DeleteEventMutationResponse = DeleteEvent200;
 
 export type DeleteEventMutation = {
-  Response: DeleteEvent200
-  Errors: DeleteEvent400
-}
+  Response: DeleteEvent200;
+  Errors: DeleteEvent400;
+};

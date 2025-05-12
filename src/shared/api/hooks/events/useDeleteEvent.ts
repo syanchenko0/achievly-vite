@@ -3,30 +3,42 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { DeleteEventMutationResponse, DeleteEvent400 } from '../../models/events/DeleteEvent.ts'
-import { useMutation } from '@tanstack/react-query'
-import { deleteEventMutationResponseSchema } from '../../zod/events/deleteEventSchema.ts'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  DeleteEventMutationResponse,
+  DeleteEvent400,
+} from "../../models/events/DeleteEvent";
+import { useMutation } from "@tanstack/react-query";
+import { deleteEventMutationResponseSchema } from "../../zod/events/deleteEventSchema";
 
-export const deleteEventMutationKey = () => [{ url: '/events/{id}' }] as const
+export const deleteEventMutationKey = () => [{ url: "/events/{id}" }] as const;
 
-export type DeleteEventMutationKey = ReturnType<typeof deleteEventMutationKey>
+export type DeleteEventMutationKey = ReturnType<typeof deleteEventMutationKey>;
 
 /**
  * @summary Delete event
  * {@link /events/:id}
  */
-export async function deleteEvent(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const { client: request = client, ...requestConfig } = config
+export async function deleteEvent(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<DeleteEventMutationResponse, ResponseErrorConfig<DeleteEvent400>, unknown>({
-    method: 'DELETE',
+  const res = await request<
+    DeleteEventMutationResponse,
+    ResponseErrorConfig<DeleteEvent400>,
+    unknown
+  >({
+    method: "DELETE",
     url: `/events/${id}`,
     ...requestConfig,
-  })
-  return deleteEventMutationResponseSchema.parse(res.data)
+  });
+  return deleteEventMutationResponseSchema.parse(res.data);
 }
 
 /**
@@ -35,22 +47,32 @@ export async function deleteEvent(config: Partial<RequestConfig> & { client?: ty
  */
 export function useDeleteEvent<TContext>(
   options: {
-    mutation?: UseMutationOptions<DeleteEventMutationResponse, ResponseErrorConfig<DeleteEvent400>, void, TContext> & { client?: QueryClient }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    mutation?: UseMutationOptions<
+      DeleteEventMutationResponse,
+      ResponseErrorConfig<DeleteEvent400>,
+      void,
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? deleteEventMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? deleteEventMutationKey();
 
-  return useMutation<DeleteEventMutationResponse, ResponseErrorConfig<DeleteEvent400>, void, TContext>(
+  return useMutation<
+    DeleteEventMutationResponse,
+    ResponseErrorConfig<DeleteEvent400>,
+    void,
+    TContext
+  >(
     {
       mutationFn: async () => {
-        return deleteEvent(config)
+        return deleteEvent(config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

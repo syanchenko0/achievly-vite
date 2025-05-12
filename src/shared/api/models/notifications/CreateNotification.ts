@@ -3,20 +3,20 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { CreateNotificationBody } from '../CreateNotificationBody.ts'
-import type { NotificationDto } from '../NotificationDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { CreateNotificationBody } from "../CreateNotificationBody";
+import type { NotificationDto } from "../NotificationDto";
 
-export type CreateNotification200 = NotificationDto
+export type CreateNotification200 = NotificationDto;
 
-export type CreateNotification400 = BadRequest
+export type CreateNotification400 = BadRequest;
 
-export type CreateNotificationMutationRequest = CreateNotificationBody
+export type CreateNotificationMutationRequest = CreateNotificationBody;
 
-export type CreateNotificationMutationResponse = CreateNotification200
+export type CreateNotificationMutationResponse = CreateNotification200;
 
 export type CreateNotificationMutation = {
-  Response: CreateNotification200
-  Request: CreateNotificationMutationRequest
-  Errors: CreateNotification400
-}
+  Response: CreateNotification200;
+  Request: CreateNotificationMutationRequest;
+  Errors: CreateNotification400;
+};

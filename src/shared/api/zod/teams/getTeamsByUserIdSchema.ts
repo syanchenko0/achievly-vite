@@ -3,18 +3,26 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { teamDtoSchema } from '../teamDtoSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { teamDtoSchema } from "../teamDtoSchema";
+import { z } from "zod";
 
-export const getTeamsByUserId200Schema = z.array(z.lazy(() => teamDtoSchema))
+export const getTeamsByUserId200Schema = z.array(z.lazy(() => teamDtoSchema));
 
-export type GetTeamsByUserId200Schema = z.infer<typeof getTeamsByUserId200Schema>
+export type GetTeamsByUserId200Schema = z.infer<
+  typeof getTeamsByUserId200Schema
+>;
 
-export const getTeamsByUserId400Schema = z.lazy(() => badRequestSchema)
+export const getTeamsByUserId400Schema = z.lazy(() => badRequestSchema);
 
-export type GetTeamsByUserId400Schema = z.infer<typeof getTeamsByUserId400Schema>
+export type GetTeamsByUserId400Schema = z.infer<
+  typeof getTeamsByUserId400Schema
+>;
 
-export const getTeamsByUserIdQueryResponseSchema = z.lazy(() => getTeamsByUserId200Schema)
+export const getTeamsByUserIdQueryResponseSchema = z.lazy(
+  () => getTeamsByUserId200Schema,
+);
 
-export type GetTeamsByUserIdQueryResponseSchema = z.infer<typeof getTeamsByUserIdQueryResponseSchema>
+export type GetTeamsByUserIdQueryResponseSchema = z.infer<
+  typeof getTeamsByUserIdQueryResponseSchema
+>;

@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { UpdateGoalBody } from '../UpdateGoalBody.ts'
-import type { UpdateResult } from '../UpdateResult.ts'
+import type { BadRequest } from "../BadRequest";
+import type { UpdateGoalBody } from "../UpdateGoalBody";
+import type { UpdateResult } from "../UpdateResult";
 
 export type UpdateGoalPathParams = {
   /**
    * @type string
    */
-  id: string
-}
+  id: string;
+};
 
-export type UpdateGoal200 = UpdateResult
+export type UpdateGoal200 = UpdateResult;
 
-export type UpdateGoal400 = BadRequest
+export type UpdateGoal400 = BadRequest;
 
-export type UpdateGoalMutationRequest = UpdateGoalBody
+export type UpdateGoalMutationRequest = UpdateGoalBody;
 
-export type UpdateGoalMutationResponse = UpdateGoal200
+export type UpdateGoalMutationResponse = UpdateGoal200;
 
 export type UpdateGoalMutation = {
-  Response: UpdateGoal200
-  Request: UpdateGoalMutationRequest
-  PathParams: UpdateGoalPathParams
-  Errors: UpdateGoal400
-}
+  Response: UpdateGoal200;
+  Request: UpdateGoalMutationRequest;
+  PathParams: UpdateGoalPathParams;
+  Errors: UpdateGoal400;
+};

@@ -3,43 +3,43 @@
  * Do not edit manually.
  */
 
-import { eventEntitySchema } from './eventEntitySchema.ts'
-import { goalEntitySchema } from './goalEntitySchema.ts'
-import { notificationEntitySchema } from './notificationEntitySchema.ts'
-import { projectEntitySchema } from './projectEntitySchema.ts'
-import { teamEntitySchema } from './teamEntitySchema.ts'
-import { z } from 'zod'
+import { eventEntitySchema } from "./eventEntitySchema";
+import { goalEntitySchema } from "./goalEntitySchema";
+import { notificationEntitySchema } from "./notificationEntitySchema";
+import { projectEntitySchema } from "./projectEntitySchema";
+import { teamEntitySchema } from "./teamEntitySchema";
+import { z } from "zod";
 
 export const userDtoSchema = z.object({
-  id: z.number().describe('ID пользователя'),
-  username: z.string().describe('Имя пользователя'),
-  email: z.string().describe('Email пользователя'),
-  picture_url: z.string().describe('Изображение пользователя'),
+  id: z.number().describe("ID пользователя"),
+  username: z.string().describe("Имя пользователя"),
+  email: z.string().describe("Email пользователя"),
+  picture_url: z.string().describe("Изображение пользователя"),
   events: z
     .array(z.lazy(() => eventEntitySchema))
-    .describe('События в календаре')
+    .describe("События в календаре")
     .nullable()
     .nullish(),
   goals: z
     .array(z.lazy(() => goalEntitySchema))
-    .describe('Цели пользователя')
+    .describe("Цели пользователя")
     .nullable()
     .nullish(),
   notifications: z
     .array(z.lazy(() => notificationEntitySchema))
-    .describe('Уведомления пользователя')
+    .describe("Уведомления пользователя")
     .nullable()
     .nullish(),
   projects: z
     .array(z.lazy(() => projectEntitySchema))
-    .describe('Проекты пользователя')
+    .describe("Проекты пользователя")
     .nullable()
     .nullish(),
   teams: z
     .array(z.lazy(() => teamEntitySchema))
-    .describe('Команды пользователя')
+    .describe("Команды пользователя")
     .nullable()
     .nullish(),
-})
+});
 
-export type UserDtoSchema = z.infer<typeof userDtoSchema>
+export type UserDtoSchema = z.infer<typeof userDtoSchema>;

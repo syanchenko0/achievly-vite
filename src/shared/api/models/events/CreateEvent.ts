@@ -3,20 +3,20 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { CreateEventBody } from '../CreateEventBody.ts'
-import type { EventDto } from '../EventDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { CreateEventBody } from "../CreateEventBody";
+import type { EventDto } from "../EventDto";
 
-export type CreateEvent200 = EventDto
+export type CreateEvent200 = EventDto;
 
-export type CreateEvent400 = BadRequest
+export type CreateEvent400 = BadRequest;
 
-export type CreateEventMutationRequest = CreateEventBody
+export type CreateEventMutationRequest = CreateEventBody;
 
-export type CreateEventMutationResponse = CreateEvent200
+export type CreateEventMutationResponse = CreateEvent200;
 
 export type CreateEventMutation = {
-  Response: CreateEvent200
-  Request: CreateEventMutationRequest
-  Errors: CreateEvent400
-}
+  Response: CreateEvent200;
+  Request: CreateEventMutationRequest;
+  Errors: CreateEvent400;
+};

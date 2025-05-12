@@ -1,1 +1,0 @@
-{"type":"object","properties":{"message":{"type":"string","description":"Error message"},"error":{"type":"string","description":"Error type"},"statusCode":{"type":"number","description":"Error status code"}},"required":["message","error","statusCode"],"x-readme-ref-name":"BadRequest"}

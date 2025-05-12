@@ -3,30 +3,44 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { DeleteGoalMutationResponse, DeleteGoalPathParams, DeleteGoal400 } from '../../models/goals/DeleteGoal.ts'
-import { useMutation } from '@tanstack/react-query'
-import { deleteGoalMutationResponseSchema } from '../../zod/goals/deleteGoalSchema.ts'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  DeleteGoalMutationResponse,
+  DeleteGoalPathParams,
+  DeleteGoal400,
+} from "../../models/goals/DeleteGoal";
+import { useMutation } from "@tanstack/react-query";
+import { deleteGoalMutationResponseSchema } from "../../zod/goals/deleteGoalSchema";
 
-export const deleteGoalMutationKey = () => [{ url: '/goals/{id}' }] as const
+export const deleteGoalMutationKey = () => [{ url: "/goals/{id}" }] as const;
 
-export type DeleteGoalMutationKey = ReturnType<typeof deleteGoalMutationKey>
+export type DeleteGoalMutationKey = ReturnType<typeof deleteGoalMutationKey>;
 
 /**
  * @summary Delete goal
  * {@link /goals/:id}
  */
-export async function deleteGoal({ id }: { id: DeleteGoalPathParams['id'] }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const { client: request = client, ...requestConfig } = config
+export async function deleteGoal(
+  { id }: { id: DeleteGoalPathParams["id"] },
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<DeleteGoalMutationResponse, ResponseErrorConfig<DeleteGoal400>, unknown>({
-    method: 'DELETE',
+  const res = await request<
+    DeleteGoalMutationResponse,
+    ResponseErrorConfig<DeleteGoal400>,
+    unknown
+  >({
+    method: "DELETE",
     url: `/goals/${id}`,
     ...requestConfig,
-  })
-  return deleteGoalMutationResponseSchema.parse(res.data)
+  });
+  return deleteGoalMutationResponseSchema.parse(res.data);
 }
 
 /**
@@ -35,24 +49,34 @@ export async function deleteGoal({ id }: { id: DeleteGoalPathParams['id'] }, con
  */
 export function useDeleteGoal<TContext>(
   options: {
-    mutation?: UseMutationOptions<DeleteGoalMutationResponse, ResponseErrorConfig<DeleteGoal400>, { id: DeleteGoalPathParams['id'] }, TContext> & {
-      client?: QueryClient
-    }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    mutation?: UseMutationOptions<
+      DeleteGoalMutationResponse,
+      ResponseErrorConfig<DeleteGoal400>,
+      { id: DeleteGoalPathParams["id"] },
+      TContext
+    > & {
+      client?: QueryClient;
+    };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? deleteGoalMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? deleteGoalMutationKey();
 
-  return useMutation<DeleteGoalMutationResponse, ResponseErrorConfig<DeleteGoal400>, { id: DeleteGoalPathParams['id'] }, TContext>(
+  return useMutation<
+    DeleteGoalMutationResponse,
+    ResponseErrorConfig<DeleteGoal400>,
+    { id: DeleteGoalPathParams["id"] },
+    TContext
+  >(
     {
       mutationFn: async ({ id }) => {
-        return deleteGoal({ id }, config)
+        return deleteGoal({ id }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

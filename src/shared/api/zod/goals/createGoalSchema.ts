@@ -3,23 +3,31 @@
  * Do not edit manually.
  */
 
-import { badRequestSchema } from '../badRequestSchema.ts'
-import { createGoalBodySchema } from '../createGoalBodySchema.ts'
-import { goalDtoSchema } from '../goalDtoSchema.ts'
-import { z } from 'zod'
+import { badRequestSchema } from "../badRequestSchema";
+import { createGoalBodySchema } from "../createGoalBodySchema";
+import { goalDtoSchema } from "../goalDtoSchema";
+import { z } from "zod";
 
-export const createGoal200Schema = z.lazy(() => goalDtoSchema)
+export const createGoal200Schema = z.lazy(() => goalDtoSchema);
 
-export type CreateGoal200Schema = z.infer<typeof createGoal200Schema>
+export type CreateGoal200Schema = z.infer<typeof createGoal200Schema>;
 
-export const createGoal400Schema = z.lazy(() => badRequestSchema)
+export const createGoal400Schema = z.lazy(() => badRequestSchema);
 
-export type CreateGoal400Schema = z.infer<typeof createGoal400Schema>
+export type CreateGoal400Schema = z.infer<typeof createGoal400Schema>;
 
-export const createGoalMutationRequestSchema = z.lazy(() => createGoalBodySchema)
+export const createGoalMutationRequestSchema = z.lazy(
+  () => createGoalBodySchema,
+);
 
-export type CreateGoalMutationRequestSchema = z.infer<typeof createGoalMutationRequestSchema>
+export type CreateGoalMutationRequestSchema = z.infer<
+  typeof createGoalMutationRequestSchema
+>;
 
-export const createGoalMutationResponseSchema = z.lazy(() => createGoal200Schema)
+export const createGoalMutationResponseSchema = z.lazy(
+  () => createGoal200Schema,
+);
 
-export type CreateGoalMutationResponseSchema = z.infer<typeof createGoalMutationResponseSchema>
+export type CreateGoalMutationResponseSchema = z.infer<
+  typeof createGoalMutationResponseSchema
+>;

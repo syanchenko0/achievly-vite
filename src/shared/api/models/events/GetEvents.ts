@@ -3,16 +3,16 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { EventDto } from '../EventDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { EventDto } from "../EventDto";
 
-export type GetEvents200 = EventDto[]
+export type GetEvents200 = EventDto[];
 
-export type GetEvents400 = BadRequest
+export type GetEvents400 = BadRequest;
 
-export type GetEventsQueryResponse = GetEvents200
+export type GetEventsQueryResponse = GetEvents200;
 
 export type GetEventsQuery = {
-  Response: GetEvents200
-  Errors: GetEvents400
-}
+  Response: GetEvents200;
+  Errors: GetEvents400;
+};
