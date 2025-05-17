@@ -11,12 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import { ChevronsUpDown, Plus, User, Users } from "lucide-react";
-import { useGetTeamsByUserId } from "@/shared/api";
+import { ChevronsUpDown, Plus, Settings, User, Users } from "lucide-react";
+import { useGetTeams } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useMemo, useState } from "react";
 import { TeamSwitcherDialog } from "@/features/team-switcher/ui/team-switcher-dialog";
 import { useTeamSettingsStore } from "@/app/store/team";
+import { Button } from "@/shared/ui/button";
+import { useNavigate } from "react-router";
+import { ROUTES } from "@/app/constants/router";
 
 function TeamSwitcher() {
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
@@ -27,13 +30,14 @@ function TeamSwitcher() {
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const { data: teams, isLoading } = useGetTeamsByUserId();
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+  const { data: teams, isLoading } = useGetTeams();
+
+  const navigate = useNavigate();
 
   const activeTeam = useMemo(
-    () =>
-      activeTeamId !== null
-        ? teams?.find((team) => team.id === Number(activeTeamId))
-        : teams?.[0],
+    () => teams?.find((team) => team.id === Number(activeTeamId)),
     [activeTeamId, teams],
   );
 
@@ -46,32 +50,40 @@ function TeamSwitcher() {
   };
 
   if (isLoading) {
-    return <Skeleton className="w-full h-12" />;
+    return <Skeleton className="h-12 w-full" />;
   }
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              {activeTeam ? (
-                <>
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    <Users size={20} />
-                  </div>
-                  <div className="text-left text-sm">
-                    <span className="truncate font-semibold">
-                      {activeTeam.name}
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <div>Его нет</div>
+              {activeTeam && (
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <Users size={20} />
+                </div>
               )}
+
+              <div className="flex flex-col text-left text-sm">
+                <span className="truncate font-semibold">
+                  {activeTeam ? activeTeam.name : "Без команды"}
+                </span>
+
+                {!activeTeam && (teams?.length || 0) > 0 && (
+                  <span className="text-xs font-medium">
+                    Не выбрана команда
+                  </span>
+                )}
+
+                {!teams?.length && (
+                  <span className="text-xs font-medium">Нет команд</span>
+                )}
+              </div>
+
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -82,21 +94,32 @@ function TeamSwitcher() {
             side="right"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
+            <DropdownMenuLabel className="text-muted-foreground flex items-center justify-between text-xs">
               Команды
             </DropdownMenuLabel>
 
-            <div className="flex flex-col gap-y-1">
+            <div className="scroll flex max-h-64 flex-col gap-y-1">
               {teams?.map((team) => (
-                <DropdownMenuItem
-                  key={team.id}
-                  className="gap-2 p-2"
-                  onClick={() => handleSwitchTeam(team.id)}
-                  aria-selected={team.id === Number(activeTeamId)}
-                >
-                  <User />
-                  <span>{team.name}</span>
-                </DropdownMenuItem>
+                <div key={team.id} className="flex items-center gap-x-1">
+                  <DropdownMenuItem
+                    className="w-full gap-2 p-2"
+                    onClick={() => handleSwitchTeam(team.id)}
+                    aria-selected={team.id === Number(activeTeamId)}
+                  >
+                    <User />
+                    <span>{team.name}</span>
+                  </DropdownMenuItem>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => {
+                      navigate(ROUTES.teams_settings);
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    <Settings />
+                  </Button>
+                </div>
               ))}
             </div>
 

@@ -7,6 +7,11 @@ import { RequireAuth } from "@/features/require-auth";
 
 const AuthPage = lazy(() => import("@/pages/auth"));
 const HomePage = lazy(() => import("@/pages/home"));
+const TeamsSettingsPage = lazy(() => import("@/pages/teams-settings"));
+// @ts-ignore
+const JoinTeamPage = lazy(() =>
+  import("@/pages/join-team").then((result) => result.JoinTeamPage),
+);
 
 const router = createBrowserRouter([
   {
@@ -26,6 +31,26 @@ const router = createBrowserRouter([
           <Suspense fallback={<Loader />}>
             <RequireAuth>
               <HomePage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.teams_settings,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <RequireAuth>
+              <TeamsSettingsPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.join_team,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <RequireAuth>
+              <JoinTeamPage />
             </RequireAuth>
           </Suspense>
         ),

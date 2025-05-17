@@ -6,6 +6,7 @@
 export type CreateTeamBody = {
   /**
    * @description Наименование команды
+   * @minLength 1
    * @type string
    */
   name: string

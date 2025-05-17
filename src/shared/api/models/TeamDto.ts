@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-import type { UserDto } from "./UserDto";
+import type { MemberDto } from "./MemberDto";
 
 export type TeamDto = {
   /**
@@ -17,12 +17,13 @@ export type TeamDto = {
    */
   name: string;
   /**
-   * @description Создатель команды
+   * @description Роль пользователя в команде
+   * @type string
    */
-  created_by: UserDto;
+  user_role: string;
   /**
    * @description Участники команды
    * @type array
    */
-  users: UserDto[];
+  members: MemberDto[];
 };

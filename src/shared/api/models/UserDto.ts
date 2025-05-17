@@ -6,8 +6,6 @@
 import type { EventEntity } from "./EventEntity";
 import type { GoalEntity } from "./GoalEntity";
 import type { NotificationEntity } from "./NotificationEntity";
-import type { ProjectEntity } from "./ProjectEntity";
-import type { TeamEntity } from "./TeamEntity";
 
 export type UserDto = {
   /**
@@ -49,10 +47,10 @@ export type UserDto = {
    * @description Проекты пользователя
    * @type array
    */
-  projects?: ProjectEntity[] | null;
+  projects?: unknown[][] | null;
   /**
    * @description Команды пользователя
    * @type array
    */
-  teams?: TeamEntity[] | null;
+  teams?: unknown[][] | null;
 };

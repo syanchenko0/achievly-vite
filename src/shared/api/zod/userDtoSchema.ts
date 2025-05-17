@@ -6,8 +6,6 @@
 import { eventEntitySchema } from "./eventEntitySchema";
 import { goalEntitySchema } from "./goalEntitySchema";
 import { notificationEntitySchema } from "./notificationEntitySchema";
-import { projectEntitySchema } from "./projectEntitySchema";
-import { teamEntitySchema } from "./teamEntitySchema";
 import { z } from "zod";
 
 export const userDtoSchema = z.object({
@@ -31,12 +29,12 @@ export const userDtoSchema = z.object({
     .nullable()
     .nullish(),
   projects: z
-    .array(z.lazy(() => projectEntitySchema))
+    .array(z.array(z.unknown()))
     .describe("Проекты пользователя")
     .nullable()
     .nullish(),
   teams: z
-    .array(z.lazy(() => teamEntitySchema))
+    .array(z.array(z.unknown()))
     .describe("Команды пользователя")
     .nullable()
     .nullish(),

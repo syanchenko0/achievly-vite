@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   type CreateTeamBodySchema,
   createTeamBodySchema,
-  getTeamsByUserIdQueryKey,
+  getTeamsQueryKey,
   useCreateTeam,
 } from "@/shared/api";
 import {
@@ -36,7 +36,7 @@ function TeamSwitcherDialog({ open, onOpenChange }: TeamSwitcherDialogProps) {
   const { mutateAsync: createTeam, error } = useCreateTeam({
     mutation: {
       onSuccess: () =>
-        queryClient.invalidateQueries({ queryKey: getTeamsByUserIdQueryKey() }),
+        queryClient.invalidateQueries({ queryKey: getTeamsQueryKey() }),
     },
   });
 
