@@ -26,7 +26,7 @@ export const getTeamGeneralInfoQueryKey = ({
   team_id,
 }: {
   team_id: GetTeamGeneralInfoPathParams["team_id"];
-}) => [{ url: "/teams/:team_id", params: { team_id: team_id } }] as const;
+}) => [{ url: "/teams/:team_id/info", params: { team_id: team_id } }] as const;
 
 export type GetTeamGeneralInfoQueryKey = ReturnType<
   typeof getTeamGeneralInfoQueryKey
@@ -34,7 +34,7 @@ export type GetTeamGeneralInfoQueryKey = ReturnType<
 
 /**
  * @summary Get team general info
- * {@link /teams/:team_id}
+ * {@link /teams/:team_id/info}
  */
 export async function getTeamGeneralInfo(
   { team_id }: { team_id: GetTeamGeneralInfoPathParams["team_id"] },
@@ -48,7 +48,7 @@ export async function getTeamGeneralInfo(
     unknown
   >({
     method: "GET",
-    url: `/teams/${team_id}`,
+    url: `/teams/${team_id}/info`,
     ...requestConfig,
   });
   return getTeamGeneralInfoQueryResponseSchema.parse(res.data);
@@ -76,7 +76,7 @@ export function getTeamGeneralInfoQueryOptions(
 
 /**
  * @summary Get team general info
- * {@link /teams/:team_id}
+ * {@link /teams/:team_id/info}
  */
 export function useGetTeamGeneralInfo<
   TData = GetTeamGeneralInfoQueryResponse,

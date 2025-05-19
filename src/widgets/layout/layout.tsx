@@ -12,7 +12,7 @@ import { TeamSwitcher } from "@/features/team-switcher";
 import { PersonalGroup } from "@/widgets/layout/ui/personal-group";
 import { ProjectsGroup } from "@/widgets/layout/ui/projects-group";
 import { RequireAuth } from "@/features/require-auth";
-import { ROUTE_LABELS } from "@/app/constants/router";
+import { ROUTE_LABELS } from "@/shared/constants/router";
 
 function Layout() {
   const { pathname } = useLocation();

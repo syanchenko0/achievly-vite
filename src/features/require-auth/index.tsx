@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
-import { ROUTES } from "@/app/constants/router";
+import { ROUTES } from "@/shared/constants/router";
 import { useCheckAuth } from "@/shared/api";
 import { Loader } from "@/shared/ui/loader";
 

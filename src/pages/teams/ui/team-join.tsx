@@ -10,10 +10,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
-import { ROUTES } from "@/app/constants/router";
+import { ROUTES } from "@/shared/constants/router";
 
-function JoinTeamPage() {
-  const { id } = useParams<{ id: string }>();
+function TeamJoin() {
+  const { team_id } = useParams<{ team_id: string }>();
 
   const [searchParams] = useSearchParams();
 
@@ -24,8 +24,8 @@ function JoinTeamPage() {
   const join_access_token = searchParams.get("jat");
 
   const { data: team, isLoading: teamLoading } = useGetTeamGeneralInfo(
-    { id: id as string },
-    { query: { enabled: !!id && !!join_access_token } },
+    { team_id: team_id as string },
+    { query: { enabled: !!team_id && !!join_access_token } },
   );
 
   const { mutate, isPending } = useJoinTeam({
@@ -38,9 +38,9 @@ function JoinTeamPage() {
   });
 
   const handleJoin = () => {
-    if (id && join_access_token)
+    if (team_id && join_access_token)
       mutate({
-        id,
+        id: team_id,
         params: { jat: join_access_token },
       });
   };
@@ -96,4 +96,4 @@ function JoinTeamPage() {
   );
 }
 
-export { JoinTeamPage };
+export { TeamJoin };

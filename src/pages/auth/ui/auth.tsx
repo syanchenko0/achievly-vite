@@ -4,7 +4,7 @@ import { VKIcon } from "@/app/assets/icons/vk";
 import { YandexIcon } from "@/app/assets/icons/yandex";
 import { Button } from "@/shared/ui/button";
 
-function AuthPage() {
+function Auth() {
   const onSocialLogin = (subject: string) => {
     window.location.href = `${import.meta.env.VITE_BASE_API_URL}/auth/${subject}`;
   };
@@ -16,7 +16,7 @@ function AuthPage() {
           <div className="mx-auto grid w-[350px] gap-6">
             <div className="grid gap-2 text-center">
               <h1 className="text-3xl font-bold">Вход</h1>
-              <p className="text-balance text-muted-foreground">
+              <p className="text-muted-foreground text-balance">
                 Выберите сервис, с помощью которого вы хотите войти
               </p>
             </div>
@@ -76,4 +76,4 @@ function AuthPage() {
   );
 }
 
-export default AuthPage;
+export { Auth };

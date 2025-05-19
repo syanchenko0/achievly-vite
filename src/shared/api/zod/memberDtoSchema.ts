@@ -7,6 +7,7 @@ import { userDtoSchema } from "./userDtoSchema";
 import { z } from "zod";
 
 export const memberDtoSchema = z.object({
+  id: z.number().describe("ID участника"),
   user: z.lazy(() => userDtoSchema).describe("Данные пользователя"),
   role: z.string().describe("Роль в команде"),
 });

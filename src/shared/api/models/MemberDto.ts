@@ -7,6 +7,11 @@ import type { UserDto } from "./UserDto";
 
 export type MemberDto = {
   /**
+   * @description ID участника
+   * @type number
+   */
+  id: number;
+  /**
    * @description Данные пользователя
    */
   user: UserDto;

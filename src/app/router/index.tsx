@@ -1,16 +1,30 @@
 import { createBrowserRouter } from "react-router";
 import { Layout } from "@/widgets/layout";
-import { ROUTES } from "@/app/constants/router";
+import { ROUTES } from "@/shared/constants/router";
 import { lazy, Suspense } from "react";
 import { Loader } from "@/shared/ui/loader";
 import { RequireAuth } from "@/features/require-auth";
+import { PageLoader } from "@/shared/ui/page-loader";
 
-const AuthPage = lazy(() => import("@/pages/auth"));
-const HomePage = lazy(() => import("@/pages/home"));
-const TeamsSettingsPage = lazy(() => import("@/pages/teams-settings"));
-// @ts-ignore
-const JoinTeamPage = lazy(() =>
-  import("@/pages/join-team").then((result) => result.JoinTeamPage),
+const AuthPage = lazy(() =>
+  import("@/pages/auth").then((module) => ({
+    default: module.Auth,
+  })),
+);
+const HomePage = lazy(() =>
+  import("@/pages/home").then((module) => ({
+    default: module.Home,
+  })),
+);
+const TeamJoinPage = lazy(() =>
+  import("@/pages/teams").then((module) => ({
+    default: module.TeamJoin,
+  })),
+);
+const TeamSettingsPage = lazy(() =>
+  import("@/pages/teams").then((module) => ({
+    default: module.TeamSettings,
+  })),
 );
 
 const router = createBrowserRouter([
@@ -28,7 +42,7 @@ const router = createBrowserRouter([
       {
         path: ROUTES.home,
         element: (
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<PageLoader />}>
             <RequireAuth>
               <HomePage />
             </RequireAuth>
@@ -36,21 +50,21 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: ROUTES.teams_settings,
+        path: ROUTES.team_join,
         element: (
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<PageLoader />}>
             <RequireAuth>
-              <TeamsSettingsPage />
+              <TeamJoinPage />
             </RequireAuth>
           </Suspense>
         ),
       },
       {
-        path: ROUTES.join_team,
+        path: ROUTES.team_settings,
         element: (
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<PageLoader />}>
             <RequireAuth>
-              <JoinTeamPage />
+              <TeamSettingsPage />
             </RequireAuth>
           </Suspense>
         ),

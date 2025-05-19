@@ -13,3 +13,23 @@ export function declension(value: number, words: string[]) {
   if (num == 1) return words[0];
   return words[2];
 }
+
+type PathParams<T extends string> =
+  T extends `${infer Start}:${infer Param}/${infer Rest}`
+    ? { [K in Param | keyof PathParams<Rest>]: string | number }
+    : T extends `${infer Start}:${infer Param}`
+      ? { [K in Param]: string | number }
+      : object;
+
+export function replacePathParams<T extends string>(
+  path: T,
+  params: PathParams<T>,
+): string {
+  let result: string = path;
+
+  for (const [key, value] of Object.entries(params)) {
+    result = result.replace(`:${key}`, String(value));
+  }
+
+  return result;
+}

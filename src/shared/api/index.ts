@@ -13,6 +13,7 @@ export type { CreateTeamMutationKey } from "./hooks/teams/useCreateTeam";
 export type { DeleteTeamMutationKey } from "./hooks/teams/useDeleteTeam";
 export type { DeleteTeamMemberMutationKey } from "./hooks/teams/useDeleteTeamMember";
 export type { GetProjectsRightsQueryKey } from "./hooks/teams/useGetProjectsRights";
+export type { GetTeamQueryKey } from "./hooks/teams/useGetTeam";
 export type { GetTeamGeneralInfoQueryKey } from "./hooks/teams/useGetTeamGeneralInfo";
 export type { GetTeamJoinLinkQueryKey } from "./hooks/teams/useGetTeamJoinLink";
 export type { GetTeamsQueryKey } from "./hooks/teams/useGetTeams";
@@ -143,6 +144,13 @@ export type {
   GetProjectsRightsQueryResponse,
   GetProjectsRightsQuery,
 } from "./models/teams/GetProjectsRights";
+export type {
+  GetTeamPathParams,
+  GetTeam200,
+  GetTeam400,
+  GetTeamQueryResponse,
+  GetTeamQuery,
+} from "./models/teams/GetTeam";
 export type {
   GetTeamGeneralInfoPathParams,
   GetTeamGeneralInfo200,
@@ -318,6 +326,12 @@ export type {
   GetTeamJoinLinkQueryResponseSchema,
 } from "./zod/teams/getTeamJoinLinkSchema";
 export type {
+  GetTeamPathParamsSchema,
+  GetTeam200Schema,
+  GetTeam400Schema,
+  GetTeamQueryResponseSchema,
+} from "./zod/teams/getTeamSchema";
+export type {
   GetTeams200Schema,
   GetTeams400Schema,
   GetTeamsQueryResponseSchema,
@@ -431,6 +445,12 @@ export {
   getProjectsRightsQueryOptions,
   useGetProjectsRights,
 } from "./hooks/teams/useGetProjectsRights";
+export {
+  getTeamQueryKey,
+  getTeam,
+  getTeamQueryOptions,
+  useGetTeam,
+} from "./hooks/teams/useGetTeam";
 export {
   getTeamGeneralInfoQueryKey,
   getTeamGeneralInfo,
@@ -590,6 +610,12 @@ export {
   getTeamJoinLink400Schema,
   getTeamJoinLinkQueryResponseSchema,
 } from "./zod/teams/getTeamJoinLinkSchema";
+export {
+  getTeamPathParamsSchema,
+  getTeam200Schema,
+  getTeam400Schema,
+  getTeamQueryResponseSchema,
+} from "./zod/teams/getTeamSchema";
 export {
   getTeams200Schema,
   getTeams400Schema,

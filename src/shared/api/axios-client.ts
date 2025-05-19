@@ -4,7 +4,7 @@ import axios, {
   type AxiosResponse,
   type Method,
 } from "axios";
-import { ROUTES } from "@/app/constants/router";
+import { ROUTES } from "@/shared/constants/router";
 
 export type RequestConfig<TVariables = unknown> = {
   method: Method;
@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
   (config) => config,
   async (error) => {
     if (
-      (error?.response?.status === 401 || error?.response?.status === 403) &&
+      error?.response?.status === 401 &&
       error.config &&
       !error.config._isRetry
     ) {

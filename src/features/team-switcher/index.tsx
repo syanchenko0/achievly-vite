@@ -19,7 +19,8 @@ import { TeamSwitcherDialog } from "@/features/team-switcher/ui/team-switcher-di
 import { useTeamSettingsStore } from "@/app/store/team";
 import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router";
-import { ROUTES } from "@/app/constants/router";
+import { ROUTES } from "@/shared/constants/router";
+import { replacePathParams } from "@/app/lib/utils";
 
 function TeamSwitcher() {
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
@@ -113,7 +114,11 @@ function TeamSwitcher() {
                     size="icon"
                     variant="ghost"
                     onClick={() => {
-                      navigate(ROUTES.teams_settings);
+                      navigate(
+                        replacePathParams(ROUTES.team_settings, {
+                          team_id: team.id,
+                        }),
+                      );
                       setDropdownOpen(false);
                     }}
                   >

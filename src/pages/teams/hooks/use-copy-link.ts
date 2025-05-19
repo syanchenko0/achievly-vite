@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { type TeamDto, useGetTeamJoinLink } from "@/shared/api";
+import { useGetTeamJoinLink } from "@/shared/api";
 
-const useCopyLink = (team: TeamDto) => {
+const useCopyLink = (team_id?: string) => {
   const [startCopied, setStartCopied] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
 
   const { data: jointTeamLink, isLoading: jointTeamLinkLoading } =
     useGetTeamJoinLink(
-      { id: String(team.id) },
-      { query: { enabled: startCopied } },
+      { team_id: team_id as string },
+      { query: { enabled: startCopied && !!team_id } },
     );
 
   const handleCopyLink: React.MouseEventHandler = (event) => {
@@ -38,10 +38,10 @@ const useCopyLink = (team: TeamDto) => {
   }, [jointTeamLink]);
 
   return {
-    handleCopyLink,
-    handleResetCopied,
     copied,
     copyLoading: jointTeamLinkLoading,
+    handleCopyLink,
+    handleResetCopied,
   };
 };
 
