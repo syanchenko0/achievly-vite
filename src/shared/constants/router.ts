@@ -6,6 +6,7 @@ const ROUTES = {
   calendar: "/calendar",
   team_join: "/teams/:team_id/join",
   team_settings: "/teams/:team_id/settings",
+  project: "/projects/:project_id",
 };
 
 const ROUTE_LABELS = {

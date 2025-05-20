@@ -16,6 +16,16 @@ import {
 } from "@/shared/ui/dialog";
 import { useState } from "react";
 import { MEMBER_ROLES } from "@/shared/constants/teams";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/ui/alert-dialog";
 
 const ActionsCell = ({
   member_id,
@@ -29,6 +39,8 @@ const ActionsCell = ({
   user_role: string;
 }) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  const [alertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
 
   const { mutateAsync: deleteTeamMember } = useDeleteTeamMember();
 
@@ -61,20 +73,41 @@ const ActionsCell = ({
       </TooltipProvider>
 
       {!isUserAdmin && (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="destructive"
-                onClick={handleDeleteTeamMember}
-              >
-                <UserX />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">Исключить из команды</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => setAlertDialogOpen(true)}
+                >
+                  <UserX />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                Исключить из команды
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Исключить участника</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Вы уверены, что хотите исключить участника из команды?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Отменить</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteTeamMember}>
+                  Подтвердить
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
       )}
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>

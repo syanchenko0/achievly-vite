@@ -2,9 +2,13 @@ import { type TeamDto } from "@/shared/api";
 import { useMemo } from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Button } from "@/shared/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import {
+  ArrowDownNarrowWide,
+  ArrowUpDown,
+  ArrowUpNarrowWide,
+} from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { MEMBER_ROLES_LABELS } from "@/shared/constants/teams";
+import { MEMBER_ROLES, MEMBER_ROLES_LABELS } from "@/shared/constants/teams";
 import { ActionsCell } from "@/pages/teams/ui/table-columns";
 
 type TableData = {
@@ -24,32 +28,8 @@ const useTableData = (team: TeamDto) => {
     [team.members],
   );
 
-  const columns: ColumnDef<TableData>[] = useMemo(
-    () => [
-      {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
+  const columns: ColumnDef<TableData>[] = useMemo(() => {
+    const columns: ColumnDef<TableData>[] = [
       {
         accessorKey: "role",
         header: "Роль",
@@ -75,8 +55,13 @@ const useTableData = (team: TeamDto) => {
                 onClick={() =>
                   column.toggleSorting(column.getIsSorted() === "asc")
                 }
+                title={`Сортировать по ${
+                  column.getIsSorted() === "asc" ? "возрастанию" : "убыванию"
+                }`}
               >
-                <ArrowUpDown />
+                {column.getIsSorted() === false && <ArrowUpDown />}
+                {column.getIsSorted() === "asc" && <ArrowUpNarrowWide />}
+                {column.getIsSorted() === "desc" && <ArrowDownNarrowWide />}
               </Button>
             </div>
           );
@@ -95,9 +80,40 @@ const useTableData = (team: TeamDto) => {
           />
         ),
       },
-    ],
-    [team.id, team.user_role],
-  );
+    ];
+
+    if (team.user_role === MEMBER_ROLES.owner) {
+      columns.unshift({
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => {
+          return (
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              disabled={row.original.role === MEMBER_ROLES.owner}
+              aria-label="Select row"
+            />
+          );
+        },
+        enableSorting: false,
+        enableHiding: false,
+      } as ColumnDef<TableData>);
+    }
+
+    return columns;
+  }, [team.id, team.user_role]);
 
   return {
     data,

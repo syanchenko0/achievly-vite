@@ -9,6 +9,7 @@ export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
 export type { UpdateGoalMutationKey } from "./hooks/goals/useUpdateGoal";
 export type { CreateNotificationMutationKey } from "./hooks/notifications/useCreateNotification";
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
+export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
 export type { CreateTeamMutationKey } from "./hooks/teams/useCreateTeam";
 export type { DeleteTeamMutationKey } from "./hooks/teams/useDeleteTeam";
 export type { DeleteTeamMemberMutationKey } from "./hooks/teams/useDeleteTeamMember";
@@ -113,6 +114,13 @@ export type {
   CreateProjectMutationResponse,
   CreateProjectMutation,
 } from "./models/projects/CreateProject";
+export type {
+  GetProjectsQueryParams,
+  GetProjects200,
+  GetProjects400,
+  GetProjectsQueryResponse,
+  GetProjectsQuery,
+} from "./models/projects/GetProjects";
 export type { TaskDto } from "./models/TaskDto";
 export type { TeamDto } from "./models/TeamDto";
 export type { TeamGeneralInfoDto } from "./models/TeamGeneralInfoDto";
@@ -286,6 +294,12 @@ export type {
   CreateProjectMutationRequestSchema,
   CreateProjectMutationResponseSchema,
 } from "./zod/projects/createProjectSchema";
+export type {
+  GetProjectsQueryParamsSchema,
+  GetProjects200Schema,
+  GetProjects400Schema,
+  GetProjectsQueryResponseSchema,
+} from "./zod/projects/getProjectsSchema";
 export type { TaskDtoSchema } from "./zod/taskDtoSchema";
 export type { TeamDtoSchema } from "./zod/teamDtoSchema";
 export type { TeamGeneralInfoDtoSchema } from "./zod/teamGeneralInfoDtoSchema";
@@ -424,6 +438,12 @@ export {
   createProject,
   useCreateProject,
 } from "./hooks/projects/useCreateProject";
+export {
+  getProjectsQueryKey,
+  getProjects,
+  getProjectsQueryOptions,
+  useGetProjects,
+} from "./hooks/projects/useGetProjects";
 export {
   createTeamMutationKey,
   createTeam,
@@ -571,6 +591,12 @@ export {
   createProjectMutationRequestSchema,
   createProjectMutationResponseSchema,
 } from "./zod/projects/createProjectSchema";
+export {
+  getProjectsQueryParamsSchema,
+  getProjects200Schema,
+  getProjects400Schema,
+  getProjectsQueryResponseSchema,
+} from "./zod/projects/getProjectsSchema";
 export { taskDtoSchema } from "./zod/taskDtoSchema";
 export { teamDtoSchema } from "./zod/teamDtoSchema";
 export { teamGeneralInfoDtoSchema } from "./zod/teamGeneralInfoDtoSchema";

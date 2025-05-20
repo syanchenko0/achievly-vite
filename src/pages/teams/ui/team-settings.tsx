@@ -1,12 +1,15 @@
 import { useParams } from "react-router";
 import {
   AlertCircle,
+  ArrowLeft,
+  ArrowRight,
   Check,
-  CircleX,
   Files,
   Loader as LoaderIcon,
+  LogOut,
   Trash2,
   Users,
+  UserX,
 } from "lucide-react";
 import {
   type TeamDto,
@@ -25,7 +28,6 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/tooltip";
 import { useCopyLink } from "@/pages/teams/hooks/use-copy-link";
-import { PageLoader } from "@/shared/ui/page-loader";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { useState } from "react";
 import {
@@ -49,9 +51,17 @@ import {
   TableRow,
 } from "@/shared/ui/table";
 import { useTableData } from "@/pages/teams/hooks/use-table-data";
-
-// блок с общей информацией о команде и кнопки действий (удаление команды, скопировать ссылку-приглашение)
-// таблица участников команды с действиями (удаление участника, открытие диалогового окна с редактированием прав участника)
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/ui/alert-dialog";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 function TeamSettings() {
   const { team_id } = useParams<{ team_id: string }>();
@@ -66,7 +76,12 @@ function TeamSettings() {
   );
 
   if (teamLoading) {
-    return <PageLoader />;
+    return (
+      <div className="bg-sidebar flex size-full flex-col gap-y-4 rounded-md border p-4">
+        <Skeleton className="min-h-[100px] w-full" />
+        <Skeleton className="size-full" />
+      </div>
+    );
   }
 
   if (!team || teamError) {
@@ -113,7 +128,7 @@ function TeamSettings() {
         <TeamControls team_id={String(team.id)} user_role={team.user_role} />
       </div>
 
-      <div className="rounded-md border p-4">
+      <div className="rounded-md border px-4">
         <UsersTable team={team} />
       </div>
     </div>
@@ -127,6 +142,8 @@ function TeamControls({
   team_id: string;
   user_role: string;
 }) {
+  const [alertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
+
   const { mutateAsync: deleteTeam } = useDeleteTeamQuery();
 
   const { mutateAsync: leaveFromTeam } = useLeaveFromTeam();
@@ -146,16 +163,38 @@ function TeamControls({
 
   if (!isOwner)
     return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="destructive" onClick={handleLeaveTeam}>
-              <CircleX />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Выйти из команды</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="destructive"
+                onClick={() => setAlertDialogOpen(true)}
+              >
+                <LogOut />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Выйти из команды</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Выйти из команды</AlertDialogTitle>
+              <AlertDialogDescription>
+                Вы уверены, что хотите покинуть команду?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Отменить</AlertDialogCancel>
+              <AlertDialogAction onClick={handleLeaveTeam}>
+                Подтвердить
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     );
 
   return (
@@ -197,7 +236,7 @@ function TeamControls({
             <Button
               size="icon"
               variant="destructive"
-              onClick={handleDeleteTeam}
+              onClick={() => setAlertDialogOpen(true)}
             >
               <Trash2 />
             </Button>
@@ -205,6 +244,23 @@ function TeamControls({
           <TooltipContent side="bottom">Удалить команду</TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
+      <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Удалить команду</AlertDialogTitle>
+            <AlertDialogDescription>
+              Вы уверены, что хотите удалить команду?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Отменить</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteTeam}>
+              Подтвердить
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -220,6 +276,8 @@ function UsersTable({ team }: { team: TeamDto }) {
   const table = useReactTable({
     data,
     columns,
+    enableRowSelection: (row) => row.original.role !== MEMBER_ROLES.owner,
+    getRowId: (row) => String(row.id),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -305,8 +363,21 @@ function UsersTable({ team }: { team: TeamDto }) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          <Button
+            variant="destructive"
+            size="sm"
+            className={cn("opacity-0 transition-opacity", {
+              ["opacity-100"]:
+                table.getFilteredSelectedRowModel().rows.length > 0,
+            })}
+          >
+            <UserX />
+            <span>Исключить выделенных участников</span>
+          </Button>
+        </div>
+        <div className="mr-4 flex items-center justify-center text-sm font-medium">
+          Страница {table.getState().pagination.pageIndex + 1} из{" "}
+          {table.getPageCount()}
         </div>
         <div className="space-x-2">
           <Button
@@ -315,7 +386,7 @@ function UsersTable({ team }: { team: TeamDto }) {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            <ArrowLeft />
           </Button>
           <Button
             variant="outline"
@@ -323,7 +394,7 @@ function UsersTable({ team }: { team: TeamDto }) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            <ArrowRight />
           </Button>
         </div>
       </div>

@@ -3,11 +3,13 @@
  * Do not edit manually.
  */
 
-import { z } from 'zod'
+import { teamDtoSchema } from "./teamDtoSchema";
+import { z } from "zod";
 
 export const projectDtoSchema = z.object({
-  id: z.number().describe('ID проекта'),
-  name: z.string().describe('Название проекта'),
-})
+  id: z.number().describe("ID проекта"),
+  name: z.string().describe("Название проекта"),
+  team: z.lazy(() => teamDtoSchema).describe("Команда проекта"),
+});
 
-export type ProjectDtoSchema = z.infer<typeof projectDtoSchema>
+export type ProjectDtoSchema = z.infer<typeof projectDtoSchema>;

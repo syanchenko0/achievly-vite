@@ -3,15 +3,21 @@
  * Do not edit manually.
  */
 
+import type { TeamDto } from "./TeamDto";
+
 export type ProjectDto = {
   /**
    * @description ID проекта
    * @type number
    */
-  id: number
+  id: number;
   /**
    * @description Название проекта
    * @type string
    */
-  name: string
-}
+  name: string;
+  /**
+   * @description Команда проекта
+   */
+  team: TeamDto;
+};
