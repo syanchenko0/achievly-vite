@@ -7,6 +7,7 @@ export type { CreateGoalMutationKey } from "./hooks/goals/useCreateGoal";
 export type { DeleteGoalMutationKey } from "./hooks/goals/useDeleteGoal";
 export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
 export type { UpdateGoalMutationKey } from "./hooks/goals/useUpdateGoal";
+export type { UpdateTasksMutationKey } from "./hooks/goals/useUpdateTasks";
 export type { CreateNotificationMutationKey } from "./hooks/notifications/useCreateNotification";
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
 export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
@@ -96,6 +97,13 @@ export type {
   UpdateGoalMutationResponse,
   UpdateGoalMutation,
 } from "./models/goals/UpdateGoal";
+export type {
+  UpdateTasks200,
+  UpdateTasks400,
+  UpdateTasksMutationRequest,
+  UpdateTasksMutationResponse,
+  UpdateTasksMutation,
+} from "./models/goals/UpdateTasks";
 export type { MemberDto } from "./models/MemberDto";
 export type { NotificationDto } from "./models/NotificationDto";
 export type { NotificationEntity } from "./models/NotificationEntity";
@@ -208,6 +216,7 @@ export type {
 export type { UpdateEventBody } from "./models/UpdateEventBody";
 export type { UpdateGoalBody } from "./models/UpdateGoalBody";
 export type { UpdateResult } from "./models/UpdateResult";
+export type { UpdateTaskBody } from "./models/UpdateTaskBody";
 export type { UpdateTeamMemberBody } from "./models/UpdateTeamMemberBody";
 export type { UserDto } from "./models/UserDto";
 export type {
@@ -281,6 +290,12 @@ export type {
   UpdateGoalMutationRequestSchema,
   UpdateGoalMutationResponseSchema,
 } from "./zod/goals/updateGoalSchema";
+export type {
+  UpdateTasks200Schema,
+  UpdateTasks400Schema,
+  UpdateTasksMutationRequestSchema,
+  UpdateTasksMutationResponseSchema,
+} from "./zod/goals/updateTasksSchema";
 export type { MemberDtoSchema } from "./zod/memberDtoSchema";
 export type { NotificationDtoSchema } from "./zod/notificationDtoSchema";
 export type { NotificationEntitySchema } from "./zod/notificationEntitySchema";
@@ -379,6 +394,7 @@ export type {
 export type { UpdateEventBodySchema } from "./zod/updateEventBodySchema";
 export type { UpdateGoalBodySchema } from "./zod/updateGoalBodySchema";
 export type { UpdateResultSchema } from "./zod/updateResultSchema";
+export type { UpdateTaskBodySchema } from "./zod/updateTaskBodySchema";
 export type { UpdateTeamMemberBodySchema } from "./zod/updateTeamMemberBodySchema";
 export type { UserDtoSchema } from "./zod/userDtoSchema";
 export type {
@@ -434,6 +450,11 @@ export {
   updateGoal,
   useUpdateGoal,
 } from "./hooks/goals/useUpdateGoal";
+export {
+  updateTasksMutationKey,
+  updateTasks,
+  useUpdateTasks,
+} from "./hooks/goals/useUpdateTasks";
 export {
   createNotificationMutationKey,
   createNotification,
@@ -580,6 +601,12 @@ export {
   updateGoalMutationRequestSchema,
   updateGoalMutationResponseSchema,
 } from "./zod/goals/updateGoalSchema";
+export {
+  updateTasks200Schema,
+  updateTasks400Schema,
+  updateTasksMutationRequestSchema,
+  updateTasksMutationResponseSchema,
+} from "./zod/goals/updateTasksSchema";
 export { memberDtoSchema } from "./zod/memberDtoSchema";
 export { notificationDtoSchema } from "./zod/notificationDtoSchema";
 export { notificationEntitySchema } from "./zod/notificationEntitySchema";
@@ -678,6 +705,7 @@ export {
 export { updateEventBodySchema } from "./zod/updateEventBodySchema";
 export { updateGoalBodySchema } from "./zod/updateGoalBodySchema";
 export { updateResultSchema } from "./zod/updateResultSchema";
+export { updateTaskBodySchema } from "./zod/updateTaskBodySchema";
 export { updateTeamMemberBodySchema } from "./zod/updateTeamMemberBodySchema";
 export { userDtoSchema } from "./zod/userDtoSchema";
 export {
