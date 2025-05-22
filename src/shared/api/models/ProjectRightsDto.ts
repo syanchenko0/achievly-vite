@@ -10,6 +10,11 @@ export type ProjectRightsDto = {
    */
   project_id: number
   /**
+   * @description Наименование проекта
+   * @type string
+   */
+  project_name: string
+  /**
    * @description Создание
    * @type boolean
    */

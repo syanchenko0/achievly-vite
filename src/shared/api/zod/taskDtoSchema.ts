@@ -8,9 +8,9 @@ import { z } from 'zod'
 export const taskDtoSchema = z.object({
   id: z.number().describe('ID задачи'),
   title: z.string().describe('Заголовок задачи'),
-  deadline_date: z.string().describe('Дата окончания задачи'),
-  note: z.string().describe('Примечание задачи'),
-  done_date: z.string().describe('Дата выполнения задачи'),
+  deadline_date: z.string().describe('Дата окончания задачи').nullable().nullish(),
+  note: z.string().describe('Примечание задачи').nullable().nullish(),
+  done_date: z.string().describe('Дата выполнения задачи').nullable().nullish(),
 })
 
 export type TaskDtoSchema = z.infer<typeof taskDtoSchema>

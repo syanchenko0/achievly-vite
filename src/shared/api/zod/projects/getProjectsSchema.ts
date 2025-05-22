@@ -8,7 +8,7 @@ import { projectDtoSchema } from "../projectDtoSchema";
 import { z } from "zod";
 
 export const getProjectsQueryParamsSchema = z.object({
-  team_id: z.coerce.number(),
+  team_id: z.string(),
 });
 
 export type GetProjectsQueryParamsSchema = z.infer<

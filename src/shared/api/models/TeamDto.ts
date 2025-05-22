@@ -4,6 +4,7 @@
  */
 
 import type { MemberDto } from "./MemberDto";
+import type { ProjectRightsDto } from "./ProjectRightsDto";
 
 export type TeamDto = {
   /**
@@ -21,6 +22,11 @@ export type TeamDto = {
    * @type string
    */
   user_role: string;
+  /**
+   * @description Массив прав в проектах
+   * @type array | undefined
+   */
+  user_projects_rights?: ProjectRightsDto[];
   /**
    * @description Участники команды
    * @type array

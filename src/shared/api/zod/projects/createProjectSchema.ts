@@ -8,12 +8,12 @@ import { createProjectBodySchema } from "../createProjectBodySchema";
 import { projectDtoSchema } from "../projectDtoSchema";
 import { z } from "zod";
 
-export const createProjectPathParamsSchema = z.object({
-  team_id: z.coerce.number(),
+export const createProjectQueryParamsSchema = z.object({
+  team_id: z.string(),
 });
 
-export type CreateProjectPathParamsSchema = z.infer<
-  typeof createProjectPathParamsSchema
+export type CreateProjectQueryParamsSchema = z.infer<
+  typeof createProjectQueryParamsSchema
 >;
 
 export const createProject200Schema = z.lazy(() => projectDtoSchema);

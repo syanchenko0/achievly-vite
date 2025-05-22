@@ -1,12 +1,12 @@
 import {
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/shared/ui/sidebar";
-import { FolderX, Plus } from "lucide-react";
-import { LayoutNavItem } from "@/widgets/layout/ui/nav-item";
+import { FolderX } from "lucide-react";
 import { useTeamSettingsStore } from "@/app/store/team";
 import { useGetProjects, useGetTeams } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
@@ -14,15 +14,12 @@ import { MEMBER_ROLES } from "@/shared/constants/teams";
 import { useMemo } from "react";
 import { replacePathParams } from "@/app/lib/utils";
 import { ROUTES } from "@/shared/constants/router";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/shared/ui/dialog";
+import { Link, matchPath, useLocation } from "react-router";
+import { ProjectsGroupDialog } from "@/features/layout/ui/projects-group-dialog";
 
 function ProjectsGroup() {
+  const { pathname } = useLocation();
+
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
 
   const { data: teams, isLoading: teamsLoading } = useGetTeams();
@@ -34,24 +31,31 @@ function ProjectsGroup() {
       },
     },
     {
-      query: { enabled: !!activeTeamId },
+      query: { enabled: !!activeTeamId && !!teams?.length },
     },
   );
 
-  const items: { label: string; link: string }[] = useMemo(
-    () =>
-      (projects || []).map((project) => ({
-        label: project.name,
-        link: replacePathParams(ROUTES.project, {
-          project_id: String(project.id),
-        }),
-      })),
-    [projects],
+  const currentTeam = useMemo(
+    () => teams?.find((team) => team.id === Number(activeTeamId)),
+    [activeTeamId, teams],
   );
 
-  const isOwner =
-    teams?.find((team) => team.id === Number(activeTeamId))?.user_role ===
-    MEMBER_ROLES.owner;
+  const items: { label: string; link: string }[] = useMemo(() => {
+    const availableProjects = projects?.filter((project) =>
+      currentTeam?.user_projects_rights?.some(
+        (right) => right.project_id === project.id && right.read,
+      ),
+    );
+
+    return (availableProjects || []).map((project) => ({
+      label: project.name,
+      link: replacePathParams(ROUTES.project, {
+        project_id: String(project.id),
+      }),
+    }));
+  }, [currentTeam?.user_projects_rights, projects]);
+
+  const isOwner = currentTeam?.user_role === MEMBER_ROLES.owner;
 
   if (projectsLoading || teamsLoading) {
     return (
@@ -61,34 +65,14 @@ function ProjectsGroup() {
     );
   }
 
-  if (!activeTeamId) {
+  if (!activeTeamId || !teams?.length) {
     return null;
   }
 
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Проекты</SidebarGroupLabel>
-      {isOwner && (
-        <Dialog>
-          <DialogTrigger asChild>
-            <SidebarGroupAction
-              title="Добавить проект"
-              className="cursor-pointer rounded-sm"
-            >
-              <Plus />
-              <span className="sr-only">Добавить проект</span>
-            </SidebarGroupAction>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>Создание проекта</DialogHeader>
-            <DialogDescription>
-              Заполните необходимые поля, чтобы создать проект
-            </DialogDescription>
-
-            <div></div>
-          </DialogContent>
-        </Dialog>
-      )}
+      {isOwner && <ProjectsGroupDialog team_id={activeTeamId} />}
       <SidebarGroupContent>
         <SidebarMenu>
           {!items.length && (
@@ -99,8 +83,18 @@ function ProjectsGroup() {
               </span>
             </div>
           )}
-          {items.map((item, index) => (
-            <LayoutNavItem key={index} {...item} />
+          {items.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <SidebarMenuButton
+                tooltip={item.label}
+                isActive={!!matchPath(item.link, pathname)}
+                className="cursor-pointer"
+              >
+                <Link to={item.link} className="w-full">
+                  {item.label}
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

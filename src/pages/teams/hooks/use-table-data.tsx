@@ -1,4 +1,4 @@
-import { type TeamDto } from "@/shared/api";
+import { type ProjectRightsDto, type TeamDto } from "@/shared/api";
 import { useMemo } from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Button } from "@/shared/ui/button";
@@ -15,6 +15,7 @@ type TableData = {
   id: number;
   role: string;
   username: string;
+  projects_rights?: ProjectRightsDto[];
 };
 
 const useTableData = (team: TeamDto) => {
@@ -24,6 +25,7 @@ const useTableData = (team: TeamDto) => {
         id: member.id,
         role: member.role,
         username: member.user.username,
+        projects_rights: member.projects_rights,
       })),
     [team.members],
   );
@@ -56,7 +58,7 @@ const useTableData = (team: TeamDto) => {
                   column.toggleSorting(column.getIsSorted() === "asc")
                 }
                 title={`Сортировать по ${
-                  column.getIsSorted() === "asc" ? "возрастанию" : "убыванию"
+                  column.getIsSorted() === "asc" ? "убыванию" : "возрастанию"
                 }`}
               >
                 {column.getIsSorted() === false && <ArrowUpDown />}
@@ -77,6 +79,7 @@ const useTableData = (team: TeamDto) => {
             team_id={team.id}
             member_role={row.original.role}
             user_role={team.user_role}
+            projects_rights={row.original.projects_rights}
           />
         ),
       },

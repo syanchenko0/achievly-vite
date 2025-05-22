@@ -12,7 +12,7 @@ import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import type {
   CreateProjectMutationRequest,
   CreateProjectMutationResponse,
-  CreateProjectPathParams,
+  CreateProjectQueryParams,
   CreateProject400,
 } from "../../models/projects/CreateProject";
 import { useMutation } from "@tanstack/react-query";
@@ -33,12 +33,9 @@ export type CreateProjectMutationKey = ReturnType<
  */
 export async function createProject(
   {
-    team_id,
     data,
-  }: {
-    team_id: CreateProjectPathParams["team_id"];
-    data: CreateProjectMutationRequest;
-  },
+    params,
+  }: { data: CreateProjectMutationRequest; params: CreateProjectQueryParams },
   config: Partial<RequestConfig<CreateProjectMutationRequest>> & {
     client?: typeof client;
   } = {},
@@ -52,6 +49,7 @@ export async function createProject(
   >({
     method: "POST",
     url: `/projects`,
+    params,
     data: createProjectMutationRequestSchema.parse(data),
     ...requestConfig,
   });
@@ -67,10 +65,7 @@ export function useCreateProject<TContext>(
     mutation?: UseMutationOptions<
       CreateProjectMutationResponse,
       ResponseErrorConfig<CreateProject400>,
-      {
-        team_id: CreateProjectPathParams["team_id"];
-        data: CreateProjectMutationRequest;
-      },
+      { data: CreateProjectMutationRequest; params: CreateProjectQueryParams },
       TContext
     > & { client?: QueryClient };
     client?: Partial<RequestConfig<CreateProjectMutationRequest>> & {
@@ -85,15 +80,12 @@ export function useCreateProject<TContext>(
   return useMutation<
     CreateProjectMutationResponse,
     ResponseErrorConfig<CreateProject400>,
-    {
-      team_id: CreateProjectPathParams["team_id"];
-      data: CreateProjectMutationRequest;
-    },
+    { data: CreateProjectMutationRequest; params: CreateProjectQueryParams },
     TContext
   >(
     {
-      mutationFn: async ({ team_id, data }) => {
-        return createProject({ team_id, data }, config);
+      mutationFn: async ({ data, params }) => {
+        return createProject({ data, params }, config);
       },
       mutationKey,
       ...mutationOptions,

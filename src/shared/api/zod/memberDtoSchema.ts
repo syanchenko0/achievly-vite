@@ -3,6 +3,7 @@
  * Do not edit manually.
  */
 
+import { projectRightsDtoSchema } from "./projectRightsDtoSchema";
 import { userDtoSchema } from "./userDtoSchema";
 import { z } from "zod";
 
@@ -10,6 +11,10 @@ export const memberDtoSchema = z.object({
   id: z.number().describe("ID участника"),
   user: z.lazy(() => userDtoSchema).describe("Данные пользователя"),
   role: z.string().describe("Роль в команде"),
+  projects_rights: z
+    .array(z.lazy(() => projectRightsDtoSchema))
+    .describe("Массив прав в проектах")
+    .optional(),
 });
 
 export type MemberDtoSchema = z.infer<typeof memberDtoSchema>;

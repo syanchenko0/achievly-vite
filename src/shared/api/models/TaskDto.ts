@@ -18,15 +18,15 @@ export type TaskDto = {
    * @description Дата окончания задачи
    * @type string
    */
-  deadline_date: string
+  deadline_date?: string | null
   /**
    * @description Примечание задачи
    * @type string
    */
-  note: string
+  note?: string | null
   /**
    * @description Дата выполнения задачи
    * @type string
    */
-  done_date: string
+  done_date?: string | null
 }

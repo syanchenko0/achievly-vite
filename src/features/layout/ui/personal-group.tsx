@@ -25,6 +25,7 @@ function PersonalGroup() {
       title: "Цели",
       icon: Goal,
       items: [
+        { label: "Доска", link: ROUTES.goals_board },
         { label: "Список", link: ROUTES.goals_list },
         {
           label: "Статистика",
@@ -53,7 +54,9 @@ function PersonalGroup() {
                   className="cursor-pointer"
                 >
                   {item.icon && <item.icon />}
-                  <Link to={item.link}>{item.title}</Link>
+                  <Link to={item.link} className="w-full">
+                    {item.title}
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             );
@@ -80,7 +83,9 @@ function PersonalGroup() {
                           asChild
                           isActive={!!matchPath(subItem.link, pathname)}
                         >
-                          <Link to={subItem.link}>{subItem.label}</Link>
+                          <Link to={subItem.link} className="w-full">
+                            {subItem.label}
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

@@ -13,7 +13,7 @@ export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
 export type { CreateTeamMutationKey } from "./hooks/teams/useCreateTeam";
 export type { DeleteTeamMutationKey } from "./hooks/teams/useDeleteTeam";
 export type { DeleteTeamMemberMutationKey } from "./hooks/teams/useDeleteTeamMember";
-export type { GetProjectsRightsQueryKey } from "./hooks/teams/useGetProjectsRights";
+export type { DeleteTeamMembersMutationKey } from "./hooks/teams/useDeleteTeamMembers";
 export type { GetTeamQueryKey } from "./hooks/teams/useGetTeam";
 export type { GetTeamGeneralInfoQueryKey } from "./hooks/teams/useGetTeamGeneralInfo";
 export type { GetTeamJoinLinkQueryKey } from "./hooks/teams/useGetTeamJoinLink";
@@ -34,6 +34,7 @@ export type { CreateGoalBody } from "./models/CreateGoalBody";
 export type { CreateNotificationBody } from "./models/CreateNotificationBody";
 export type { CreateProjectBody } from "./models/CreateProjectBody";
 export type { CreateTeamBody } from "./models/CreateTeamBody";
+export type { DeleteTeamMembersBody } from "./models/DeleteTeamMembersBody";
 export type { EventDto } from "./models/EventDto";
 export type { EventEntity } from "./models/EventEntity";
 export type {
@@ -63,6 +64,7 @@ export type {
   UpdateEventMutationResponse,
   UpdateEventMutation,
 } from "./models/events/UpdateEvent";
+export type { GoalBodyTask } from "./models/GoalBodyTask";
 export type { GoalDto } from "./models/GoalDto";
 export type { GoalEntity } from "./models/GoalEntity";
 export type {
@@ -107,7 +109,7 @@ export type {
 export type { ProjectDto } from "./models/ProjectDto";
 export type { ProjectRightsDto } from "./models/ProjectRightsDto";
 export type {
-  CreateProjectPathParams,
+  CreateProjectQueryParams,
   CreateProject200,
   CreateProject400,
   CreateProjectMutationRequest,
@@ -146,12 +148,13 @@ export type {
   DeleteTeamMemberMutation,
 } from "./models/teams/DeleteTeamMember";
 export type {
-  GetProjectsRightsPathParams,
-  GetProjectsRights200,
-  GetProjectsRights400,
-  GetProjectsRightsQueryResponse,
-  GetProjectsRightsQuery,
-} from "./models/teams/GetProjectsRights";
+  DeleteTeamMembersPathParams,
+  DeleteTeamMembers200,
+  DeleteTeamMembers400,
+  DeleteTeamMembersMutationRequest,
+  DeleteTeamMembersMutationResponse,
+  DeleteTeamMembersMutation,
+} from "./models/teams/DeleteTeamMembers";
 export type {
   GetTeamPathParams,
   GetTeam200,
@@ -224,6 +227,7 @@ export type { CreateGoalBodySchema } from "./zod/createGoalBodySchema";
 export type { CreateNotificationBodySchema } from "./zod/createNotificationBodySchema";
 export type { CreateProjectBodySchema } from "./zod/createProjectBodySchema";
 export type { CreateTeamBodySchema } from "./zod/createTeamBodySchema";
+export type { DeleteTeamMembersBodySchema } from "./zod/deleteTeamMembersBodySchema";
 export type { EventDtoSchema } from "./zod/eventDtoSchema";
 export type { EventEntitySchema } from "./zod/eventEntitySchema";
 export type {
@@ -249,6 +253,7 @@ export type {
   UpdateEventMutationRequestSchema,
   UpdateEventMutationResponseSchema,
 } from "./zod/events/updateEventSchema";
+export type { GoalBodyTaskSchema } from "./zod/goalBodyTaskSchema";
 export type { GoalDtoSchema } from "./zod/goalDtoSchema";
 export type { GoalEntitySchema } from "./zod/goalEntitySchema";
 export type {
@@ -288,7 +293,7 @@ export type {
 export type { ProjectDtoSchema } from "./zod/projectDtoSchema";
 export type { ProjectRightsDtoSchema } from "./zod/projectRightsDtoSchema";
 export type {
-  CreateProjectPathParamsSchema,
+  CreateProjectQueryParamsSchema,
   CreateProject200Schema,
   CreateProject400Schema,
   CreateProjectMutationRequestSchema,
@@ -316,17 +321,18 @@ export type {
   DeleteTeamMemberMutationResponseSchema,
 } from "./zod/teams/deleteTeamMemberSchema";
 export type {
+  DeleteTeamMembersPathParamsSchema,
+  DeleteTeamMembers200Schema,
+  DeleteTeamMembers400Schema,
+  DeleteTeamMembersMutationRequestSchema,
+  DeleteTeamMembersMutationResponseSchema,
+} from "./zod/teams/deleteTeamMembersSchema";
+export type {
   DeleteTeamPathParamsSchema,
   DeleteTeam200Schema,
   DeleteTeam400Schema,
   DeleteTeamMutationResponseSchema,
 } from "./zod/teams/deleteTeamSchema";
-export type {
-  GetProjectsRightsPathParamsSchema,
-  GetProjectsRights200Schema,
-  GetProjectsRights400Schema,
-  GetProjectsRightsQueryResponseSchema,
-} from "./zod/teams/getProjectsRightsSchema";
 export type {
   GetTeamGeneralInfoPathParamsSchema,
   GetTeamGeneralInfo200Schema,
@@ -460,11 +466,10 @@ export {
   useDeleteTeamMember,
 } from "./hooks/teams/useDeleteTeamMember";
 export {
-  getProjectsRightsQueryKey,
-  getProjectsRights,
-  getProjectsRightsQueryOptions,
-  useGetProjectsRights,
-} from "./hooks/teams/useGetProjectsRights";
+  deleteTeamMembersMutationKey,
+  deleteTeamMembers,
+  useDeleteTeamMembers,
+} from "./hooks/teams/useDeleteTeamMembers";
 export {
   getTeamQueryKey,
   getTeam,
@@ -521,6 +526,7 @@ export { createGoalBodySchema } from "./zod/createGoalBodySchema";
 export { createNotificationBodySchema } from "./zod/createNotificationBodySchema";
 export { createProjectBodySchema } from "./zod/createProjectBodySchema";
 export { createTeamBodySchema } from "./zod/createTeamBodySchema";
+export { deleteTeamMembersBodySchema } from "./zod/deleteTeamMembersBodySchema";
 export { eventDtoSchema } from "./zod/eventDtoSchema";
 export { eventEntitySchema } from "./zod/eventEntitySchema";
 export {
@@ -546,6 +552,7 @@ export {
   updateEventMutationRequestSchema,
   updateEventMutationResponseSchema,
 } from "./zod/events/updateEventSchema";
+export { goalBodyTaskSchema } from "./zod/goalBodyTaskSchema";
 export { goalDtoSchema } from "./zod/goalDtoSchema";
 export { goalEntitySchema } from "./zod/goalEntitySchema";
 export {
@@ -585,7 +592,7 @@ export {
 export { projectDtoSchema } from "./zod/projectDtoSchema";
 export { projectRightsDtoSchema } from "./zod/projectRightsDtoSchema";
 export {
-  createProjectPathParamsSchema,
+  createProjectQueryParamsSchema,
   createProject200Schema,
   createProject400Schema,
   createProjectMutationRequestSchema,
@@ -613,17 +620,18 @@ export {
   deleteTeamMemberMutationResponseSchema,
 } from "./zod/teams/deleteTeamMemberSchema";
 export {
+  deleteTeamMembersPathParamsSchema,
+  deleteTeamMembers200Schema,
+  deleteTeamMembers400Schema,
+  deleteTeamMembersMutationRequestSchema,
+  deleteTeamMembersMutationResponseSchema,
+} from "./zod/teams/deleteTeamMembersSchema";
+export {
   deleteTeamPathParamsSchema,
   deleteTeam200Schema,
   deleteTeam400Schema,
   deleteTeamMutationResponseSchema,
 } from "./zod/teams/deleteTeamSchema";
-export {
-  getProjectsRightsPathParamsSchema,
-  getProjectsRights200Schema,
-  getProjectsRights400Schema,
-  getProjectsRightsQueryResponseSchema,
-} from "./zod/teams/getProjectsRightsSchema";
 export {
   getTeamGeneralInfoPathParamsSchema,
   getTeamGeneralInfo200Schema,

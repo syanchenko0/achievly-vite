@@ -4,12 +4,17 @@
  */
 
 import { memberDtoSchema } from "./memberDtoSchema";
+import { projectRightsDtoSchema } from "./projectRightsDtoSchema";
 import { z } from "zod";
 
 export const teamDtoSchema = z.object({
   id: z.number().describe("ID команды"),
   name: z.string().describe("Наименование команды"),
   user_role: z.string().describe("Роль пользователя в команде"),
+  user_projects_rights: z
+    .array(z.lazy(() => projectRightsDtoSchema))
+    .describe("Массив прав в проектах")
+    .optional(),
   members: z.array(z.lazy(() => memberDtoSchema)).describe("Участники команды"),
 });
 

@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-import { taskDtoSchema } from "./taskDtoSchema";
+import { goalBodyTaskSchema } from "./goalBodyTaskSchema";
 import { z } from "zod";
 
 export const updateGoalBodySchema = z.object({
@@ -14,7 +14,7 @@ export const updateGoalBodySchema = z.object({
   note: z.string().describe("Примечание к цели").optional(),
   achieved_date: z.string().describe("Дата выполнения цели").optional(),
   tasks: z
-    .array(z.lazy(() => taskDtoSchema))
+    .array(z.lazy(() => goalBodyTaskSchema))
     .describe("Задачи цели")
     .nullable()
     .nullish(),

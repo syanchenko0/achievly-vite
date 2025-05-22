@@ -3,6 +3,7 @@
  * Do not edit manually.
  */
 
+import type { ProjectRightsDto } from "./ProjectRightsDto";
 import type { UserDto } from "./UserDto";
 
 export type MemberDto = {
@@ -20,4 +21,9 @@ export type MemberDto = {
    * @type string
    */
   role: string;
+  /**
+   * @description Массив прав в проектах
+   * @type array | undefined
+   */
+  projects_rights?: ProjectRightsDto[];
 };

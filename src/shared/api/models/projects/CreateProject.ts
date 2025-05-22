@@ -7,11 +7,11 @@ import type { BadRequest } from "../BadRequest";
 import type { CreateProjectBody } from "../CreateProjectBody";
 import type { ProjectDto } from "../ProjectDto";
 
-export type CreateProjectPathParams = {
+export type CreateProjectQueryParams = {
   /**
-   * @type number
+   * @type string
    */
-  team_id: number;
+  team_id: string;
 };
 
 export type CreateProject200 = ProjectDto;
@@ -25,6 +25,6 @@ export type CreateProjectMutationResponse = CreateProject200;
 export type CreateProjectMutation = {
   Response: CreateProject200;
   Request: CreateProjectMutationRequest;
-  PathParams: CreateProjectPathParams;
+  QueryParams: CreateProjectQueryParams;
   Errors: CreateProject400;
 };

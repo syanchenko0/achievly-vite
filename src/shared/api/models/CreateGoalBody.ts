@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-import type { TaskDto } from "./TaskDto";
+import type { GoalBodyTask } from "./GoalBodyTask";
 
 export type CreateGoalBody = {
   /**
@@ -30,5 +30,5 @@ export type CreateGoalBody = {
    * @description Задачи цели
    * @type array
    */
-  tasks?: TaskDto[] | null;
+  tasks?: GoalBodyTask[] | null;
 };

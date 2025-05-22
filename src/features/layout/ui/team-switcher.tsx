@@ -15,7 +15,7 @@ import { ChevronsUpDown, Plus, Settings, User, Users } from "lucide-react";
 import { useGetTeams } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useMemo, useState } from "react";
-import { TeamSwitcherDialog } from "@/features/team-switcher/ui/team-switcher-dialog";
+import { TeamSwitcherDialog } from "@/features/layout/ui/team-switcher-dialog";
 import { useTeamSettingsStore } from "@/app/store/team";
 import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router";

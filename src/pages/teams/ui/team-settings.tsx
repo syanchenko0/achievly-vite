@@ -14,6 +14,7 @@ import {
 import {
   type TeamDto,
   useDeleteTeam as useDeleteTeamQuery,
+  useDeleteTeamMembers,
   useGetTeam,
   useLeaveFromTeam,
 } from "@/shared/api";
@@ -60,6 +61,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { Skeleton } from "@/shared/ui/skeleton";
 
@@ -267,6 +269,8 @@ function TeamControls({
 
 function UsersTable({ team }: { team: TeamDto }) {
   const { data, columns } = useTableData(team);
+  const { mutateAsync: deleteMembers, isPending: deleteMembersLoading } =
+    useDeleteTeamMembers();
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -293,6 +297,16 @@ function UsersTable({ team }: { team: TeamDto }) {
       rowSelection,
     },
   });
+
+  const handleDeleteMembers = async () => {
+    const selectedRows = table.getSelectedRowModel().rows;
+    const ids = selectedRows.map((row) => row.original.id);
+
+    await deleteMembers({
+      team_id: String(team.id),
+      data: { member_ids: ids },
+    });
+  };
 
   return (
     <div className="w-full">
@@ -362,18 +376,43 @@ function UsersTable({ team }: { team: TeamDto }) {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          <Button
-            variant="destructive"
-            size="sm"
-            className={cn("opacity-0 transition-opacity", {
-              ["opacity-100"]:
-                table.getFilteredSelectedRowModel().rows.length > 0,
-            })}
-          >
-            <UserX />
-            <span>Исключить выделенных участников</span>
-          </Button>
+        <div className="flex-1">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                size="sm"
+                className={cn("opacity-0 transition-opacity", {
+                  ["opacity-100"]:
+                    table.getFilteredSelectedRowModel().rows.length > 0,
+                })}
+                disabled={deleteMembersLoading}
+              >
+                {deleteMembersLoading ? (
+                  <LoaderIcon className="animate-spin" />
+                ) : (
+                  <>
+                    <UserX />
+                    <span>Исключить выделенных участников</span>
+                  </>
+                )}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Подтвердите действие</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Вы уверены, что хотите исключить выделенных участников?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Отменить</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteMembers}>
+                  Подтвердить
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <div className="mr-4 flex items-center justify-center text-sm font-medium">
           Страница {table.getState().pagination.pageIndex + 1} из{" "}

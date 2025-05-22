@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router";
-import { Layout } from "@/widgets/layout";
+import { Layout } from "@/features/layout";
 import { ROUTES } from "@/shared/constants/router";
 import { lazy, Suspense } from "react";
 import { Loader } from "@/shared/ui/loader";
-import { RequireAuth } from "@/features/require-auth";
+import { RequireAuth } from "@/shared/ui/require-auth";
 import { PageLoader } from "@/shared/ui/page-loader";
 
 const AuthPage = lazy(() =>
@@ -24,6 +24,21 @@ const TeamJoinPage = lazy(() =>
 const TeamSettingsPage = lazy(() =>
   import("@/pages/teams").then((module) => ({
     default: module.TeamSettings,
+  })),
+);
+const GoalsBoardPage = lazy(() =>
+  import("@/pages/goals").then((module) => ({
+    default: module.GoalsBoard,
+  })),
+);
+const GoalsListPage = lazy(() =>
+  import("@/pages/goals").then((module) => ({
+    default: module.GoalsList,
+  })),
+);
+const GoalsStatisticsPage = lazy(() =>
+  import("@/pages/goals").then((module) => ({
+    default: module.GoalsStatistics,
   })),
 );
 
@@ -65,6 +80,36 @@ const router = createBrowserRouter([
           <Suspense fallback={<PageLoader />}>
             <RequireAuth>
               <TeamSettingsPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.goals_board,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <GoalsBoardPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.goals_list,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <GoalsListPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.goals_statistics,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <GoalsStatisticsPage />
             </RequireAuth>
           </Suspense>
         ),

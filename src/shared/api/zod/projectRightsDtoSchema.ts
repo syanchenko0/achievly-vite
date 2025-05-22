@@ -7,6 +7,7 @@ import { z } from 'zod'
 
 export const projectRightsDtoSchema = z.object({
   project_id: z.number().describe('ID проекта'),
+  project_name: z.string().describe('Наименование проекта'),
   create: z.boolean().describe('Создание'),
   read: z.boolean().describe('Чтение'),
   update: z.boolean().describe('Обновление'),
