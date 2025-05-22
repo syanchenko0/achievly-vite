@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
 import type { GoalDto, TaskDto } from "@/shared/api";
-import type { DragEndEvent } from "@dnd-kit/core";
+import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 
 const useTasksDnd = ({ goals }: { goals?: GoalDto[] }) => {
   const [activeTasks, setActiveTasks] = useState<TaskDto[]>([]);
-
   const [doneTasks, setDoneTasks] = useState<TaskDto[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const activeTask = [...activeTasks, ...doneTasks].find(
+    (task) => String(task.id) === activeId,
+  );
+
+  function onDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id as string);
+  }
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+    setActiveId(null);
 
     if (!over) return;
 
     const activeIncluded = activeTasks.some((t) => String(t.id) === active.id);
-
     const doneIncluded = doneTasks.some((t) => String(t.id) === active.id);
 
     const task = (activeIncluded ? activeTasks : doneTasks).find(
@@ -46,7 +54,7 @@ const useTasksDnd = ({ goals }: { goals?: GoalDto[] }) => {
     }
   }, [goals]);
 
-  return { activeTasks, doneTasks, onDragEnd };
+  return { activeTasks, doneTasks, onDragStart, onDragEnd, activeTask };
 };
 
 export { useTasksDnd };

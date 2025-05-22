@@ -1,73 +1,30 @@
-import type { DragEndEvent } from "@dnd-kit/core";
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
-import type { GoalDto } from "@/shared/api";
+import {
+  DndContext,
+  DragOverlay,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 import { type TaskDto, useGetGoals } from "@/shared/api";
 import { GOALS_STATUS } from "@/shared/constants/goals";
 import { CalendarIcon, GripVertical } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { useEffect, useState } from "react";
-
-const useTasksDnd = ({ goals }: { goals?: GoalDto[] }) => {
-  const [activeTasks, setActiveTasks] = useState<TaskDto[]>([]);
-
-  const [doneTasks, setDoneTasks] = useState<TaskDto[]>([]);
-
-  function onDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-
-    if (!over) return;
-
-    const activeIncluded = activeTasks.some((t) => String(t.id) === active.id);
-
-    const doneIncluded = doneTasks.some((t) => String(t.id) === active.id);
-
-    const task = (activeIncluded ? activeTasks : doneTasks).find(
-      (t) => String(t.id) === active.id,
-    );
-
-    if (!task) return;
-
-    if (over.id === "done") {
-      if (activeIncluded)
-        setActiveTasks((prev) => prev.filter((t) => t.id !== task.id));
-      if (!doneIncluded) setDoneTasks((prev) => [...prev, task]);
-    }
-
-    if (over.id === "active") {
-      if (doneIncluded)
-        setDoneTasks((prev) => prev.filter((t) => t.id !== task.id));
-      if (!activeIncluded) setActiveTasks((prev) => [...prev, task]);
-    }
-  }
-
-  useEffect(() => {
-    if (goals) {
-      setActiveTasks(
-        goals.flatMap((g) => (g.tasks || []).filter((t) => !t.done_date)),
-      );
-      setDoneTasks(
-        goals.flatMap((g) => (g.tasks || []).filter((t) => t.done_date)),
-      );
-    }
-  }, [goals]);
-
-  return { activeTasks, doneTasks, onDragEnd };
-};
+import { useTasksDnd } from "@/pages/goals/hooks/use-tasks-dnd";
 
 function GoalsBoard() {
   const { data: goals, isLoading: goalsLoading } = useGetGoals({
     params: { status: GOALS_STATUS.ongoing },
   });
 
-  const { activeTasks, doneTasks, onDragEnd } = useTasksDnd({ goals });
+  const { activeTasks, doneTasks, onDragStart, onDragEnd, activeTask } =
+    useTasksDnd({ goals });
 
   if (goalsLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <DndContext onDragEnd={onDragEnd}>
+    <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div className="bg-sidebar flex size-full flex-col gap-y-4 rounded-md border p-4">
         <div className="flex size-full gap-x-6">
           <Droppable id="active">
@@ -95,6 +52,10 @@ function GoalsBoard() {
           </Droppable>
         </div>
       </div>
+
+      <DragOverlay>
+        {activeTask ? <TaskCard task={activeTask} /> : null}
+      </DragOverlay>
     </DndContext>
   );
 }
