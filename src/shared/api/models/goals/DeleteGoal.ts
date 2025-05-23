@@ -9,7 +9,7 @@ export type DeleteGoalPathParams = {
   /**
    * @type string
    */
-  id: string;
+  goal_id: string;
 };
 
 export type DeleteGoal200 = unknown;

@@ -21,19 +21,23 @@ import {
   updateGoalMutationRequestSchema,
 } from "../../zod/goals/updateGoalSchema";
 
-export const updateGoalMutationKey = () => [{ url: "/goals/{id}" }] as const;
+export const updateGoalMutationKey = () =>
+  [{ url: "/goals/{goal_id}" }] as const;
 
 export type UpdateGoalMutationKey = ReturnType<typeof updateGoalMutationKey>;
 
 /**
  * @summary Update goal
- * {@link /goals/:id}
+ * {@link /goals/:goal_id}
  */
 export async function updateGoal(
   {
-    id,
+    goal_id,
     data,
-  }: { id: UpdateGoalPathParams["id"]; data?: UpdateGoalMutationRequest },
+  }: {
+    goal_id: UpdateGoalPathParams["goal_id"];
+    data?: UpdateGoalMutationRequest;
+  },
   config: Partial<RequestConfig<UpdateGoalMutationRequest>> & {
     client?: typeof client;
   } = {},
@@ -46,7 +50,7 @@ export async function updateGoal(
     UpdateGoalMutationRequest
   >({
     method: "PATCH",
-    url: `/goals/${id}`,
+    url: `/goals/${goal_id}`,
     data: updateGoalMutationRequestSchema.parse(data),
     ...requestConfig,
   });
@@ -55,14 +59,17 @@ export async function updateGoal(
 
 /**
  * @summary Update goal
- * {@link /goals/:id}
+ * {@link /goals/:goal_id}
  */
 export function useUpdateGoal<TContext>(
   options: {
     mutation?: UseMutationOptions<
       UpdateGoalMutationResponse,
       ResponseErrorConfig<UpdateGoal400>,
-      { id: UpdateGoalPathParams["id"]; data?: UpdateGoalMutationRequest },
+      {
+        goal_id: UpdateGoalPathParams["goal_id"];
+        data?: UpdateGoalMutationRequest;
+      },
       TContext
     > & { client?: QueryClient };
     client?: Partial<RequestConfig<UpdateGoalMutationRequest>> & {
@@ -77,12 +84,15 @@ export function useUpdateGoal<TContext>(
   return useMutation<
     UpdateGoalMutationResponse,
     ResponseErrorConfig<UpdateGoal400>,
-    { id: UpdateGoalPathParams["id"]; data?: UpdateGoalMutationRequest },
+    {
+      goal_id: UpdateGoalPathParams["goal_id"];
+      data?: UpdateGoalMutationRequest;
+    },
     TContext
   >(
     {
-      mutationFn: async ({ id, data }) => {
-        return updateGoal({ id, data }, config);
+      mutationFn: async ({ goal_id, data }) => {
+        return updateGoal({ goal_id, data }, config);
       },
       mutationKey,
       ...mutationOptions,

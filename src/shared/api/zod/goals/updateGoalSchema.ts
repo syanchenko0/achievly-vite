@@ -9,7 +9,7 @@ import { updateResultSchema } from "../updateResultSchema";
 import { z } from "zod";
 
 export const updateGoalPathParamsSchema = z.object({
-  id: z.string(),
+  goal_id: z.string(),
 });
 
 export type UpdateGoalPathParamsSchema = z.infer<

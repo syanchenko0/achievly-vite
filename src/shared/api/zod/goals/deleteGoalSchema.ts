@@ -7,7 +7,7 @@ import { badRequestSchema } from "../badRequestSchema";
 import { z } from "zod";
 
 export const deleteGoalPathParamsSchema = z.object({
-  id: z.string(),
+  goal_id: z.string(),
 });
 
 export type DeleteGoalPathParamsSchema = z.infer<

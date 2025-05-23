@@ -11,7 +11,7 @@ export type UpdateGoalPathParams = {
   /**
    * @type string
    */
-  id: string;
+  goal_id: string;
 };
 
 export type UpdateGoal200 = UpdateResult;

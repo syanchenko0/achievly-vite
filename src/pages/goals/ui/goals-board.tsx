@@ -3,7 +3,7 @@ import { DragDropProvider, useDroppable } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { CollisionPriority } from "@dnd-kit/abstract";
-import { type TaskDto, useGetGoals, useUpdateTasks } from "@/shared/api";
+import { type TaskDto, useGetGoals, useUpdateTask } from "@/shared/api";
 import { GOALS_STATUS } from "@/shared/constants/goals";
 import { CalendarIcon, GripVertical } from "lucide-react";
 import { format } from "date-fns";
@@ -25,10 +25,10 @@ function GoalsBoard() {
     params: { status: GOALS_STATUS.ongoing },
   });
 
-  const { mutate: updateTasks } = useUpdateTasks();
+  const { mutate: updateTask } = useUpdateTask();
 
   const onDragEnd = () => {
-    updateTasks({ data: [...tasks.active, ...tasks.done] });
+    updateTask({ data });
   };
 
   useEffect(() => {
@@ -72,7 +72,13 @@ function GoalsBoard() {
           };
         });
       }}
-      onDragEnd={onDragEnd}
+      onDragEnd={(event) => {
+        const { operation } = event;
+
+        if (operation.source?.id === undefined) return;
+
+        console.log(event);
+      }}
     >
       <div className="bg-sidebar size-full rounded-md border p-4">
         <div className="flex size-full gap-x-4">
@@ -159,6 +165,7 @@ function TaskCard({
                 ? format(new Date(task.deadline_date), "PPPP", { locale: ru })
                 : "Дата окончания задачи не указана"}
             </span>
+            <span>ID: {task.id}</span>
           </div>
         </div>
         <div className="flex items-center gap-x-2">

@@ -5,9 +5,10 @@ export type { GetEventsQueryKey } from "./hooks/events/useGetEvents";
 export type { UpdateEventMutationKey } from "./hooks/events/useUpdateEvent";
 export type { CreateGoalMutationKey } from "./hooks/goals/useCreateGoal";
 export type { DeleteGoalMutationKey } from "./hooks/goals/useDeleteGoal";
+export type { DeleteTaskMutationKey } from "./hooks/goals/useDeleteTask";
 export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
 export type { UpdateGoalMutationKey } from "./hooks/goals/useUpdateGoal";
-export type { UpdateTasksMutationKey } from "./hooks/goals/useUpdateTasks";
+export type { UpdateTaskMutationKey } from "./hooks/goals/useUpdateTask";
 export type { CreateNotificationMutationKey } from "./hooks/notifications/useCreateNotification";
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
 export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
@@ -83,6 +84,13 @@ export type {
   DeleteGoalMutation,
 } from "./models/goals/DeleteGoal";
 export type {
+  DeleteTaskPathParams,
+  DeleteTask200,
+  DeleteTask400,
+  DeleteTaskMutationResponse,
+  DeleteTaskMutation,
+} from "./models/goals/DeleteTask";
+export type {
   GetGoalsQueryParams,
   GetGoals200,
   GetGoals400,
@@ -98,12 +106,13 @@ export type {
   UpdateGoalMutation,
 } from "./models/goals/UpdateGoal";
 export type {
-  UpdateTasks200,
-  UpdateTasks400,
-  UpdateTasksMutationRequest,
-  UpdateTasksMutationResponse,
-  UpdateTasksMutation,
-} from "./models/goals/UpdateTasks";
+  UpdateTaskPathParams,
+  UpdateTask200,
+  UpdateTask400,
+  UpdateTaskMutationRequest,
+  UpdateTaskMutationResponse,
+  UpdateTaskMutation,
+} from "./models/goals/UpdateTask";
 export type { MemberDto } from "./models/MemberDto";
 export type { NotificationDto } from "./models/NotificationDto";
 export type { NotificationEntity } from "./models/NotificationEntity";
@@ -278,6 +287,12 @@ export type {
   DeleteGoalMutationResponseSchema,
 } from "./zod/goals/deleteGoalSchema";
 export type {
+  DeleteTaskPathParamsSchema,
+  DeleteTask200Schema,
+  DeleteTask400Schema,
+  DeleteTaskMutationResponseSchema,
+} from "./zod/goals/deleteTaskSchema";
+export type {
   GetGoalsQueryParamsSchema,
   GetGoals200Schema,
   GetGoals400Schema,
@@ -291,11 +306,12 @@ export type {
   UpdateGoalMutationResponseSchema,
 } from "./zod/goals/updateGoalSchema";
 export type {
-  UpdateTasks200Schema,
-  UpdateTasks400Schema,
-  UpdateTasksMutationRequestSchema,
-  UpdateTasksMutationResponseSchema,
-} from "./zod/goals/updateTasksSchema";
+  UpdateTaskPathParamsSchema,
+  UpdateTask200Schema,
+  UpdateTask400Schema,
+  UpdateTaskMutationRequestSchema,
+  UpdateTaskMutationResponseSchema,
+} from "./zod/goals/updateTaskSchema";
 export type { MemberDtoSchema } from "./zod/memberDtoSchema";
 export type { NotificationDtoSchema } from "./zod/notificationDtoSchema";
 export type { NotificationEntitySchema } from "./zod/notificationEntitySchema";
@@ -440,6 +456,11 @@ export {
   useDeleteGoal,
 } from "./hooks/goals/useDeleteGoal";
 export {
+  deleteTaskMutationKey,
+  deleteTask,
+  useDeleteTask,
+} from "./hooks/goals/useDeleteTask";
+export {
   getGoalsQueryKey,
   getGoals,
   getGoalsQueryOptions,
@@ -451,10 +472,10 @@ export {
   useUpdateGoal,
 } from "./hooks/goals/useUpdateGoal";
 export {
-  updateTasksMutationKey,
-  updateTasks,
-  useUpdateTasks,
-} from "./hooks/goals/useUpdateTasks";
+  updateTaskMutationKey,
+  updateTask,
+  useUpdateTask,
+} from "./hooks/goals/useUpdateTask";
 export {
   createNotificationMutationKey,
   createNotification,
@@ -589,6 +610,12 @@ export {
   deleteGoalMutationResponseSchema,
 } from "./zod/goals/deleteGoalSchema";
 export {
+  deleteTaskPathParamsSchema,
+  deleteTask200Schema,
+  deleteTask400Schema,
+  deleteTaskMutationResponseSchema,
+} from "./zod/goals/deleteTaskSchema";
+export {
   getGoalsQueryParamsSchema,
   getGoals200Schema,
   getGoals400Schema,
@@ -602,11 +629,12 @@ export {
   updateGoalMutationResponseSchema,
 } from "./zod/goals/updateGoalSchema";
 export {
-  updateTasks200Schema,
-  updateTasks400Schema,
-  updateTasksMutationRequestSchema,
-  updateTasksMutationResponseSchema,
-} from "./zod/goals/updateTasksSchema";
+  updateTaskPathParamsSchema,
+  updateTask200Schema,
+  updateTask400Schema,
+  updateTaskMutationRequestSchema,
+  updateTaskMutationResponseSchema,
+} from "./zod/goals/updateTaskSchema";
 export { memberDtoSchema } from "./zod/memberDtoSchema";
 export { notificationDtoSchema } from "./zod/notificationDtoSchema";
 export { notificationEntitySchema } from "./zod/notificationEntitySchema";
