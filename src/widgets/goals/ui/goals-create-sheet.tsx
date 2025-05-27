@@ -66,28 +66,29 @@ function GoalsCreateSheet({
     >
       <Form {...form}>
         <SheetContent className="w-[400px] sm:w-[580px] sm:max-w-[580px]">
-          <SheetHeader>
-            <SheetTitle>Создать цель</SheetTitle>
-            <SheetDescription>
-              Заполните необходимые поля, чтобы создать цель
-            </SheetDescription>
-          </SheetHeader>
-          <div className="px-4">
-            <GoalForm />
-          </div>
-          <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
-            <Button
-              type="submit"
-              onClick={form.handleSubmit(handleCreateGoal)}
-              disabled={createGoalPending}
-            >
-              {createGoalPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Создать цель"
-              )}
-            </Button>
-          </SheetFooter>
+          <form
+            onSubmit={form.handleSubmit(handleCreateGoal)}
+            className="flex h-full flex-col"
+          >
+            <SheetHeader>
+              <SheetTitle>Создать цель</SheetTitle>
+              <SheetDescription>
+                Заполните необходимые поля, чтобы создать цель
+              </SheetDescription>
+            </SheetHeader>
+            <div className="px-4">
+              <GoalForm />
+            </div>
+            <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
+              <Button type="submit" disabled={createGoalPending}>
+                {createGoalPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Создать цель"
+                )}
+              </Button>
+            </SheetFooter>
+          </form>
         </SheetContent>
       </Form>
     </Sheet>

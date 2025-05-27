@@ -7,8 +7,11 @@ export type { CreateGoalMutationKey } from "./hooks/goals/useCreateGoal";
 export type { DeleteGoalMutationKey } from "./hooks/goals/useDeleteGoal";
 export type { DeleteTaskMutationKey } from "./hooks/goals/useDeleteTask";
 export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
+export type { GetTasksQueryKey } from "./hooks/goals/useGetTasks";
 export type { UpdateGoalMutationKey } from "./hooks/goals/useUpdateGoal";
+export type { UpdateGoalListOrderMutationKey } from "./hooks/goals/useUpdateGoalListOrder";
 export type { UpdateTaskMutationKey } from "./hooks/goals/useUpdateTask";
+export type { UpdateTaskListOrderMutationKey } from "./hooks/goals/useUpdateTaskListOrder";
 export type { CreateNotificationMutationKey } from "./hooks/notifications/useCreateNotification";
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
 export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
@@ -98,6 +101,12 @@ export type {
   GetGoalsQuery,
 } from "./models/goals/GetGoals";
 export type {
+  GetTasks200,
+  GetTasks400,
+  GetTasksQueryResponse,
+  GetTasksQuery,
+} from "./models/goals/GetTasks";
+export type {
   UpdateGoalPathParams,
   UpdateGoal200,
   UpdateGoal400,
@@ -106,6 +115,13 @@ export type {
   UpdateGoalMutation,
 } from "./models/goals/UpdateGoal";
 export type {
+  UpdateGoalListOrder200,
+  UpdateGoalListOrder400,
+  UpdateGoalListOrderMutationRequest,
+  UpdateGoalListOrderMutationResponse,
+  UpdateGoalListOrderMutation,
+} from "./models/goals/UpdateGoalListOrder";
+export type {
   UpdateTaskPathParams,
   UpdateTask200,
   UpdateTask400,
@@ -113,6 +129,14 @@ export type {
   UpdateTaskMutationResponse,
   UpdateTaskMutation,
 } from "./models/goals/UpdateTask";
+export type {
+  UpdateTaskListOrder200,
+  UpdateTaskListOrder400,
+  UpdateTaskListOrderMutationRequest,
+  UpdateTaskListOrderMutationResponse,
+  UpdateTaskListOrderMutation,
+} from "./models/goals/UpdateTaskListOrder";
+export type { GoalWithoutTasksDto } from "./models/GoalWithoutTasksDto";
 export type { MemberDto } from "./models/MemberDto";
 export type { NotificationDto } from "./models/NotificationDto";
 export type { NotificationEntity } from "./models/NotificationEntity";
@@ -224,8 +248,10 @@ export type {
 } from "./models/teams/UpdateTeamMember";
 export type { UpdateEventBody } from "./models/UpdateEventBody";
 export type { UpdateGoalBody } from "./models/UpdateGoalBody";
+export type { UpdateGoalListOrderBody } from "./models/UpdateGoalListOrderBody";
 export type { UpdateResult } from "./models/UpdateResult";
 export type { UpdateTaskBody } from "./models/UpdateTaskBody";
+export type { UpdateTaskListOrderBody } from "./models/UpdateTaskListOrderBody";
 export type { UpdateTeamMemberBody } from "./models/UpdateTeamMemberBody";
 export type { UserDto } from "./models/UserDto";
 export type {
@@ -299,6 +325,17 @@ export type {
   GetGoalsQueryResponseSchema,
 } from "./zod/goals/getGoalsSchema";
 export type {
+  GetTasks200Schema,
+  GetTasks400Schema,
+  GetTasksQueryResponseSchema,
+} from "./zod/goals/getTasksSchema";
+export type {
+  UpdateGoalListOrder200Schema,
+  UpdateGoalListOrder400Schema,
+  UpdateGoalListOrderMutationRequestSchema,
+  UpdateGoalListOrderMutationResponseSchema,
+} from "./zod/goals/updateGoalListOrderSchema";
+export type {
   UpdateGoalPathParamsSchema,
   UpdateGoal200Schema,
   UpdateGoal400Schema,
@@ -306,12 +343,19 @@ export type {
   UpdateGoalMutationResponseSchema,
 } from "./zod/goals/updateGoalSchema";
 export type {
+  UpdateTaskListOrder200Schema,
+  UpdateTaskListOrder400Schema,
+  UpdateTaskListOrderMutationRequestSchema,
+  UpdateTaskListOrderMutationResponseSchema,
+} from "./zod/goals/updateTaskListOrderSchema";
+export type {
   UpdateTaskPathParamsSchema,
   UpdateTask200Schema,
   UpdateTask400Schema,
   UpdateTaskMutationRequestSchema,
   UpdateTaskMutationResponseSchema,
 } from "./zod/goals/updateTaskSchema";
+export type { GoalWithoutTasksDtoSchema } from "./zod/goalWithoutTasksDtoSchema";
 export type { MemberDtoSchema } from "./zod/memberDtoSchema";
 export type { NotificationDtoSchema } from "./zod/notificationDtoSchema";
 export type { NotificationEntitySchema } from "./zod/notificationEntitySchema";
@@ -409,8 +453,10 @@ export type {
 } from "./zod/teams/updateTeamMemberSchema";
 export type { UpdateEventBodySchema } from "./zod/updateEventBodySchema";
 export type { UpdateGoalBodySchema } from "./zod/updateGoalBodySchema";
+export type { UpdateGoalListOrderBodySchema } from "./zod/updateGoalListOrderBodySchema";
 export type { UpdateResultSchema } from "./zod/updateResultSchema";
 export type { UpdateTaskBodySchema } from "./zod/updateTaskBodySchema";
+export type { UpdateTaskListOrderBodySchema } from "./zod/updateTaskListOrderBodySchema";
 export type { UpdateTeamMemberBodySchema } from "./zod/updateTeamMemberBodySchema";
 export type { UserDtoSchema } from "./zod/userDtoSchema";
 export type {
@@ -467,15 +513,31 @@ export {
   useGetGoals,
 } from "./hooks/goals/useGetGoals";
 export {
+  getTasksQueryKey,
+  getTasks,
+  getTasksQueryOptions,
+  useGetTasks,
+} from "./hooks/goals/useGetTasks";
+export {
   updateGoalMutationKey,
   updateGoal,
   useUpdateGoal,
 } from "./hooks/goals/useUpdateGoal";
 export {
+  updateGoalListOrderMutationKey,
+  updateGoalListOrder,
+  useUpdateGoalListOrder,
+} from "./hooks/goals/useUpdateGoalListOrder";
+export {
   updateTaskMutationKey,
   updateTask,
   useUpdateTask,
 } from "./hooks/goals/useUpdateTask";
+export {
+  updateTaskListOrderMutationKey,
+  updateTaskListOrder,
+  useUpdateTaskListOrder,
+} from "./hooks/goals/useUpdateTaskListOrder";
 export {
   createNotificationMutationKey,
   createNotification,
@@ -622,6 +684,17 @@ export {
   getGoalsQueryResponseSchema,
 } from "./zod/goals/getGoalsSchema";
 export {
+  getTasks200Schema,
+  getTasks400Schema,
+  getTasksQueryResponseSchema,
+} from "./zod/goals/getTasksSchema";
+export {
+  updateGoalListOrder200Schema,
+  updateGoalListOrder400Schema,
+  updateGoalListOrderMutationRequestSchema,
+  updateGoalListOrderMutationResponseSchema,
+} from "./zod/goals/updateGoalListOrderSchema";
+export {
   updateGoalPathParamsSchema,
   updateGoal200Schema,
   updateGoal400Schema,
@@ -629,12 +702,19 @@ export {
   updateGoalMutationResponseSchema,
 } from "./zod/goals/updateGoalSchema";
 export {
+  updateTaskListOrder200Schema,
+  updateTaskListOrder400Schema,
+  updateTaskListOrderMutationRequestSchema,
+  updateTaskListOrderMutationResponseSchema,
+} from "./zod/goals/updateTaskListOrderSchema";
+export {
   updateTaskPathParamsSchema,
   updateTask200Schema,
   updateTask400Schema,
   updateTaskMutationRequestSchema,
   updateTaskMutationResponseSchema,
 } from "./zod/goals/updateTaskSchema";
+export { goalWithoutTasksDtoSchema } from "./zod/goalWithoutTasksDtoSchema";
 export { memberDtoSchema } from "./zod/memberDtoSchema";
 export { notificationDtoSchema } from "./zod/notificationDtoSchema";
 export { notificationEntitySchema } from "./zod/notificationEntitySchema";
@@ -732,8 +812,10 @@ export {
 } from "./zod/teams/updateTeamMemberSchema";
 export { updateEventBodySchema } from "./zod/updateEventBodySchema";
 export { updateGoalBodySchema } from "./zod/updateGoalBodySchema";
+export { updateGoalListOrderBodySchema } from "./zod/updateGoalListOrderBodySchema";
 export { updateResultSchema } from "./zod/updateResultSchema";
 export { updateTaskBodySchema } from "./zod/updateTaskBodySchema";
+export { updateTaskListOrderBodySchema } from "./zod/updateTaskListOrderBodySchema";
 export { updateTeamMemberBodySchema } from "./zod/updateTeamMemberBodySchema";
 export { userDtoSchema } from "./zod/userDtoSchema";
 export {

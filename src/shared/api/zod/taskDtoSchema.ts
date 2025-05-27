@@ -3,14 +3,23 @@
  * Do not edit manually.
  */
 
-import { z } from 'zod'
+import { goalWithoutTasksDtoSchema } from "./goalWithoutTasksDtoSchema";
+import { z } from "zod";
 
 export const taskDtoSchema = z.object({
-  id: z.number().describe('ID задачи'),
-  title: z.string().describe('Заголовок задачи'),
-  deadline_date: z.string().describe('Дата окончания задачи').nullable().nullish(),
-  note: z.string().describe('Примечание задачи').nullable().nullish(),
-  done_date: z.string().describe('Дата выполнения задачи').nullable().nullish(),
-})
+  id: z.number().describe("ID задачи"),
+  title: z.string().describe("Заголовок задачи"),
+  deadline_date: z
+    .string()
+    .describe("Дата окончания задачи")
+    .nullable()
+    .nullish(),
+  note: z.string().describe("Примечание задачи").nullable().nullish(),
+  done_date: z.string().describe("Дата выполнения задачи").nullable().nullish(),
+  goal: z
+    .lazy(() => goalWithoutTasksDtoSchema)
+    .describe("Цель, к которой относится задача")
+    .optional(),
+});
 
-export type TaskDtoSchema = z.infer<typeof taskDtoSchema>
+export type TaskDtoSchema = z.infer<typeof taskDtoSchema>;

@@ -10,9 +10,17 @@ export const updateGoalBodySchema = z.object({
   title: z.string().describe("Заголовок цели").optional(),
   category: z.string().describe("Категория цели").optional(),
   status: z.string().describe("Статус цели").optional(),
-  deadline_date: z.string().describe("Дата окончания цели").optional(),
-  note: z.string().describe("Примечание к цели").optional(),
-  achieved_date: z.string().describe("Дата выполнения цели").optional(),
+  deadline_date: z
+    .string()
+    .describe("Дата окончания цели")
+    .nullable()
+    .nullish(),
+  note: z.string().describe("Примечание к цели").nullable().nullish(),
+  achieved_date: z
+    .string()
+    .describe("Дата выполнения цели")
+    .nullable()
+    .nullish(),
   tasks: z
     .array(z.lazy(() => goalBodyTaskSchema))
     .describe("Задачи цели")

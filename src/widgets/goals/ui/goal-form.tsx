@@ -7,7 +7,7 @@ import {
   FormMessage,
 } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
-import type { CreateGoalBodySchema, GoalBodyTask } from "@/shared/api";
+import type { CreateGoalBodySchema, GoalBodyTask, TaskDto } from "@/shared/api";
 import {
   Select,
   SelectContent,
@@ -20,12 +20,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/app/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon, Plus } from "lucide-react";
+import { CalendarIcon, GripVertical, Plus } from "lucide-react";
 import { Calendar } from "@/shared/ui/calendar";
 import { ru } from "date-fns/locale";
 import { useState } from "react";
 import { TaskCreateSheet } from "@/widgets/goals/ui/task-create-sheet";
 import { TaskUpdateSheet } from "@/widgets/goals/ui/task-update-sheet";
+import { useSortable } from "@dnd-kit/react/sortable";
+import { DragDropProvider } from "@dnd-kit/react";
 
 function GoalForm() {
   const [openCreateSheet, setOpenCreateSheet] = useState<boolean>(false);
@@ -38,7 +40,7 @@ function GoalForm() {
 
   const form = useFormContext<CreateGoalBodySchema>();
 
-  const { fields, append, update } = useFieldArray({
+  const { fields, append, update, move } = useFieldArray({
     control: form.control,
     name: "tasks",
     keyName: "field_id",
@@ -93,6 +95,7 @@ function GoalForm() {
               <PopoverTrigger asChild>
                 <FormControl>
                   <Button
+                    type="button"
                     variant={"outline"}
                     className={cn(
                       "w-1/2 pl-3 text-left font-normal",
@@ -130,42 +133,38 @@ function GoalForm() {
         )}
       />
 
-      <div className="flex flex-col gap-y-2">
-        <span className="text-sm font-medium">Список задач</span>
-        {fields.map((field, index) => (
-          <div
-            key={field.field_id}
-            className="relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2"
-            onClick={() => {
-              setTaskForUpdate(field);
-              setIndexTaskForUpdate(index);
-              setOpenUpdateSheet(true);
-            }}
-          >
-            <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
-            <div className="flex flex-col gap-y-2">
-              <span className="text-left text-base font-medium">
-                {field.title}
-              </span>
-              <div className="flex items-center gap-x-2">
-                <CalendarIcon className="size-4" />
-                <span className="text-xs">
-                  {field.deadline_date
-                    ? format(new Date(field.deadline_date), "PPPP", {
-                        locale: ru,
-                      })
-                    : "Дата окончания задачи не указана"}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
+      <DragDropProvider
+        onDragOver={({ operation: { source, target } }) => {
+          if (source?.id !== target?.id) {
+            const oldIndex = fields.findIndex((f) => f.field_id === source?.id);
+            const newIndex = fields.findIndex((f) => f.field_id === target?.id);
 
-        <Button onClick={() => setOpenCreateSheet(true)}>
-          <Plus />
-          Добавить задачу
-        </Button>
-      </div>
+            move(oldIndex, newIndex);
+          }
+        }}
+      >
+        <div className="flex flex-col gap-y-2">
+          <span className="text-sm font-medium">Список задач</span>
+          {fields.map((field, index) => (
+            <SortableTaskCard
+              key={field.field_id}
+              id={field.field_id}
+              index={index}
+              task={field as TaskDto}
+              onClick={() => {
+                setTaskForUpdate(field);
+                setIndexTaskForUpdate(index);
+                setOpenUpdateSheet(true);
+              }}
+            />
+          ))}
+
+          <Button type="button" onClick={() => setOpenCreateSheet(true)}>
+            <Plus />
+            Добавить задачу
+          </Button>
+        </div>
+      </DragDropProvider>
 
       <TaskCreateSheet
         open={openCreateSheet}
@@ -182,6 +181,48 @@ function GoalForm() {
         />
       )}
     </div>
+  );
+}
+
+function SortableTaskCard({
+  id,
+  index,
+  task,
+  onClick,
+}: {
+  id: string;
+  index: number;
+  task: TaskDto;
+  onClick: () => void;
+}) {
+  const { ref } = useSortable({ id, index });
+
+  return (
+    <button
+      ref={ref}
+      className="bg-background relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2"
+      onClick={onClick}
+    >
+      <div className="flex justify-between">
+        <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
+        <div className="flex flex-col gap-y-2">
+          <span className="text-left text-base font-medium">{task.title}</span>
+          <div className="flex items-center gap-x-2">
+            <CalendarIcon className="size-4" />
+            <span className="text-xs">
+              {task.deadline_date
+                ? format(new Date(task.deadline_date), "PPPP", {
+                    locale: ru,
+                  })
+                : "Дата окончания задачи не указана"}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-x-2">
+          <GripVertical className="text-neutral-400" />
+        </div>
+      </div>
+    </button>
   );
 }
 

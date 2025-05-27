@@ -18,14 +18,14 @@ export type CreateGoalBody = {
   category: string;
   /**
    * @description Дата окончания цели
-   * @type string | undefined
+   * @type string
    */
-  deadline_date?: string;
+  deadline_date?: string | null;
   /**
    * @description Примечание к цели
-   * @type string | undefined
+   * @type string
    */
-  note?: string;
+  note?: string | null;
   /**
    * @description Задачи цели
    * @type array

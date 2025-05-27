@@ -50,7 +50,7 @@ function TaskCreateSheet({
             <TaskForm />
           </div>
           <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
-            <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+            <Button type="button" onClick={form.handleSubmit(onSubmit)}>
               Создать задачу
             </Button>
           </SheetFooter>

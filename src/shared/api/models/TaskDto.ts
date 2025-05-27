@@ -3,30 +3,36 @@
  * Do not edit manually.
  */
 
+import type { GoalWithoutTasksDto } from "./GoalWithoutTasksDto";
+
 export type TaskDto = {
   /**
    * @description ID задачи
    * @type number
    */
-  id: number
+  id: number;
   /**
    * @description Заголовок задачи
    * @type string
    */
-  title: string
+  title: string;
   /**
    * @description Дата окончания задачи
    * @type string
    */
-  deadline_date?: string | null
+  deadline_date?: string | null;
   /**
    * @description Примечание задачи
    * @type string
    */
-  note?: string | null
+  note?: string | null;
   /**
    * @description Дата выполнения задачи
    * @type string
    */
-  done_date?: string | null
-}
+  done_date?: string | null;
+  /**
+   * @description Цель, к которой относится задача
+   */
+  goal?: GoalWithoutTasksDto;
+};

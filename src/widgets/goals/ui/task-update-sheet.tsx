@@ -32,8 +32,6 @@ function TaskUpdateSheet({
     reValidateMode: "onChange",
   });
 
-  console.log({ task });
-
   const onSubmit = async (data: GoalBodyTask) => {
     onUpdate(data);
     setOpen(false);
