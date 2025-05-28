@@ -1,38 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { DragDropProvider, useDroppable } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { useSortable } from "@dnd-kit/react/sortable";
 import { CollisionPriority } from "@dnd-kit/abstract";
-import { useQueryClient } from "@tanstack/react-query";
 import {
-  getGoalsQueryKey,
   type GoalDto,
-  type UpdateGoalBody,
-  updateGoalBodySchema,
-  useDeleteGoal,
   useGetGoals,
   useUpdateGoal,
   useUpdateGoalListOrder,
 } from "@/shared/api";
-import { CalendarIcon, GripVertical, InfoIcon, Loader2 } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 import { Skeleton } from "@/shared/ui/skeleton";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/shared/ui/sheet";
-import { Button } from "@/shared/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/shared/ui/form";
-import { GoalForm } from "@/widgets/goals";
+import { GoalUpdateSheet } from "@/widgets/goals";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { GoalSortableCard } from "@/widgets/goals/ui/goal-sortable-card";
 
 type GoalsState = {
   active: GoalDto[];
@@ -40,6 +21,10 @@ type GoalsState = {
 };
 
 function GoalsList() {
+  const [openSheet, setOpenSheet] = useState<boolean>(false);
+
+  const [goalForUpdate, setGoalForUpdate] = useState<GoalDto>();
+
   const [goals, setGoals] = useState<GoalsState>({
     active: [],
     done: [],
@@ -155,11 +140,18 @@ function GoalsList() {
                 )}
 
                 {items.map((goal, index) => (
-                  <SortableGoalCard
+                  <GoalSortableCard
                     key={goal.id}
+                    id={goal.id}
                     index={index}
-                    column={column}
                     goal={goal}
+                    group={column}
+                    type="item"
+                    accept={["item"]}
+                    onClick={() => {
+                      setGoalForUpdate(goal);
+                      setOpenSheet(true);
+                    }}
                   />
                 ))}
               </div>
@@ -167,6 +159,15 @@ function GoalsList() {
           ))}
         </div>
       </div>
+
+      <GoalUpdateSheet
+        open={openSheet}
+        goal={goalForUpdate}
+        onOpenChange={(value) => {
+          setOpenSheet(value);
+          setGoalForUpdate(undefined);
+        }}
+      />
     </DragDropProvider>
   );
 }
@@ -198,146 +199,6 @@ function Column({
         {children}
       </div>
     </div>
-  );
-}
-
-function SortableGoalCard({
-  index,
-  column,
-  goal,
-}: {
-  index: number;
-  column: string;
-  goal: GoalDto;
-}) {
-  const { ref } = useSortable({
-    id: goal.id,
-    index,
-    group: column,
-    type: "item",
-    accept: ["item"],
-  });
-
-  return <GoalCard goal={goal} ref={ref} />;
-}
-
-function GoalCard({
-  goal,
-  ref,
-}: {
-  goal: GoalDto;
-  ref: (element: Element | null) => void;
-}) {
-  const queryClient = useQueryClient();
-
-  const [openSheet, setOpenSheet] = useState<boolean>(false);
-
-  const { mutate: updateGoal, isPending: updateGoalPending } = useUpdateGoal({
-    mutation: {
-      onSuccess: () => {
-        queryClient
-          .invalidateQueries({ queryKey: getGoalsQueryKey() })
-          .then(() => setOpenSheet(false));
-      },
-    },
-  });
-
-  const { mutate: deleteGoal, isPending: deleteGoalPending } = useDeleteGoal({
-    mutation: {
-      onSuccess: () => {
-        queryClient
-          .invalidateQueries({ queryKey: getGoalsQueryKey() })
-          .then(() => setOpenSheet(false));
-      },
-    },
-  });
-
-  const form = useForm({
-    defaultValues: goal,
-    resolver: zodResolver(updateGoalBodySchema),
-    mode: "onChange",
-    reValidateMode: "onChange",
-  });
-
-  const onSubmit = (data: UpdateGoalBody) => {
-    console.log(data);
-
-    // updateGoal({ goal_id: String(goal.id), data });
-  };
-
-  const handleDeleteTask = () => {
-    deleteGoal({ goal_id: String(goal.id) });
-  };
-
-  return (
-    <Sheet open={openSheet} onOpenChange={setOpenSheet}>
-      <SheetTrigger asChild>
-        <button
-          ref={ref}
-          className="bg-sidebar relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2 shadow-sm"
-        >
-          <div className="flex justify-between">
-            <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
-            <div className="flex flex-col gap-y-2">
-              <span className="text-left text-base font-medium">
-                {goal.title}
-              </span>
-              <div className="flex items-center gap-x-2">
-                <CalendarIcon className="size-4" />
-                <span className="text-xs">
-                  {goal.deadline_date
-                    ? format(new Date(goal.deadline_date), "PPPP", {
-                        locale: ru,
-                      })
-                    : "Дата окончания цели не указана"}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-center gap-x-2">
-              <GripVertical className="text-neutral-400" />
-            </div>
-          </div>
-        </button>
-      </SheetTrigger>
-      <Form {...form}>
-        <SheetContent className="scroll w-[400px] overflow-y-auto sm:w-[580px] sm:max-w-[580px]">
-          <SheetHeader>
-            <SheetTitle>Редактировать задачу</SheetTitle>
-            <SheetDescription>
-              Измените данные в полях ниже и нажмите «Сохранить изменения»
-            </SheetDescription>
-          </SheetHeader>
-          <div className="p-4">
-            <GoalForm />
-          </div>
-          <SheetFooter>
-            <Button
-              type="submit"
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={updateGoalPending}
-            >
-              {updateGoalPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Сохранить изменения"
-              )}
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={handleDeleteTask}
-              disabled={deleteGoalPending}
-            >
-              {deleteGoalPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Удалить цель"
-              )}
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </Form>
-    </Sheet>
   );
 }
 

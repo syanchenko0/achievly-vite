@@ -13,9 +13,15 @@ import { TeamSwitcher } from "@/features/layout/ui/team-switcher";
 import { PersonalGroup } from "@/features/layout/ui/personal-group";
 import { ProjectsGroup } from "@/features/layout/ui/projects-group";
 import { useRouteLabel } from "@/features/layout/hooks/use-route-label";
-import { GoalsCreate } from "@/widgets/goals";
+import { Plus } from "lucide-react";
+import { Button } from "@/shared/ui/button";
+import { useState } from "react";
+import { GoalCreateSheet } from "@/widgets/goals/ui/goal-create-sheet";
 
 function Layout() {
+  const [openCreateGoalSheet, setOpenCreateGoalSheet] =
+    useState<boolean>(false);
+
   const { label } = useRouteLabel();
 
   return (
@@ -39,12 +45,20 @@ function Layout() {
                 {label}
               </span>
             </div>
-            <GoalsCreate />
+            <Button onClick={() => setOpenCreateGoalSheet(true)}>
+              <Plus />
+              Создать цель
+            </Button>
           </header>
           <div className="flex-1 overflow-y-auto pr-1">
             <Outlet />
           </div>
         </SidebarInset>
+
+        <GoalCreateSheet
+          open={openCreateGoalSheet}
+          onOpenChange={setOpenCreateGoalSheet}
+        />
       </SidebarProvider>
     </RequireAuth>
   );

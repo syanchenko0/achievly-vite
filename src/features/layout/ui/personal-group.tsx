@@ -63,7 +63,12 @@ function PersonalGroup() {
           }
 
           return (
-            <Collapsible key={item.title} asChild className="group/collapsible">
+            <Collapsible
+              key={item.title}
+              defaultOpen
+              asChild
+              className="group/collapsible"
+            >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton

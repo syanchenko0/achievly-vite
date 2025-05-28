@@ -1,41 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { DragDropProvider, useDroppable } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { useSortable } from "@dnd-kit/react/sortable";
 import { CollisionPriority } from "@dnd-kit/abstract";
-import { useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router";
 import {
-  getTasksQueryKey,
   type TaskDto,
-  type UpdateTaskBody,
-  updateTaskBodySchema,
-  useDeleteTask,
   useGetTasks,
   useUpdateTask,
   useUpdateTaskListOrder,
 } from "@/shared/api";
-import { CalendarIcon, GripVertical, InfoIcon, Loader2 } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 import { Skeleton } from "@/shared/ui/skeleton";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/shared/ui/sheet";
-import { Button } from "@/shared/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/shared/ui/form";
-import { TaskForm } from "@/widgets/goals";
-
-import { ROUTES } from "@/shared/constants/router";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { TaskSortableCard } from "@/widgets/goals/ui/task-sortable-card";
+import { TaskUpdateSheet } from "@/widgets/goals";
 
 type TasksState = {
   active: TaskDto[];
@@ -43,6 +21,10 @@ type TasksState = {
 };
 
 function GoalsBoard() {
+  const [openSheet, setOpenSheet] = useState<boolean>(false);
+
+  const [taskForUpdate, setTaskForUpdate] = useState<TaskDto>();
+
   const [tasks, setTasks] = useState<TasksState>({
     active: [],
     done: [],
@@ -156,11 +138,18 @@ function GoalsBoard() {
                 )}
 
                 {items.map((task, index) => (
-                  <SortableTaskCard
+                  <TaskSortableCard
                     key={task.id}
+                    id={task.id}
                     index={index}
-                    column={column}
                     task={task}
+                    group={column}
+                    type="item"
+                    accept={["item"]}
+                    onClick={() => {
+                      setOpenSheet(true);
+                      setTaskForUpdate(task);
+                    }}
                   />
                 ))}
               </div>
@@ -168,6 +157,15 @@ function GoalsBoard() {
           ))}
         </div>
       </div>
+
+      <TaskUpdateSheet
+        open={openSheet}
+        task={taskForUpdate}
+        onOpenChange={(value) => {
+          setOpenSheet(value);
+          setTaskForUpdate(undefined);
+        }}
+      />
     </DragDropProvider>
   );
 }
@@ -201,160 +199,6 @@ function Column({
         {children}
       </div>
     </div>
-  );
-}
-
-function SortableTaskCard({
-  index,
-  column,
-  task,
-}: {
-  index: number;
-  column: string;
-  task: TaskDto;
-}) {
-  const { ref } = useSortable({
-    id: task.id,
-    index,
-    group: column,
-    type: "item",
-    accept: ["item"],
-  });
-
-  return <TaskCard task={task} ref={ref} />;
-}
-
-function TaskCard({
-  task,
-  ref,
-}: {
-  task: TaskDto;
-  ref: (element: Element | null) => void;
-}) {
-  const queryClient = useQueryClient();
-
-  const [openSheet, setOpenSheet] = useState<boolean>(false);
-
-  const { mutate: updateTask, isPending: updateTaskPending } = useUpdateTask({
-    mutation: {
-      onSuccess: () => {
-        queryClient
-          .invalidateQueries({ queryKey: getTasksQueryKey() })
-          .then(() => setOpenSheet(false));
-      },
-    },
-  });
-
-  const { mutate: deleteTask, isPending: deleteTaskPending } = useDeleteTask({
-    mutation: {
-      onSuccess: () => {
-        queryClient
-          .invalidateQueries({ queryKey: getTasksQueryKey() })
-          .then(() => setOpenSheet(false));
-      },
-    },
-  });
-
-  const form = useForm({
-    defaultValues: task,
-    resolver: zodResolver(updateTaskBodySchema),
-    mode: "onChange",
-    reValidateMode: "onChange",
-  });
-
-  const onSubmit = (data: UpdateTaskBody) => {
-    updateTask({ task_id: String(task.id), data });
-  };
-
-  const handleDeleteTask = () => {
-    deleteTask({ task_id: String(task.id) });
-  };
-
-  return (
-    <Sheet open={openSheet} onOpenChange={setOpenSheet}>
-      <SheetTrigger asChild>
-        <button
-          ref={ref}
-          className="bg-sidebar relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2 shadow-sm"
-        >
-          <div className="flex justify-between">
-            <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
-            <div className="flex flex-col gap-y-2">
-              <span className="text-left text-base font-medium">
-                {task.title}
-              </span>
-              <div className="flex items-center gap-x-2">
-                <CalendarIcon className="size-4" />
-                <span className="text-xs">
-                  {task.deadline_date
-                    ? format(new Date(task.deadline_date), "PPPP", {
-                        locale: ru,
-                      })
-                    : "Дата окончания задачи не указана"}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-center gap-x-2">
-              <GripVertical className="text-neutral-400" />
-            </div>
-          </div>
-        </button>
-      </SheetTrigger>
-      <Form {...form}>
-        <SheetContent className="w-[400px] sm:w-[580px] sm:max-w-[580px]">
-          <SheetHeader>
-            <SheetTitle>Редактировать задачу</SheetTitle>
-            <SheetDescription>
-              Измените данные в полях ниже и нажмите «Сохранить изменения»
-            </SheetDescription>
-          </SheetHeader>
-          {task.goal && (
-            <div className="px-4">
-              <div className="flex items-center gap-x-4 rounded-md border p-2">
-                <InfoIcon className="size-4" />
-                <span className="text-foreground text-sm">
-                  Задача относится к цели:{" "}
-                  <Link
-                    to={`${ROUTES.goals_list}?goal_id=${task.goal.id}`}
-                    className="font-medium underline transition-colors hover:text-sky-600"
-                  >
-                    {task.goal.title}
-                  </Link>
-                </span>
-              </div>
-            </div>
-          )}
-          <div className="p-4">
-            <TaskForm />
-          </div>
-          <SheetFooter>
-            <Button
-              type="submit"
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={updateTaskPending}
-            >
-              {updateTaskPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Сохранить изменения"
-              )}
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={handleDeleteTask}
-              disabled={deleteTaskPending}
-            >
-              {deleteTaskPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Удалить задачу"
-              )}
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </Form>
-    </Sheet>
   );
 }
 
