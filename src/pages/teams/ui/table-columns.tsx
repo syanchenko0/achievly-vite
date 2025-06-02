@@ -217,8 +217,8 @@ const ActionsCellDialog = ({
       projects_rights,
     },
     resolver: zodResolver(updateTeamMemberBodySchema),
-    reValidateMode: "onChange",
-    mode: "onChange",
+    reValidateMode: "onSubmit",
+    mode: "onSubmit",
   });
 
   const { fields } = useFieldArray({

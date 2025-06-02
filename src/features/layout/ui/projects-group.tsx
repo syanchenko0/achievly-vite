@@ -1,23 +1,26 @@
 import {
   SidebarGroup,
+  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/ui/sidebar";
-import { FolderX } from "lucide-react";
+import { FolderX, Plus } from "lucide-react";
 import { useTeamSettingsStore } from "@/app/store/team";
 import { useGetProjects, useGetTeams } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { MEMBER_ROLES } from "@/shared/constants/teams";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { replacePathParams } from "@/app/lib/utils";
 import { ROUTES } from "@/shared/constants/router";
 import { Link, matchPath, useLocation } from "react-router";
 import { ProjectsGroupDialog } from "@/features/layout/ui/projects-group-dialog";
 
 function ProjectsGroup() {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
   const { pathname } = useLocation();
 
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
@@ -40,20 +43,15 @@ function ProjectsGroup() {
     [activeTeamId, teams],
   );
 
-  const items: { label: string; link: string }[] = useMemo(() => {
-    const availableProjects = projects?.filter((project) =>
-      currentTeam?.user_projects_rights?.some(
-        (right) => right.project_id === project.id && right.read,
-      ),
-    );
-
-    return (availableProjects || []).map((project) => ({
+  const items = useMemo(() => {
+    return (projects || []).map((project) => ({
+      id: project.id,
       label: project.name,
       link: replacePathParams(ROUTES.project, {
         project_id: String(project.id),
       }),
     }));
-  }, [currentTeam?.user_projects_rights, projects]);
+  }, [projects]);
 
   const isOwner = currentTeam?.user_role === MEMBER_ROLES.owner;
 
@@ -72,7 +70,16 @@ function ProjectsGroup() {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Проекты</SidebarGroupLabel>
-      {isOwner && <ProjectsGroupDialog team_id={activeTeamId} />}
+      {isOwner && (
+        <SidebarGroupAction
+          title="Добавить проект"
+          className="cursor-pointer rounded-sm"
+          onClick={() => setDialogOpen(true)}
+        >
+          <Plus />
+          <span className="sr-only">Добавить проект</span>
+        </SidebarGroupAction>
+      )}
       <SidebarGroupContent>
         <SidebarMenu>
           {!items.length && (
@@ -84,13 +91,13 @@ function ProjectsGroup() {
             </div>
           )}
           {items.map((item) => (
-            <SidebarMenuItem key={item.label}>
+            <SidebarMenuItem key={item.id}>
               <SidebarMenuButton
                 tooltip={item.label}
                 isActive={!!matchPath(item.link, pathname)}
-                className="cursor-pointer"
+                className="cursor-pointer p-0"
               >
-                <Link to={item.link} className="w-full">
+                <Link to={item.link} className="w-full p-2">
                   {item.label}
                 </Link>
               </SidebarMenuButton>
@@ -98,6 +105,12 @@ function ProjectsGroup() {
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
+
+      <ProjectsGroupDialog
+        team_id={activeTeamId}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </SidebarGroup>
   );
 }

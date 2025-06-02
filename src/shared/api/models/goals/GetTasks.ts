@@ -6,6 +6,13 @@
 import type { BadRequest } from "../BadRequest";
 import type { TaskDto } from "../TaskDto";
 
+export type GetTasksQueryParams = {
+  /**
+   * @type string
+   */
+  status?: string | null;
+};
+
 export type GetTasks200 = TaskDto[];
 
 export type GetTasks400 = BadRequest;
@@ -14,5 +21,6 @@ export type GetTasksQueryResponse = GetTasks200;
 
 export type GetTasksQuery = {
   Response: GetTasks200;
+  QueryParams: GetTasksQueryParams;
   Errors: GetTasks400;
 };

@@ -17,6 +17,7 @@ import {
   type CreateGoalBody,
   createGoalBodySchema,
   getGoalsQueryKey,
+  getTasksQueryKey,
   type TaskDto,
   useCreateGoal,
 } from "@/shared/api";
@@ -36,6 +37,16 @@ function GoalCreateSheet({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent className="w-[400px] sm:w-[580px] sm:max-w-[580px]">
+        <Content onOpenChange={onOpenChange} />
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+function Content({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
   const [openTaskCreateSheet, setOpenTaskCreateSheet] =
     useState<boolean>(false);
   const [indexTaskForUpdate, setIndexTaskForUpdate] = useState<number>();
@@ -70,6 +81,7 @@ function GoalCreateSheet({
             onOpenChange(false);
             form.reset();
           });
+        queryClient.invalidateQueries({ queryKey: getTasksQueryKey() }).then();
       },
     },
   });
@@ -87,110 +99,94 @@ function GoalCreateSheet({
   };
 
   return (
-    <Sheet
-      open={open}
-      onOpenChange={(value) => {
-        onOpenChange(value);
-        form.reset();
-      }}
-    >
-      <FormProvider {...form}>
-        <SheetContent className="w-[400px] sm:w-[580px] sm:max-w-[580px]">
-          <SheetHeader>
-            <SheetTitle>Создание цели</SheetTitle>
-            <SheetDescription>
-              Заполните необходимые поля, чтобы создать цель
-            </SheetDescription>
-          </SheetHeader>
+    <FormProvider {...form}>
+      <SheetHeader>
+        <SheetTitle>Создание цели</SheetTitle>
+        <SheetDescription>
+          Заполните необходимые поля, чтобы создать цель
+        </SheetDescription>
+      </SheetHeader>
 
-          <div className="scroll flex flex-col gap-y-4 overflow-y-auto px-4">
-            <TitleField control={form.control} label="Наименование цели" />
-            <CategoryField
-              control={form.control}
-              label="Категория"
-              className="w-full"
-            />
-            <DeadlineDateField
-              control={form.control}
-              label="Дата окончания цели"
-            />
-            <NoteField control={form.control} label="Примечание к цели" />
+      <div className="scroll flex flex-col gap-y-4 overflow-y-auto px-4">
+        <TitleField control={form.control} label="Наименование цели" />
+        <CategoryField
+          control={form.control}
+          label="Категория"
+          className="w-full"
+        />
+        <DeadlineDateField control={form.control} label="Дата окончания цели" />
+        <NoteField control={form.control} label="Примечание к цели" />
 
-            <DragDropProvider
-              onDragOver={({ operation: { source, target } }) => {
-                if (source?.id !== target?.id) {
-                  const oldIndex = fields.findIndex(
-                    (f) => f.field_id === source?.id,
-                  );
-                  const newIndex = fields.findIndex(
-                    (f) => f.field_id === target?.id,
-                  );
+        <DragDropProvider
+          onDragOver={({ operation: { source, target } }) => {
+            if (source?.id !== target?.id) {
+              const oldIndex = fields.findIndex(
+                (f) => f.field_id === source?.id,
+              );
+              const newIndex = fields.findIndex(
+                (f) => f.field_id === target?.id,
+              );
 
-                  move(oldIndex, newIndex);
-                }
-              }}
-            >
-              <div className="flex flex-col gap-y-2">
-                <span className="text-sm font-medium">Список задач</span>
-                {fields.map((field, index) => (
-                  <TaskSortableCard
-                    key={field.field_id}
-                    id={field.field_id}
-                    index={index}
-                    task={field as TaskDto}
-                    onClick={() => {
-                      setIndexTaskForUpdate(index);
-                      setOpenTaskCreateSheet(true);
-                    }}
-                  />
-                ))}
-
-                <Button
-                  type="button"
-                  onClick={() => setOpenTaskCreateSheet(true)}
-                >
-                  <Plus />
-                  Добавить задачу
-                </Button>
-              </div>
-
-              <TaskCreateSheet
-                open={openTaskCreateSheet}
-                onOpenChange={(value) => {
-                  setOpenTaskCreateSheet(value);
-                  setIndexTaskForUpdate(undefined);
-                }}
-                task={form.getValues(`tasks.${indexTaskForUpdate as number}`)}
-                onCreate={(data) => {
-                  if (indexTaskForUpdate === undefined) {
-                    append(data);
-                  }
-                }}
-                onUpdate={(data) => {
-                  if (indexTaskForUpdate !== undefined) {
-                    update(indexTaskForUpdate, data);
-                    setIndexTaskForUpdate(undefined);
-                  }
+              move(oldIndex, newIndex);
+            }
+          }}
+        >
+          <div className="flex flex-col gap-y-2">
+            <span className="text-sm font-medium">Список задач</span>
+            {fields.map((field, index) => (
+              <TaskSortableCard
+                key={field.field_id}
+                id={field.field_id}
+                index={index}
+                task={field as TaskDto}
+                onClick={() => {
+                  setIndexTaskForUpdate(index);
+                  setOpenTaskCreateSheet(true);
                 }}
               />
-            </DragDropProvider>
+            ))}
+
+            <Button type="button" onClick={() => setOpenTaskCreateSheet(true)}>
+              <Plus />
+              Добавить задачу
+            </Button>
           </div>
 
-          <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
-            <Button
-              disabled={createGoalPending}
-              onClick={form.handleSubmit(handleCreateGoal)}
-            >
-              {createGoalPending ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                "Создать цель"
-              )}
-            </Button>
-          </SheetFooter>
-        </SheetContent>
-      </FormProvider>
-    </Sheet>
+          <TaskCreateSheet
+            open={openTaskCreateSheet}
+            onOpenChange={(value) => {
+              setOpenTaskCreateSheet(value);
+              setIndexTaskForUpdate(undefined);
+            }}
+            task={form.getValues(`tasks.${indexTaskForUpdate as number}`)}
+            onCreate={(data) => {
+              if (indexTaskForUpdate === undefined) {
+                append(data);
+              }
+            }}
+            onUpdate={(data) => {
+              if (indexTaskForUpdate !== undefined) {
+                update(indexTaskForUpdate, data);
+                setIndexTaskForUpdate(undefined);
+              }
+            }}
+          />
+        </DragDropProvider>
+      </div>
+
+      <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
+        <Button
+          disabled={createGoalPending}
+          onClick={form.handleSubmit(handleCreateGoal)}
+        >
+          {createGoalPending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            "Создать цель"
+          )}
+        </Button>
+      </SheetFooter>
+    </FormProvider>
   );
 }
 

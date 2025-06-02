@@ -16,12 +16,14 @@ import type {
 } from "@tanstack/react-query";
 import type {
   GetTasksQueryResponse,
+  GetTasksQueryParams,
   GetTasks400,
 } from "../../models/goals/GetTasks";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { getTasksQueryResponseSchema } from "../../zod/goals/getTasksSchema";
 
-export const getTasksQueryKey = () => [{ url: "/goals/tasks" }] as const;
+export const getTasksQueryKey = (params?: GetTasksQueryParams) =>
+  [{ url: "/goals/tasks" }, ...(params ? [params] : [])] as const;
 
 export type GetTasksQueryKey = ReturnType<typeof getTasksQueryKey>;
 
@@ -30,6 +32,7 @@ export type GetTasksQueryKey = ReturnType<typeof getTasksQueryKey>;
  * {@link /goals/tasks}
  */
 export async function getTasks(
+  { params }: { params?: GetTasksQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
   const { client: request = client, ...requestConfig } = config;
@@ -38,14 +41,15 @@ export async function getTasks(
     GetTasksQueryResponse,
     ResponseErrorConfig<GetTasks400>,
     unknown
-  >({ method: "GET", url: `/goals/tasks`, ...requestConfig });
+  >({ method: "GET", url: `/goals/tasks`, params, ...requestConfig });
   return getTasksQueryResponseSchema.parse(res.data);
 }
 
 export function getTasksQueryOptions(
+  { params }: { params?: GetTasksQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const queryKey = getTasksQueryKey();
+  const queryKey = getTasksQueryKey(params);
   return queryOptions<
     GetTasksQueryResponse,
     ResponseErrorConfig<GetTasks400>,
@@ -55,7 +59,7 @@ export function getTasksQueryOptions(
     queryKey,
     queryFn: async ({ signal }) => {
       config.signal = signal;
-      return getTasks(config);
+      return getTasks({ params }, config);
     },
   });
 }
@@ -69,6 +73,7 @@ export function useGetTasks<
   TQueryData = GetTasksQueryResponse,
   TQueryKey extends QueryKey = GetTasksQueryKey,
 >(
+  { params }: { params?: GetTasksQueryParams },
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -86,11 +91,14 @@ export function useGetTasks<
     query: { client: queryClient, ...queryOptions } = {},
     client: config = {},
   } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getTasksQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getTasksQueryKey(params);
 
   const query = useQuery(
     {
-      ...(getTasksQueryOptions(config) as unknown as QueryObserverOptions),
+      ...(getTasksQueryOptions(
+        { params },
+        config,
+      ) as unknown as QueryObserverOptions),
       queryKey,
       ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
     },

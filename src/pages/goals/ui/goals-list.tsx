@@ -1,19 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropProvider, useDroppable } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { CollisionPriority } from "@dnd-kit/abstract";
-import {
-  type GoalDto,
-  useGetGoals,
-  useUpdateGoal,
-  useUpdateGoalListOrder,
-} from "@/shared/api";
+import { type GoalDto } from "@/shared/api";
 import { InfoIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { GoalUpdateSheet } from "@/widgets/goals";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { GoalSortableCard } from "@/widgets/goals/ui/goal-sortable-card";
+import { useGoalsListQueries } from "@/pages/goals/hooks/use-goals-list-queries";
+import { useSearchParams } from "react-router";
 
 type GoalsState = {
   active: GoalDto[];
@@ -21,36 +18,32 @@ type GoalsState = {
 };
 
 function GoalsList() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [openSheet, setOpenSheet] = useState<boolean>(false);
-
   const [goalForUpdate, setGoalForUpdate] = useState<GoalDto>();
-
   const [goals, setGoals] = useState<GoalsState>({
     active: [],
     done: [],
   });
 
-  const closestUpdateGoalListOrderFn = useRef<() => void>(null);
-
-  const closestUpdateGoalFn = useRef<() => void>(null);
-
-  const { data: allGoals, isLoading: allGoalsLoading } = useGetGoals({
-    params: undefined,
-  });
-
-  const { mutate: updateGoal } = useUpdateGoal();
-
-  const { mutate: updateGoalListOrder } = useUpdateGoalListOrder();
+  const { initialGoals, allGoalsLoading, updateGoal, updateGoalListOrder } =
+    useGoalsListQueries();
 
   useEffect(() => {
-    if (allGoals) {
-      setGoals((prev) => ({
-        ...prev,
-        active: allGoals.filter((t) => !t.achieved_date),
-        done: allGoals.filter((t) => t.achieved_date),
-      }));
+    if (initialGoals) {
+      setGoals(initialGoals);
     }
-  }, [allGoals]);
+
+    if (searchParams.get("goal_id")) {
+      setOpenSheet(true);
+      setGoalForUpdate(
+        initialGoals.active.find(
+          (goal) => goal.id === Number(searchParams.get("goal_id")),
+        ),
+      );
+    }
+  }, [initialGoals]);
 
   if (allGoalsLoading) {
     return <Skeleton className="size-full" />;
@@ -59,62 +52,53 @@ function GoalsList() {
   return (
     <DragDropProvider
       onDragOver={(event) => {
-        const {
-          operation: { source },
-        } = event;
-
         setGoals((goals) => {
           const state = move(goals, event);
 
-          const list = [...state.active, ...state.done].map((goal, index) => ({
-            id: goal.id,
-            list_order: index,
-          }));
-
-          closestUpdateGoalListOrderFn.current = () => {
-            updateGoalListOrder({ data: list });
-          };
-
-          closestUpdateGoalFn.current = () => {
-            const activeGoal = state.active.find((a) => a.id === source?.id);
-
-            if (activeGoal) {
-              updateGoal({
-                goal_id: String(activeGoal.id),
-                data: { ...activeGoal, achieved_date: null },
-              });
-            }
-
-            if (!activeGoal) {
-              const doneTask = state.done.find((a) => a.id === source?.id);
-
-              if (doneTask)
-                updateGoal({
-                  goal_id: String(doneTask.id),
-                  data: {
-                    ...doneTask,
-                    achieved_date: format(new Date(), "yyyy-MM-dd"),
-                  },
-                });
-            }
-          };
-
           return {
-            active: state.active.map((a) => ({ ...a, done_date: null })),
+            active: state.active.map((a) => ({ ...a, achieved_date: null })),
             done: state.done.map((d) => ({
               ...d,
-              done_date: format(new Date(), "yyyy-MM-dd"),
+              achieved_date: format(new Date(), "yyyy-MM-dd"),
             })),
           };
         });
       }}
       onDragEnd={() => {
-        if (closestUpdateGoalListOrderFn.current) {
-          closestUpdateGoalListOrderFn.current();
-        }
+        const list = [...goals.active, ...goals.done].map((goal, index) => ({
+          id: goal.id,
+          list_order: index,
+        }));
 
-        if (closestUpdateGoalFn.current) {
-          closestUpdateGoalFn.current();
+        updateGoalListOrder({ data: list });
+
+        if (initialGoals.active.length !== goals.active.length) {
+          const activeGoal = goals.active.find(
+            (goal) =>
+              !initialGoals.active.some((initGoal) => initGoal.id === goal.id),
+          );
+
+          if (activeGoal) {
+            updateGoal({
+              goal_id: String(activeGoal.id),
+              data: { ...activeGoal, achieved_date: null },
+            });
+          } else {
+            const doneGoal = goals.done.find(
+              (goal) =>
+                !initialGoals.done.some((initGoal) => initGoal.id === goal.id),
+            );
+
+            if (doneGoal) {
+              updateGoal({
+                goal_id: String(doneGoal.id),
+                data: {
+                  ...doneGoal,
+                  achieved_date: format(new Date(), "yyyy-MM-dd"),
+                },
+              });
+            }
+          }
         }
       }}
     >
@@ -166,6 +150,8 @@ function GoalsList() {
         onOpenChange={(value) => {
           setOpenSheet(value);
           setGoalForUpdate(undefined);
+          searchParams.delete("goal_id");
+          setSearchParams(searchParams);
         }}
       />
     </DragDropProvider>

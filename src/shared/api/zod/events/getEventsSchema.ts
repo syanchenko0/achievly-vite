@@ -7,6 +7,15 @@ import { badRequestSchema } from "../badRequestSchema";
 import { eventDtoSchema } from "../eventDtoSchema";
 import { z } from "zod";
 
+export const getEventsQueryParamsSchema = z.object({
+  end_period: z.string(),
+  start_period: z.string(),
+});
+
+export type GetEventsQueryParamsSchema = z.infer<
+  typeof getEventsQueryParamsSchema
+>;
+
 export const getEvents200Schema = z.array(z.lazy(() => eventDtoSchema));
 
 export type GetEvents200Schema = z.infer<typeof getEvents200Schema>;

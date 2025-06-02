@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectTaskDto } from "./ProjectTaskDto";
 import type { TeamDto } from "./TeamDto";
 
 export type ProjectDto = {
@@ -17,7 +19,17 @@ export type ProjectDto = {
    */
   name: string;
   /**
+   * @description Столбцы проекта
+   * @type array
+   */
+  columns: ProjectColumn[];
+  /**
    * @description Команда проекта
    */
   team: TeamDto;
+  /**
+   * @description Команда проекта
+   * @type array
+   */
+  project_tasks?: ProjectTaskDto[] | null;
 };

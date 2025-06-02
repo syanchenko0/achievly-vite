@@ -4,7 +4,7 @@
  */
 
 import type { BadRequest } from "../BadRequest";
-import type { ProjectDto } from "../ProjectDto";
+import type { ShortInfoProjectDto } from "../ShortInfoProjectDto";
 
 export type GetProjectsQueryParams = {
   /**
@@ -13,7 +13,7 @@ export type GetProjectsQueryParams = {
   team_id: string;
 };
 
-export type GetProjects200 = ProjectDto[];
+export type GetProjects200 = ShortInfoProjectDto[];
 
 export type GetProjects400 = BadRequest;
 

@@ -3,41 +3,13 @@
  * Do not edit manually.
  */
 
-import { eventEntitySchema } from "./eventEntitySchema";
-import { goalEntitySchema } from "./goalEntitySchema";
-import { notificationEntitySchema } from "./notificationEntitySchema";
-import { z } from "zod";
+import { z } from 'zod'
 
 export const userDtoSchema = z.object({
-  id: z.number().describe("ID пользователя"),
-  username: z.string().describe("Имя пользователя"),
-  email: z.string().describe("Email пользователя"),
-  picture_url: z.string().describe("Изображение пользователя"),
-  events: z
-    .array(z.lazy(() => eventEntitySchema))
-    .describe("События в календаре")
-    .nullable()
-    .nullish(),
-  goals: z
-    .array(z.lazy(() => goalEntitySchema))
-    .describe("Цели пользователя")
-    .nullable()
-    .nullish(),
-  notifications: z
-    .array(z.lazy(() => notificationEntitySchema))
-    .describe("Уведомления пользователя")
-    .nullable()
-    .nullish(),
-  projects: z
-    .array(z.array(z.unknown()))
-    .describe("Проекты пользователя")
-    .nullable()
-    .nullish(),
-  teams: z
-    .array(z.array(z.unknown()))
-    .describe("Команды пользователя")
-    .nullable()
-    .nullish(),
-});
+  id: z.number().describe('ID пользователя'),
+  username: z.string().describe('Имя пользователя'),
+  email: z.string().describe('Email пользователя'),
+  picture_url: z.string().describe('Изображение пользователя'),
+})
 
-export type UserDtoSchema = z.infer<typeof userDtoSchema>;
+export type UserDtoSchema = z.infer<typeof userDtoSchema>

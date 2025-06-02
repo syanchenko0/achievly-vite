@@ -30,7 +30,7 @@ function GoalSortableCard({
       onClick={onClick}
     >
       <div className="flex justify-between">
-        <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
+        <div className="absolute top-0 left-0 h-full w-1 bg-amber-600" />
         <div className="flex flex-col gap-y-2">
           <span className="text-left text-base font-medium">{goal.title}</span>
           <div className="flex items-center gap-x-2">

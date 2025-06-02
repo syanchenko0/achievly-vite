@@ -4,7 +4,7 @@
  */
 
 import { badRequestSchema } from "../badRequestSchema";
-import { projectDtoSchema } from "../projectDtoSchema";
+import { shortInfoProjectDtoSchema } from "../shortInfoProjectDtoSchema";
 import { z } from "zod";
 
 export const getProjectsQueryParamsSchema = z.object({
@@ -15,7 +15,9 @@ export type GetProjectsQueryParamsSchema = z.infer<
   typeof getProjectsQueryParamsSchema
 >;
 
-export const getProjects200Schema = z.array(z.lazy(() => projectDtoSchema));
+export const getProjects200Schema = z.array(
+  z.lazy(() => shortInfoProjectDtoSchema),
+);
 
 export type GetProjects200Schema = z.infer<typeof getProjects200Schema>;
 

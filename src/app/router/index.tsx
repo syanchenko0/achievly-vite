@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router";
 import { Layout } from "@/features/layout";
 import { ROUTES } from "@/shared/constants/router";
 import { lazy, Suspense } from "react";
-import { Loader } from "@/shared/ui/loader";
 import { RequireAuth } from "@/shared/ui/require-auth";
 import { PageLoader } from "@/shared/ui/page-loader";
+import { AuthLoader } from "@/shared/ui/auth-loader";
 
 const AuthPage = lazy(() =>
   import("@/pages/auth").then((module) => ({
@@ -41,12 +41,22 @@ const GoalsStatisticsPage = lazy(() =>
     default: module.GoalsStatistics,
   })),
 );
+const EventsCalendarPage = lazy(() =>
+  import("@/pages/events").then((module) => ({
+    default: module.EventsCalendar,
+  })),
+);
+const ProjectPage = lazy(() =>
+  import("@/pages/projects").then((module) => ({
+    default: module.Project,
+  })),
+);
 
 const router = createBrowserRouter([
   {
     path: ROUTES.auth,
     element: (
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<AuthLoader />}>
         <AuthPage />
       </Suspense>
     ),
@@ -110,6 +120,26 @@ const router = createBrowserRouter([
           <Suspense fallback={<PageLoader />}>
             <RequireAuth>
               <GoalsStatisticsPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.events_calendar,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <EventsCalendarPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.project,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <ProjectPage />
             </RequireAuth>
           </Suspense>
         ),

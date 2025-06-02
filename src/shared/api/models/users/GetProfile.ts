@@ -4,13 +4,10 @@
  */
 
 import type { BadRequest } from "../BadRequest";
-import type { UserDto } from "../UserDto";
+import type { ProfileDto } from "../ProfileDto";
 
-export type GetProfile200 = UserDto;
+export type GetProfile200 = ProfileDto;
 
-/**
- * @description Пользователь не найден
- */
 export type GetProfile404 = BadRequest;
 
 export type GetProfileQueryResponse = GetProfile200;

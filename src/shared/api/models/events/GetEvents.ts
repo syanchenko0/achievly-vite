@@ -6,6 +6,17 @@
 import type { BadRequest } from "../BadRequest";
 import type { EventDto } from "../EventDto";
 
+export type GetEventsQueryParams = {
+  /**
+   * @type string
+   */
+  end_period: string;
+  /**
+   * @type string
+   */
+  start_period: string;
+};
+
 export type GetEvents200 = EventDto[];
 
 export type GetEvents400 = BadRequest;
@@ -14,5 +25,6 @@ export type GetEventsQueryResponse = GetEvents200;
 
 export type GetEventsQuery = {
   Response: GetEvents200;
+  QueryParams: GetEventsQueryParams;
   Errors: GetEvents400;
 };

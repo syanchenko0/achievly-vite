@@ -3,13 +3,23 @@
  * Do not edit manually.
  */
 
+import { projectColumnSchema } from "./projectColumnSchema";
+import { projectTaskDtoSchema } from "./projectTaskDtoSchema";
 import { teamDtoSchema } from "./teamDtoSchema";
 import { z } from "zod";
 
 export const projectDtoSchema = z.object({
   id: z.number().describe("ID проекта"),
   name: z.string().describe("Название проекта"),
+  columns: z
+    .array(z.lazy(() => projectColumnSchema))
+    .describe("Столбцы проекта"),
   team: z.lazy(() => teamDtoSchema).describe("Команда проекта"),
+  project_tasks: z
+    .array(z.lazy(() => projectTaskDtoSchema))
+    .describe("Команда проекта")
+    .nullable()
+    .nullish(),
 });
 
 export type ProjectDtoSchema = z.infer<typeof projectDtoSchema>;

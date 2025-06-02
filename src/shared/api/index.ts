@@ -1,5 +1,6 @@
 export type { CheckAuthQueryKey } from "./hooks/auth/useCheckAuth";
-export type { CreateEventMutationKey } from "./hooks/events/useCreateEvent";
+export type { LogoutMutationKey } from "./hooks/auth/useLogout";
+export type { CreateEventsMutationKey } from "./hooks/events/useCreateEvents";
 export type { DeleteEventMutationKey } from "./hooks/events/useDeleteEvent";
 export type { GetEventsQueryKey } from "./hooks/events/useGetEvents";
 export type { UpdateEventMutationKey } from "./hooks/events/useUpdateEvent";
@@ -14,7 +15,11 @@ export type { UpdateTaskMutationKey } from "./hooks/goals/useUpdateTask";
 export type { UpdateTaskListOrderMutationKey } from "./hooks/goals/useUpdateTaskListOrder";
 export type { CreateNotificationMutationKey } from "./hooks/notifications/useCreateNotification";
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
+export type { CreateProjectTaskMutationKey } from "./hooks/projects/useCreateProjectTask";
+export type { GetProjectQueryKey } from "./hooks/projects/useGetProject";
 export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
+export type { UpdateProjectMutationKey } from "./hooks/projects/useUpdateProject";
+export type { UpdateProjectTaskMutationKey } from "./hooks/projects/useUpdateProjectTask";
 export type { CreateTeamMutationKey } from "./hooks/teams/useCreateTeam";
 export type { DeleteTeamMutationKey } from "./hooks/teams/useDeleteTeam";
 export type { DeleteTeamMemberMutationKey } from "./hooks/teams/useDeleteTeamMember";
@@ -27,35 +32,45 @@ export type { JoinTeamMutationKey } from "./hooks/teams/useJoinTeam";
 export type { LeaveFromTeamMutationKey } from "./hooks/teams/useLeaveFromTeam";
 export type { UpdateTeamMemberMutationKey } from "./hooks/teams/useUpdateTeamMember";
 export type { GetProfileQueryKey } from "./hooks/users/useGetProfile";
+export type { GetUserQueryKey } from "./hooks/users/useGetUser";
 export type {
   CheckAuth200,
   CheckAuth401,
   CheckAuthQueryResponse,
   CheckAuthQuery,
 } from "./models/auth/CheckAuth";
+export type {
+  Logout200,
+  Logout400,
+  LogoutMutationResponse,
+  LogoutMutation,
+} from "./models/auth/Logout";
 export type { BadRequest } from "./models/BadRequest";
 export type { CreateEventBody } from "./models/CreateEventBody";
+export type { CreateEventsBody } from "./models/CreateEventsBody";
 export type { CreateGoalBody } from "./models/CreateGoalBody";
 export type { CreateNotificationBody } from "./models/CreateNotificationBody";
 export type { CreateProjectBody } from "./models/CreateProjectBody";
+export type { CreateProjectTaskBody } from "./models/CreateProjectTaskBody";
 export type { CreateTeamBody } from "./models/CreateTeamBody";
 export type { DeleteTeamMembersBody } from "./models/DeleteTeamMembersBody";
 export type { EventDto } from "./models/EventDto";
-export type { EventEntity } from "./models/EventEntity";
 export type {
-  CreateEvent200,
-  CreateEvent400,
-  CreateEventMutationRequest,
-  CreateEventMutationResponse,
-  CreateEventMutation,
-} from "./models/events/CreateEvent";
+  CreateEvents200,
+  CreateEvents400,
+  CreateEventsMutationRequest,
+  CreateEventsMutationResponse,
+  CreateEventsMutation,
+} from "./models/events/CreateEvents";
 export type {
+  DeleteEventPathParams,
   DeleteEvent200,
   DeleteEvent400,
   DeleteEventMutationResponse,
   DeleteEventMutation,
 } from "./models/events/DeleteEvent";
 export type {
+  GetEventsQueryParams,
   GetEvents200,
   GetEvents400,
   GetEventsQueryResponse,
@@ -71,7 +86,6 @@ export type {
 } from "./models/events/UpdateEvent";
 export type { GoalBodyTask } from "./models/GoalBodyTask";
 export type { GoalDto } from "./models/GoalDto";
-export type { GoalEntity } from "./models/GoalEntity";
 export type {
   CreateGoal200,
   CreateGoal400,
@@ -101,6 +115,7 @@ export type {
   GetGoalsQuery,
 } from "./models/goals/GetGoals";
 export type {
+  GetTasksQueryParams,
   GetTasks200,
   GetTasks400,
   GetTasksQueryResponse,
@@ -139,7 +154,6 @@ export type {
 export type { GoalWithoutTasksDto } from "./models/GoalWithoutTasksDto";
 export type { MemberDto } from "./models/MemberDto";
 export type { NotificationDto } from "./models/NotificationDto";
-export type { NotificationEntity } from "./models/NotificationEntity";
 export type {
   CreateNotification200,
   CreateNotification400,
@@ -147,6 +161,8 @@ export type {
   CreateNotificationMutationResponse,
   CreateNotificationMutation,
 } from "./models/notifications/CreateNotification";
+export type { ProfileDto } from "./models/ProfileDto";
+export type { ProjectColumn } from "./models/ProjectColumn";
 export type { ProjectDto } from "./models/ProjectDto";
 export type { ProjectRightsDto } from "./models/ProjectRightsDto";
 export type {
@@ -158,12 +174,45 @@ export type {
   CreateProjectMutation,
 } from "./models/projects/CreateProject";
 export type {
+  CreateProjectTaskPathParams,
+  CreateProjectTask200,
+  CreateProjectTask400,
+  CreateProjectTaskMutationRequest,
+  CreateProjectTaskMutationResponse,
+  CreateProjectTaskMutation,
+} from "./models/projects/CreateProjectTask";
+export type {
+  GetProjectPathParams,
+  GetProject200,
+  GetProject400,
+  GetProjectQueryResponse,
+  GetProjectQuery,
+} from "./models/projects/GetProject";
+export type {
   GetProjectsQueryParams,
   GetProjects200,
   GetProjects400,
   GetProjectsQueryResponse,
   GetProjectsQuery,
 } from "./models/projects/GetProjects";
+export type {
+  UpdateProjectPathParams,
+  UpdateProject200,
+  UpdateProject400,
+  UpdateProjectMutationRequest,
+  UpdateProjectMutationResponse,
+  UpdateProjectMutation,
+} from "./models/projects/UpdateProject";
+export type {
+  UpdateProjectTaskPathParams,
+  UpdateProjectTask200,
+  UpdateProjectTask400,
+  UpdateProjectTaskMutationRequest,
+  UpdateProjectTaskMutationResponse,
+  UpdateProjectTaskMutation,
+} from "./models/projects/UpdateProjectTask";
+export type { ProjectTaskDto } from "./models/ProjectTaskDto";
+export type { ShortInfoProjectDto } from "./models/ShortInfoProjectDto";
 export type { TaskDto } from "./models/TaskDto";
 export type { TeamDto } from "./models/TeamDto";
 export type { TeamGeneralInfoDto } from "./models/TeamGeneralInfoDto";
@@ -249,6 +298,8 @@ export type {
 export type { UpdateEventBody } from "./models/UpdateEventBody";
 export type { UpdateGoalBody } from "./models/UpdateGoalBody";
 export type { UpdateGoalListOrderBody } from "./models/UpdateGoalListOrderBody";
+export type { UpdateProjectBody } from "./models/UpdateProjectBody";
+export type { UpdateProjectTaskBody } from "./models/UpdateProjectTaskBody";
 export type { UpdateResult } from "./models/UpdateResult";
 export type { UpdateTaskBody } from "./models/UpdateTaskBody";
 export type { UpdateTaskListOrderBody } from "./models/UpdateTaskListOrderBody";
@@ -261,31 +312,45 @@ export type {
   GetProfileQuery,
 } from "./models/users/GetProfile";
 export type {
+  GetUser200,
+  GetUser404,
+  GetUserQueryResponse,
+  GetUserQuery,
+} from "./models/users/GetUser";
+export type {
   CheckAuth200Schema,
   CheckAuth401Schema,
   CheckAuthQueryResponseSchema,
 } from "./zod/auth/checkAuthSchema";
+export type {
+  Logout200Schema,
+  Logout400Schema,
+  LogoutMutationResponseSchema,
+} from "./zod/auth/logoutSchema";
 export type { BadRequestSchema } from "./zod/badRequestSchema";
 export type { CreateEventBodySchema } from "./zod/createEventBodySchema";
+export type { CreateEventsBodySchema } from "./zod/createEventsBodySchema";
 export type { CreateGoalBodySchema } from "./zod/createGoalBodySchema";
 export type { CreateNotificationBodySchema } from "./zod/createNotificationBodySchema";
 export type { CreateProjectBodySchema } from "./zod/createProjectBodySchema";
+export type { CreateProjectTaskBodySchema } from "./zod/createProjectTaskBodySchema";
 export type { CreateTeamBodySchema } from "./zod/createTeamBodySchema";
 export type { DeleteTeamMembersBodySchema } from "./zod/deleteTeamMembersBodySchema";
 export type { EventDtoSchema } from "./zod/eventDtoSchema";
-export type { EventEntitySchema } from "./zod/eventEntitySchema";
 export type {
-  CreateEvent200Schema,
-  CreateEvent400Schema,
-  CreateEventMutationRequestSchema,
-  CreateEventMutationResponseSchema,
-} from "./zod/events/createEventSchema";
+  CreateEvents200Schema,
+  CreateEvents400Schema,
+  CreateEventsMutationRequestSchema,
+  CreateEventsMutationResponseSchema,
+} from "./zod/events/createEventsSchema";
 export type {
+  DeleteEventPathParamsSchema,
   DeleteEvent200Schema,
   DeleteEvent400Schema,
   DeleteEventMutationResponseSchema,
 } from "./zod/events/deleteEventSchema";
 export type {
+  GetEventsQueryParamsSchema,
   GetEvents200Schema,
   GetEvents400Schema,
   GetEventsQueryResponseSchema,
@@ -299,7 +364,6 @@ export type {
 } from "./zod/events/updateEventSchema";
 export type { GoalBodyTaskSchema } from "./zod/goalBodyTaskSchema";
 export type { GoalDtoSchema } from "./zod/goalDtoSchema";
-export type { GoalEntitySchema } from "./zod/goalEntitySchema";
 export type {
   CreateGoal200Schema,
   CreateGoal400Schema,
@@ -325,6 +389,7 @@ export type {
   GetGoalsQueryResponseSchema,
 } from "./zod/goals/getGoalsSchema";
 export type {
+  GetTasksQueryParamsSchema,
   GetTasks200Schema,
   GetTasks400Schema,
   GetTasksQueryResponseSchema,
@@ -358,13 +423,14 @@ export type {
 export type { GoalWithoutTasksDtoSchema } from "./zod/goalWithoutTasksDtoSchema";
 export type { MemberDtoSchema } from "./zod/memberDtoSchema";
 export type { NotificationDtoSchema } from "./zod/notificationDtoSchema";
-export type { NotificationEntitySchema } from "./zod/notificationEntitySchema";
 export type {
   CreateNotification200Schema,
   CreateNotification400Schema,
   CreateNotificationMutationRequestSchema,
   CreateNotificationMutationResponseSchema,
 } from "./zod/notifications/createNotificationSchema";
+export type { ProfileDtoSchema } from "./zod/profileDtoSchema";
+export type { ProjectColumnSchema } from "./zod/projectColumnSchema";
 export type { ProjectDtoSchema } from "./zod/projectDtoSchema";
 export type { ProjectRightsDtoSchema } from "./zod/projectRightsDtoSchema";
 export type {
@@ -375,11 +441,40 @@ export type {
   CreateProjectMutationResponseSchema,
 } from "./zod/projects/createProjectSchema";
 export type {
+  CreateProjectTaskPathParamsSchema,
+  CreateProjectTask200Schema,
+  CreateProjectTask400Schema,
+  CreateProjectTaskMutationRequestSchema,
+  CreateProjectTaskMutationResponseSchema,
+} from "./zod/projects/createProjectTaskSchema";
+export type {
+  GetProjectPathParamsSchema,
+  GetProject200Schema,
+  GetProject400Schema,
+  GetProjectQueryResponseSchema,
+} from "./zod/projects/getProjectSchema";
+export type {
   GetProjectsQueryParamsSchema,
   GetProjects200Schema,
   GetProjects400Schema,
   GetProjectsQueryResponseSchema,
 } from "./zod/projects/getProjectsSchema";
+export type {
+  UpdateProjectPathParamsSchema,
+  UpdateProject200Schema,
+  UpdateProject400Schema,
+  UpdateProjectMutationRequestSchema,
+  UpdateProjectMutationResponseSchema,
+} from "./zod/projects/updateProjectSchema";
+export type {
+  UpdateProjectTaskPathParamsSchema,
+  UpdateProjectTask200Schema,
+  UpdateProjectTask400Schema,
+  UpdateProjectTaskMutationRequestSchema,
+  UpdateProjectTaskMutationResponseSchema,
+} from "./zod/projects/updateProjectTaskSchema";
+export type { ProjectTaskDtoSchema } from "./zod/projectTaskDtoSchema";
+export type { ShortInfoProjectDtoSchema } from "./zod/shortInfoProjectDtoSchema";
 export type { TaskDtoSchema } from "./zod/taskDtoSchema";
 export type { TeamDtoSchema } from "./zod/teamDtoSchema";
 export type { TeamGeneralInfoDtoSchema } from "./zod/teamGeneralInfoDtoSchema";
@@ -454,6 +549,8 @@ export type {
 export type { UpdateEventBodySchema } from "./zod/updateEventBodySchema";
 export type { UpdateGoalBodySchema } from "./zod/updateGoalBodySchema";
 export type { UpdateGoalListOrderBodySchema } from "./zod/updateGoalListOrderBodySchema";
+export type { UpdateProjectBodySchema } from "./zod/updateProjectBodySchema";
+export type { UpdateProjectTaskBodySchema } from "./zod/updateProjectTaskBodySchema";
 export type { UpdateResultSchema } from "./zod/updateResultSchema";
 export type { UpdateTaskBodySchema } from "./zod/updateTaskBodySchema";
 export type { UpdateTaskListOrderBodySchema } from "./zod/updateTaskListOrderBodySchema";
@@ -464,17 +561,23 @@ export type {
   GetProfile404Schema,
   GetProfileQueryResponseSchema,
 } from "./zod/users/getProfileSchema";
+export type {
+  GetUser200Schema,
+  GetUser404Schema,
+  GetUserQueryResponseSchema,
+} from "./zod/users/getUserSchema";
 export {
   checkAuthQueryKey,
   checkAuth,
   checkAuthQueryOptions,
   useCheckAuth,
 } from "./hooks/auth/useCheckAuth";
+export { logoutMutationKey, logout, useLogout } from "./hooks/auth/useLogout";
 export {
-  createEventMutationKey,
-  createEvent,
-  useCreateEvent,
-} from "./hooks/events/useCreateEvent";
+  createEventsMutationKey,
+  createEvents,
+  useCreateEvents,
+} from "./hooks/events/useCreateEvents";
 export {
   deleteEventMutationKey,
   deleteEvent,
@@ -549,11 +652,32 @@ export {
   useCreateProject,
 } from "./hooks/projects/useCreateProject";
 export {
+  createProjectTaskMutationKey,
+  createProjectTask,
+  useCreateProjectTask,
+} from "./hooks/projects/useCreateProjectTask";
+export {
+  getProjectQueryKey,
+  getProject,
+  getProjectQueryOptions,
+  useGetProject,
+} from "./hooks/projects/useGetProject";
+export {
   getProjectsQueryKey,
   getProjects,
   getProjectsQueryOptions,
   useGetProjects,
 } from "./hooks/projects/useGetProjects";
+export {
+  updateProjectMutationKey,
+  updateProject,
+  useUpdateProject,
+} from "./hooks/projects/useUpdateProject";
+export {
+  updateProjectTaskMutationKey,
+  updateProjectTask,
+  useUpdateProjectTask,
+} from "./hooks/projects/useUpdateProjectTask";
 export {
   createTeamMutationKey,
   createTeam,
@@ -620,31 +744,45 @@ export {
   useGetProfile,
 } from "./hooks/users/useGetProfile";
 export {
+  getUserQueryKey,
+  getUser,
+  getUserQueryOptions,
+  useGetUser,
+} from "./hooks/users/useGetUser";
+export {
   checkAuth200Schema,
   checkAuth401Schema,
   checkAuthQueryResponseSchema,
 } from "./zod/auth/checkAuthSchema";
+export {
+  logout200Schema,
+  logout400Schema,
+  logoutMutationResponseSchema,
+} from "./zod/auth/logoutSchema";
 export { badRequestSchema } from "./zod/badRequestSchema";
 export { createEventBodySchema } from "./zod/createEventBodySchema";
+export { createEventsBodySchema } from "./zod/createEventsBodySchema";
 export { createGoalBodySchema } from "./zod/createGoalBodySchema";
 export { createNotificationBodySchema } from "./zod/createNotificationBodySchema";
 export { createProjectBodySchema } from "./zod/createProjectBodySchema";
+export { createProjectTaskBodySchema } from "./zod/createProjectTaskBodySchema";
 export { createTeamBodySchema } from "./zod/createTeamBodySchema";
 export { deleteTeamMembersBodySchema } from "./zod/deleteTeamMembersBodySchema";
 export { eventDtoSchema } from "./zod/eventDtoSchema";
-export { eventEntitySchema } from "./zod/eventEntitySchema";
 export {
-  createEvent200Schema,
-  createEvent400Schema,
-  createEventMutationRequestSchema,
-  createEventMutationResponseSchema,
-} from "./zod/events/createEventSchema";
+  createEvents200Schema,
+  createEvents400Schema,
+  createEventsMutationRequestSchema,
+  createEventsMutationResponseSchema,
+} from "./zod/events/createEventsSchema";
 export {
+  deleteEventPathParamsSchema,
   deleteEvent200Schema,
   deleteEvent400Schema,
   deleteEventMutationResponseSchema,
 } from "./zod/events/deleteEventSchema";
 export {
+  getEventsQueryParamsSchema,
   getEvents200Schema,
   getEvents400Schema,
   getEventsQueryResponseSchema,
@@ -658,7 +796,6 @@ export {
 } from "./zod/events/updateEventSchema";
 export { goalBodyTaskSchema } from "./zod/goalBodyTaskSchema";
 export { goalDtoSchema } from "./zod/goalDtoSchema";
-export { goalEntitySchema } from "./zod/goalEntitySchema";
 export {
   createGoal200Schema,
   createGoal400Schema,
@@ -684,6 +821,7 @@ export {
   getGoalsQueryResponseSchema,
 } from "./zod/goals/getGoalsSchema";
 export {
+  getTasksQueryParamsSchema,
   getTasks200Schema,
   getTasks400Schema,
   getTasksQueryResponseSchema,
@@ -717,13 +855,14 @@ export {
 export { goalWithoutTasksDtoSchema } from "./zod/goalWithoutTasksDtoSchema";
 export { memberDtoSchema } from "./zod/memberDtoSchema";
 export { notificationDtoSchema } from "./zod/notificationDtoSchema";
-export { notificationEntitySchema } from "./zod/notificationEntitySchema";
 export {
   createNotification200Schema,
   createNotification400Schema,
   createNotificationMutationRequestSchema,
   createNotificationMutationResponseSchema,
 } from "./zod/notifications/createNotificationSchema";
+export { profileDtoSchema } from "./zod/profileDtoSchema";
+export { projectColumnSchema } from "./zod/projectColumnSchema";
 export { projectDtoSchema } from "./zod/projectDtoSchema";
 export { projectRightsDtoSchema } from "./zod/projectRightsDtoSchema";
 export {
@@ -734,11 +873,40 @@ export {
   createProjectMutationResponseSchema,
 } from "./zod/projects/createProjectSchema";
 export {
+  createProjectTaskPathParamsSchema,
+  createProjectTask200Schema,
+  createProjectTask400Schema,
+  createProjectTaskMutationRequestSchema,
+  createProjectTaskMutationResponseSchema,
+} from "./zod/projects/createProjectTaskSchema";
+export {
+  getProjectPathParamsSchema,
+  getProject200Schema,
+  getProject400Schema,
+  getProjectQueryResponseSchema,
+} from "./zod/projects/getProjectSchema";
+export {
   getProjectsQueryParamsSchema,
   getProjects200Schema,
   getProjects400Schema,
   getProjectsQueryResponseSchema,
 } from "./zod/projects/getProjectsSchema";
+export {
+  updateProjectPathParamsSchema,
+  updateProject200Schema,
+  updateProject400Schema,
+  updateProjectMutationRequestSchema,
+  updateProjectMutationResponseSchema,
+} from "./zod/projects/updateProjectSchema";
+export {
+  updateProjectTaskPathParamsSchema,
+  updateProjectTask200Schema,
+  updateProjectTask400Schema,
+  updateProjectTaskMutationRequestSchema,
+  updateProjectTaskMutationResponseSchema,
+} from "./zod/projects/updateProjectTaskSchema";
+export { projectTaskDtoSchema } from "./zod/projectTaskDtoSchema";
+export { shortInfoProjectDtoSchema } from "./zod/shortInfoProjectDtoSchema";
 export { taskDtoSchema } from "./zod/taskDtoSchema";
 export { teamDtoSchema } from "./zod/teamDtoSchema";
 export { teamGeneralInfoDtoSchema } from "./zod/teamGeneralInfoDtoSchema";
@@ -813,6 +981,8 @@ export {
 export { updateEventBodySchema } from "./zod/updateEventBodySchema";
 export { updateGoalBodySchema } from "./zod/updateGoalBodySchema";
 export { updateGoalListOrderBodySchema } from "./zod/updateGoalListOrderBodySchema";
+export { updateProjectBodySchema } from "./zod/updateProjectBodySchema";
+export { updateProjectTaskBodySchema } from "./zod/updateProjectTaskBodySchema";
 export { updateResultSchema } from "./zod/updateResultSchema";
 export { updateTaskBodySchema } from "./zod/updateTaskBodySchema";
 export { updateTaskListOrderBodySchema } from "./zod/updateTaskListOrderBodySchema";
@@ -823,3 +993,8 @@ export {
   getProfile404Schema,
   getProfileQueryResponseSchema,
 } from "./zod/users/getProfileSchema";
+export {
+  getUser200Schema,
+  getUser404Schema,
+  getUserQueryResponseSchema,
+} from "./zod/users/getUserSchema";

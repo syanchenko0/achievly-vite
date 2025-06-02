@@ -1,19 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropProvider, useDroppable } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { CollisionPriority } from "@dnd-kit/abstract";
-import {
-  type TaskDto,
-  useGetTasks,
-  useUpdateTask,
-  useUpdateTaskListOrder,
-} from "@/shared/api";
+import { type TaskDto } from "@/shared/api";
 import { InfoIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { TaskSortableCard } from "@/widgets/goals/ui/task-sortable-card";
 import { TaskUpdateSheet } from "@/widgets/goals";
+import { useGoalsBoardQueries } from "@/pages/goals/hooks/use-goals-board-queries";
 
 type TasksState = {
   active: TaskDto[];
@@ -22,33 +18,20 @@ type TasksState = {
 
 function GoalsBoard() {
   const [openSheet, setOpenSheet] = useState<boolean>(false);
-
   const [taskForUpdate, setTaskForUpdate] = useState<TaskDto>();
-
   const [tasks, setTasks] = useState<TasksState>({
     active: [],
     done: [],
   });
 
-  const closestUpdateTaskListOrderFn = useRef<() => void>(null);
-
-  const closestUpdateTaskFn = useRef<() => void>(null);
-
-  const { data: allTasks, isLoading: allTasksLoading } = useGetTasks();
-
-  const { mutate: updateTask } = useUpdateTask();
-
-  const { mutate: updateTaskListOrder } = useUpdateTaskListOrder();
+  const { initialTasks, allTasksLoading, updateTask, updateTaskListOrder } =
+    useGoalsBoardQueries();
 
   useEffect(() => {
-    if (allTasks) {
-      setTasks((prev) => ({
-        ...prev,
-        active: allTasks.filter((t) => !t.done_date),
-        done: allTasks.filter((t) => t.done_date),
-      }));
+    if (initialTasks) {
+      setTasks(initialTasks);
     }
-  }, [allTasks]);
+  }, [initialTasks]);
 
   if (allTasksLoading) {
     return <Skeleton className="size-full" />;
@@ -57,45 +40,8 @@ function GoalsBoard() {
   return (
     <DragDropProvider
       onDragOver={(event) => {
-        const {
-          operation: { source },
-        } = event;
-
         setTasks((tasks) => {
           const state = move(tasks, event);
-
-          const list = [...state.active, ...state.done].map((task, index) => ({
-            id: task.id,
-            list_order: index,
-          }));
-
-          closestUpdateTaskListOrderFn.current = () => {
-            updateTaskListOrder({ data: list });
-          };
-
-          closestUpdateTaskFn.current = () => {
-            const activeTask = state.active.find((a) => a.id === source?.id);
-
-            if (activeTask) {
-              updateTask({
-                task_id: String(activeTask.id),
-                data: { ...activeTask, done_date: null },
-              });
-            }
-
-            if (!activeTask) {
-              const doneTask = state.done.find((a) => a.id === source?.id);
-
-              if (doneTask)
-                updateTask({
-                  task_id: String(doneTask.id),
-                  data: {
-                    ...doneTask,
-                    done_date: format(new Date(), "yyyy-MM-dd"),
-                  },
-                });
-            }
-          };
 
           return {
             active: state.active.map((a) => ({ ...a, done_date: null })),
@@ -107,12 +53,40 @@ function GoalsBoard() {
         });
       }}
       onDragEnd={() => {
-        if (closestUpdateTaskListOrderFn.current) {
-          closestUpdateTaskListOrderFn.current();
-        }
+        const list = [...tasks.active, ...tasks.done].map((task, index) => ({
+          id: task.id,
+          list_order: index,
+        }));
 
-        if (closestUpdateTaskFn.current) {
-          closestUpdateTaskFn.current();
+        updateTaskListOrder({ data: list });
+
+        if (initialTasks.active.length !== tasks.active.length) {
+          const activeTask = tasks.active.find(
+            (task) =>
+              !initialTasks.active.some((initTask) => initTask.id === task.id),
+          );
+
+          if (activeTask) {
+            updateTask({
+              task_id: String(activeTask.id),
+              data: { ...activeTask, done_date: null },
+            });
+          } else {
+            const doneTask = tasks.done.find(
+              (task) =>
+                !initialTasks.done.some((initTask) => initTask.id === task.id),
+            );
+
+            if (doneTask) {
+              updateTask({
+                task_id: String(doneTask.id),
+                data: {
+                  ...doneTask,
+                  done_date: format(new Date(), "yyyy-MM-dd"),
+                },
+              });
+            }
+          }
         }
       }}
     >

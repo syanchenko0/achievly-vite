@@ -3,54 +3,25 @@
  * Do not edit manually.
  */
 
-import type { EventEntity } from "./EventEntity";
-import type { GoalEntity } from "./GoalEntity";
-import type { NotificationEntity } from "./NotificationEntity";
-
 export type UserDto = {
   /**
    * @description ID пользователя
    * @type number
    */
-  id: number;
+  id: number
   /**
    * @description Имя пользователя
    * @type string
    */
-  username: string;
+  username: string
   /**
    * @description Email пользователя
    * @type string
    */
-  email: string;
+  email: string
   /**
    * @description Изображение пользователя
    * @type string
    */
-  picture_url: string;
-  /**
-   * @description События в календаре
-   * @type array
-   */
-  events?: EventEntity[] | null;
-  /**
-   * @description Цели пользователя
-   * @type array
-   */
-  goals?: GoalEntity[] | null;
-  /**
-   * @description Уведомления пользователя
-   * @type array
-   */
-  notifications?: NotificationEntity[] | null;
-  /**
-   * @description Проекты пользователя
-   * @type array
-   */
-  projects?: unknown[][] | null;
-  /**
-   * @description Команды пользователя
-   * @type array
-   */
-  teams?: unknown[][] | null;
-};
+  picture_url: string
+}

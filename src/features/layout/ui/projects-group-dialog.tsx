@@ -6,7 +6,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/shared/ui/dialog";
 import {
   Form,
@@ -16,31 +15,68 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import { SidebarGroupAction } from "@/shared/ui/sidebar";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   type CreateProjectBodySchema,
   createProjectBodySchema,
-  getTeamsQueryKey,
+  type GeneralInfoProjectDto,
+  getProjectsQueryKey,
   useCreateProject,
 } from "@/shared/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-function ProjectsGroupDialog({ team_id }: { team_id: string }) {
-  const queryClient = useQueryClient();
+function ProjectsGroupDialog({
+  team_id,
+  open,
+  onOpenChange,
+}: {
+  team_id: string;
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <Content team_id={team_id} onOpenChange={onOpenChange} />
+      </DialogContent>
+    </Dialog>
+  );
+}
 
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+function Content({
+  team_id,
+  onOpenChange,
+}: {
+  team_id: string;
+  onOpenChange: (value: boolean) => void;
+}) {
+  const queryClient = useQueryClient();
 
   const { mutateAsync: createProject, isPending: createProjectPending } =
     useCreateProject({
       mutation: {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getTeamsQueryKey() });
+        onSettled: async (newProject) => {
+          await queryClient.cancelQueries({
+            queryKey: getProjectsQueryKey({ team_id }),
+          });
+
+          const previousProjects = queryClient.getQueryData<
+            GeneralInfoProjectDto[]
+          >(getProjectsQueryKey({ team_id }));
+
+          queryClient.setQueryData(getProjectsQueryKey({ team_id }), [
+            ...(previousProjects || []),
+            newProject,
+          ]);
+
+          onOpenChange(false);
+          form.reset();
+
+          return { previousProjects };
         },
       },
     });
@@ -56,21 +92,12 @@ function ProjectsGroupDialog({ team_id }: { team_id: string }) {
 
   const onSubmit = async (data: CreateProjectBodySchema) => {
     await createProject({ data, params: { team_id } });
-    setDialogOpen(false);
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <SidebarGroupAction
-          title="Добавить проект"
-          className="cursor-pointer rounded-sm"
-        >
-          <Plus />
-          <span className="sr-only">Добавить проект</span>
-        </SidebarGroupAction>
-      </DialogTrigger>
-      <DialogContent>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <DialogHeader>
           <DialogTitle>Создание проекта</DialogTitle>
           <DialogDescription>
@@ -78,39 +105,35 @@ function ProjectsGroupDialog({ team_id }: { team_id: string }) {
           </DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Наименование проекта</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Введите наименование" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="reset" variant="destructive">
-                  Отменить
-                </Button>
-              </DialogClose>
-              <Button type="submit" disabled={createProjectPending}>
-                {createProjectPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Создать"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Наименование проекта</FormLabel>
+              <FormControl>
+                <Input placeholder="Введите наименование" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="reset" variant="destructive">
+              Отменить
+            </Button>
+          </DialogClose>
+          <Button type="submit" disabled={createProjectPending}>
+            {createProjectPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Создать"
+            )}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
   );
 }
 

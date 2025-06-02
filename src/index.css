@@ -74,6 +74,7 @@
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
+	--fc-border-color: oklch(0.708 0 0);
 }
 
 .dark {
@@ -124,4 +125,53 @@
 		scrollbar-color: var(--color-muted-foreground) transparent;
 		scrollbar-gutter: stable;
 	}
+}
+
+.fc-scrollgrid {
+	@apply text-foreground rounded-lg;
+}
+
+.fc-scrollgrid-section > td {
+	@apply rounded-b-lg
+}
+
+.fc-scrollgrid-section > th {
+	@apply rounded-t-lg
+}
+
+.fc .fc-toolbar-title {
+	@apply text-base;
+}
+
+.fc-scroller {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-muted-foreground) transparent;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus, .fc .fc-button-primary:not(:disabled):active:focus {
+	@apply outline-0 shadow-none border-neutral-700 hover:border-neutral-700 hover:bg-accent/60
+}
+
+.fc .fc-button:focus,.fc .fc-button:not(:disabled):active:focus,.fc .fc-button-primary:not(:disabled):active:focus {
+	@apply outline-0 shadow-none border-neutral-700 hover:border-neutral-700 bg-accent hover:bg-accent/60
+}
+
+.fc .fc-button {
+	@apply bg-accent hover:bg-accent/60 border-neutral-700 hover:border-neutral-700 p-2
+}
+
+.fc .fc-timegrid-col.fc-day-today {
+	@apply bg-accent/60
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+	@apply bg-accent/60 border-neutral-700
+}
+
+.fc-event {
+	@apply bg-green-700 text-accent-foreground rounded-md shadow-sm overflow-hidden;
+}
+
+.fc .fc-timegrid-slot-minor {
+	@apply border-0
 }

@@ -7,6 +7,16 @@ import { badRequestSchema } from "../badRequestSchema";
 import { taskDtoSchema } from "../taskDtoSchema";
 import { z } from "zod";
 
+export const getTasksQueryParamsSchema = z
+  .object({
+    status: z.string().nullable().nullish(),
+  })
+  .optional();
+
+export type GetTasksQueryParamsSchema = z.infer<
+  typeof getTasksQueryParamsSchema
+>;
+
 export const getTasks200Schema = z.array(z.lazy(() => taskDtoSchema));
 
 export type GetTasks200Schema = z.infer<typeof getTasks200Schema>;

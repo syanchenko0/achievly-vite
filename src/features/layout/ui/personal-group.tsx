@@ -25,8 +25,8 @@ function PersonalGroup() {
       title: "Цели",
       icon: Goal,
       items: [
-        { label: "Доска", link: ROUTES.goals_board },
-        { label: "Список", link: ROUTES.goals_list },
+        { label: "Список задач", link: ROUTES.goals_board },
+        { label: "Список целей", link: ROUTES.goals_list },
         {
           label: "Статистика",
           link: ROUTES.goals_statistics,
@@ -36,7 +36,7 @@ function PersonalGroup() {
     {
       title: "Календарь",
       icon: CalendarRange,
-      link: ROUTES.calendar,
+      link: ROUTES.events_calendar,
     },
   ];
 
@@ -48,16 +48,16 @@ function PersonalGroup() {
           if (!item?.items) {
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  tooltip={item.title}
-                  isActive={!!matchPath(item.link, pathname)}
-                  className="cursor-pointer"
-                >
-                  {item.icon && <item.icon />}
-                  <Link to={item.link} className="w-full">
-                    {item.title}
-                  </Link>
-                </SidebarMenuButton>
+                <Link to={item.link} className="w-full">
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    isActive={!!matchPath(item.link, pathname)}
+                    className="cursor-pointer"
+                  >
+                    {item.icon && <item.icon />}
+                    <span className="w-full">{item.title}</span>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
             );
           }

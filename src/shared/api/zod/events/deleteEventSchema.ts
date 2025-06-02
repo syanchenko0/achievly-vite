@@ -6,6 +6,14 @@
 import { badRequestSchema } from "../badRequestSchema";
 import { z } from "zod";
 
+export const deleteEventPathParamsSchema = z.object({
+  event_id: z.string(),
+});
+
+export type DeleteEventPathParamsSchema = z.infer<
+  typeof deleteEventPathParamsSchema
+>;
+
 export const deleteEvent200Schema = z.unknown();
 
 export type DeleteEvent200Schema = z.infer<typeof deleteEvent200Schema>;

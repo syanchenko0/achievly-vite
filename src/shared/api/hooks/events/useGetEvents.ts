@@ -16,12 +16,14 @@ import type {
 } from "@tanstack/react-query";
 import type {
   GetEventsQueryResponse,
+  GetEventsQueryParams,
   GetEvents400,
 } from "../../models/events/GetEvents";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { getEventsQueryResponseSchema } from "../../zod/events/getEventsSchema";
 
-export const getEventsQueryKey = () => [{ url: "/events" }] as const;
+export const getEventsQueryKey = (params: GetEventsQueryParams) =>
+  [{ url: "/events" }, ...(params ? [params] : [])] as const;
 
 export type GetEventsQueryKey = ReturnType<typeof getEventsQueryKey>;
 
@@ -30,6 +32,7 @@ export type GetEventsQueryKey = ReturnType<typeof getEventsQueryKey>;
  * {@link /events}
  */
 export async function getEvents(
+  { params }: { params: GetEventsQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
   const { client: request = client, ...requestConfig } = config;
@@ -38,24 +41,26 @@ export async function getEvents(
     GetEventsQueryResponse,
     ResponseErrorConfig<GetEvents400>,
     unknown
-  >({ method: "GET", url: `/events`, ...requestConfig });
+  >({ method: "GET", url: `/events`, params, ...requestConfig });
   return getEventsQueryResponseSchema.parse(res.data);
 }
 
 export function getEventsQueryOptions(
+  { params }: { params: GetEventsQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const queryKey = getEventsQueryKey();
+  const queryKey = getEventsQueryKey(params);
   return queryOptions<
     GetEventsQueryResponse,
     ResponseErrorConfig<GetEvents400>,
     GetEventsQueryResponse,
     typeof queryKey
   >({
+    enabled: !!params,
     queryKey,
     queryFn: async ({ signal }) => {
       config.signal = signal;
-      return getEvents(config);
+      return getEvents({ params }, config);
     },
   });
 }
@@ -69,6 +74,7 @@ export function useGetEvents<
   TQueryData = GetEventsQueryResponse,
   TQueryKey extends QueryKey = GetEventsQueryKey,
 >(
+  { params }: { params: GetEventsQueryParams },
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -86,11 +92,14 @@ export function useGetEvents<
     query: { client: queryClient, ...queryOptions } = {},
     client: config = {},
   } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getEventsQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getEventsQueryKey(params);
 
   const query = useQuery(
     {
-      ...(getEventsQueryOptions(config) as unknown as QueryObserverOptions),
+      ...(getEventsQueryOptions(
+        { params },
+        config,
+      ) as unknown as QueryObserverOptions),
       queryKey,
       ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
     },

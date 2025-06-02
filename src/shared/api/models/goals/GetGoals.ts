@@ -8,9 +8,9 @@ import type { GoalDto } from "../GoalDto";
 
 export type GetGoalsQueryParams = {
   /**
-   * @type string | undefined
+   * @type string
    */
-  status?: string;
+  status?: string | null;
 };
 
 export type GetGoals200 = GoalDto[];

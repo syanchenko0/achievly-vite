@@ -4,16 +4,13 @@
  */
 
 import { badRequestSchema } from "../badRequestSchema";
-import { userDtoSchema } from "../userDtoSchema";
+import { profileDtoSchema } from "../profileDtoSchema";
 import { z } from "zod";
 
-export const getProfile200Schema = z.lazy(() => userDtoSchema);
+export const getProfile200Schema = z.lazy(() => profileDtoSchema);
 
 export type GetProfile200Schema = z.infer<typeof getProfile200Schema>;
 
-/**
- * @description Пользователь не найден
- */
 export const getProfile404Schema = z.lazy(() => badRequestSchema);
 
 export type GetProfile404Schema = z.infer<typeof getProfile404Schema>;

@@ -1,8 +1,9 @@
 import type { TaskDto } from "@/shared/api";
 import { useSortable } from "@dnd-kit/react/sortable";
-import { CalendarIcon, GripVertical } from "lucide-react";
+import { CalendarIcon, GripVertical, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import { Button } from "@/shared/ui/button";
 
 function TaskSortableCard({
   id,
@@ -12,6 +13,7 @@ function TaskSortableCard({
   type,
   accept,
   onClick,
+  onDelete,
 }: {
   id: string | number;
   index: number;
@@ -20,11 +22,12 @@ function TaskSortableCard({
   type?: string;
   accept?: string[];
   onClick: () => void;
+  onDelete?: () => void;
 }) {
   const { ref } = useSortable({ id, index, group, type, accept });
 
   return (
-    <button
+    <div
       ref={ref}
       className="bg-sidebar relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2"
       onClick={onClick}
@@ -45,10 +48,22 @@ function TaskSortableCard({
           </div>
         </div>
         <div className="flex items-center gap-x-2">
+          {onDelete && (
+            <Button
+              size="icon"
+              variant="destructive"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+            >
+              <Trash2 />
+            </Button>
+          )}
           <GripVertical className="text-neutral-400" />
         </div>
       </div>
-    </button>
+    </div>
   );
 }
 

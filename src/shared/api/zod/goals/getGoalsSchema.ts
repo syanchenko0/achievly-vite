@@ -9,7 +9,7 @@ import { z } from "zod";
 
 export const getGoalsQueryParamsSchema = z
   .object({
-    status: z.string().optional(),
+    status: z.string().nullable().nullish(),
   })
   .optional();
 
