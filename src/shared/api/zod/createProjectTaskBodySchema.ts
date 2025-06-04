@@ -16,6 +16,7 @@ export const createProjectTaskBodySchema = z.object({
     .describe("ID исполнителя задачи")
     .nullable()
     .nullish(),
+  deadline_date: z.string().describe("Дедлайн задачи").nullable().nullish(),
 });
 
 export type CreateProjectTaskBodySchema = z.infer<

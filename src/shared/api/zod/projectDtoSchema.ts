@@ -4,6 +4,7 @@
  */
 
 import { projectColumnSchema } from "./projectColumnSchema";
+import { projectRightsDtoSchema } from "./projectRightsDtoSchema";
 import { projectTaskDtoSchema } from "./projectTaskDtoSchema";
 import { teamDtoSchema } from "./teamDtoSchema";
 import { z } from "zod";
@@ -15,6 +16,10 @@ export const projectDtoSchema = z.object({
     .array(z.lazy(() => projectColumnSchema))
     .describe("Столбцы проекта"),
   team: z.lazy(() => teamDtoSchema).describe("Команда проекта"),
+  user_project_rights: z
+    .lazy(() => projectRightsDtoSchema)
+    .describe("Права пользователя в текущем проекте")
+    .optional(),
   project_tasks: z
     .array(z.lazy(() => projectTaskDtoSchema))
     .describe("Команда проекта")

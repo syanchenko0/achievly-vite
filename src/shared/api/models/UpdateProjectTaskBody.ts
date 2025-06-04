@@ -30,4 +30,14 @@ export type UpdateProjectTaskBody = {
    * @type number
    */
   executor_member_id?: number | null;
+  /**
+   * @description Дедлайн задачи
+   * @type string
+   */
+  deadline_date?: string | null;
+  /**
+   * @description Дата завершения задачи
+   * @type string
+   */
+  done_date?: string | null;
 };

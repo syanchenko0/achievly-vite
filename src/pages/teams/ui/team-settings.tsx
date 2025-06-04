@@ -15,6 +15,7 @@ import {
   type TeamDto,
   useDeleteTeam as useDeleteTeamQuery,
   useDeleteTeamMembers,
+  useGetProfile,
   useGetTeam,
   useLeaveFromTeam,
 } from "@/shared/api";
@@ -268,7 +269,9 @@ function TeamControls({
 }
 
 function UsersTable({ team }: { team: TeamDto }) {
-  const { data, columns } = useTableData(team);
+  const { data: profile } = useGetProfile();
+
+  const { data, columns } = useTableData(team, profile?.id);
   const { mutateAsync: deleteMembers, isPending: deleteMembersLoading } =
     useDeleteTeamMembers();
 

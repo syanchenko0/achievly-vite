@@ -1,49 +1,46 @@
 import { useParams } from "react-router";
-import {
-  type ProjectColumn,
-  type ProjectTaskDto,
-  useGetProject,
-} from "@/shared/api";
+import { type ProjectColumn, type ProjectTaskDto } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { DragDropProvider } from "@dnd-kit/react";
-import { CollisionPriority } from "@dnd-kit/abstract";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import {
-  AlertCircle,
-  ChevronsUp,
-  EllipsisVertical,
-  Pencil,
-  Plus,
-  User,
-} from "lucide-react";
-import { Button } from "@/shared/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
-import { useSortable } from "@dnd-kit/react/sortable";
-import { CreateProjectTaskDialog } from "@/widgets/projects";
+import { AlertCircle, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { move } from "@dnd-kit/helpers";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { format } from "date-fns";
+import { useProjectQueries } from "@/pages/projects/hooks/use-project-queries";
+import { ProjectSortableTask } from "@/pages/projects/ui/project-sortable-task";
+import { ProjectSortableColumn } from "@/pages/projects/ui/project-sortable-column";
+import { ProjectColumnEditDialog } from "@/pages/projects/ui/project-column-edit-dialog";
+import { ProjectTaskEditSheet } from "@/pages/projects/ui/project-task-edit-sheet";
+import { Button } from "@/shared/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import { ProjectColumnCreateDialog } from "@/pages/projects/ui/project-column-create-dialog";
+import { ForbiddenEditAlertDialog } from "@/pages/projects/ui/forbidden-edit-alert-dialog";
 
 function Project() {
   const { project_id } = useParams<{ project_id: string }>();
 
   const [items, setItems] = useState<Map<ProjectColumn, ProjectTaskDto[]>>();
   const [columns, setColumns] = useState<ProjectColumn[]>([]);
+  const [openColumnCreateDialog, setOpenColumnCreateDialog] =
+    useState<boolean>(false);
+  const [openColumnEditDialog, setOpenColumnEditDialog] =
+    useState<boolean>(false);
+  const [openTaskEditDialog, setOpenTaskEditDialog] = useState<boolean>(false);
+  const [openForbiddenEditAlertDialog, setOpenForbiddenEditAlertDialog] =
+    useState<boolean>(false);
+  const [columnForUpdate, setColumnForUpdate] = useState<ProjectColumn>();
+  const [taskForUpdate, setTaskForUpdate] = useState<ProjectTaskDto>();
 
   const previousItems = useRef<Map<ProjectColumn, ProjectTaskDto[]>>(items);
 
-  const { data: project, isLoading: projectLoading } = useGetProject(
-    {
-      project_id: project_id as string,
-    },
-    { query: { enabled: !!project_id } },
-  );
+  const {
+    project,
+    projectLoading,
+    updateProject,
+    updateProjectTask,
+    updateProjectTaskListOrder,
+  } = useProjectQueries();
 
   useEffect(() => {
     if (project) {
@@ -122,150 +119,140 @@ function Project() {
           return;
         }
 
+        if (source?.type === "item") {
+          const currentItem = Array.from(items?.entries() ?? []).find(
+            (item) => {
+              return item[1].find((task) => task.id === source?.id);
+            },
+          );
+
+          if (currentItem) {
+            const column = currentItem[0];
+
+            const task = currentItem[1].find((task) => task.id === source?.id);
+
+            if (!project?.user_project_rights?.update) {
+              if (task && task.column.id !== column.id) {
+                setItems(previousItems.current);
+                setOpenForbiddenEditAlertDialog(true);
+              }
+
+              return;
+            }
+
+            const list = [...currentItem[1]].map((task, index) => ({
+              id: task.id,
+              list_order: index,
+            }));
+
+            updateProjectTaskListOrder({
+              project_id: Number(project_id),
+              data: list,
+            });
+
+            if (task && task.column.id !== column.id)
+              updateProjectTask({
+                project_id: Number(project_id),
+                task_id: task.id,
+                data: {
+                  column,
+                  done_date: column.is_final_stage
+                    ? format(new Date(), "yyyy-MM-dd")
+                    : null,
+                },
+              });
+          }
+        }
+
         if (source?.type === "column") {
-          setColumns((columns) => move(columns, event));
+          const newColumns = move(columns, event);
+
+          updateProject({
+            project_id: Number(project_id),
+            data: {
+              columns: newColumns.map((column, index) => ({
+                ...column,
+                order: index,
+              })),
+            },
+          });
+
+          setColumns(newColumns);
         }
       }}
     >
       <div className="bg-sidebar size-full rounded-md border p-4">
         <div className="flex size-full gap-x-4">
           {columns.map((column, columnIndex) => (
-            <Column key={column.id} index={columnIndex} column={column}>
+            <ProjectSortableColumn
+              key={column.id}
+              index={columnIndex}
+              column={column}
+              onOpenColumnEditDialog={() => {
+                setColumnForUpdate(column);
+                setOpenColumnEditDialog(true);
+              }}
+            >
               <div className="flex flex-col gap-y-2">
-                {items
-                  ?.get(column)
-                  ?.map((task, taskIndex) => (
-                    <ProjectTaskCard
-                      key={task.id}
-                      id={task.id}
-                      index={taskIndex}
-                      column={column}
-                      task={task}
-                    />
-                  ))}
+                {items?.get(column)?.map((task, taskIndex) => (
+                  <ProjectSortableTask
+                    key={task.id}
+                    id={task.id}
+                    index={taskIndex}
+                    column={column}
+                    task={task}
+                    onClick={() => {
+                      setTaskForUpdate(task);
+                      setOpenTaskEditDialog(true);
+                    }}
+                  />
+                ))}
               </div>
-            </Column>
+            </ProjectSortableColumn>
           ))}
+          <Tooltip>
+            <TooltipTrigger asChild className="mt-2">
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={() => setOpenColumnCreateDialog(true)}
+              >
+                <Plus />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Добавить столбец</TooltipContent>
+          </Tooltip>
         </div>
       </div>
-    </DragDropProvider>
-  );
-}
 
-function Column({
-  index,
-  children,
-  column,
-}: {
-  index: number;
-  column: ProjectColumn;
-  children: React.ReactNode;
-}) {
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+      {project?.user_project_rights?.create && (
+        <ProjectColumnCreateDialog
+          open={openColumnCreateDialog}
+          onOpenChange={setOpenColumnCreateDialog}
+        />
+      )}
 
-  const { ref } = useSortable({
-    id: column.id,
-    index,
-    type: "column",
-    collisionPriority: CollisionPriority.Low,
-    accept: ["item", "column"],
-  });
+      {project?.user_project_rights?.update && (
+        <ProjectColumnEditDialog
+          column={columnForUpdate}
+          open={openColumnEditDialog}
+          onOpenChange={setOpenColumnEditDialog}
+        />
+      )}
 
-  return (
-    <div className="flex size-full flex-col items-center gap-2" ref={ref}>
-      <div className="flex size-full flex-col gap-y-4">
-        <div className="bg-sidebar flex cursor-pointer items-center justify-between rounded-md border px-4 py-2">
-          <h3 className="text-base font-medium">{column.name}</h3>
-          <div className="flex items-center">
-            {!column.removable && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => setOpenDialog(true)}
-                  >
-                    <Plus />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Добавить задачу</TooltipContent>
-              </Tooltip>
-            )}
+      {project?.user_project_rights?.update && (
+        <ProjectTaskEditSheet
+          task={taskForUpdate}
+          open={openTaskEditDialog}
+          onOpenChange={setOpenTaskEditDialog}
+        />
+      )}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="icon" variant="ghost">
-                  <EllipsisVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Pencil />
-                  Редактировать столбец
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
-        {children}
-      </div>
-
-      <CreateProjectTaskDialog
-        open={openDialog}
-        column={column}
-        onOpenChange={setOpenDialog}
+      <ForbiddenEditAlertDialog
+        open={openForbiddenEditAlertDialog}
+        onOpenChange={setOpenForbiddenEditAlertDialog}
       />
-    </div>
-  );
-}
-
-export function ProjectTaskCard({
-  id,
-  index,
-  column,
-  task,
-}: {
-  id: number;
-  index: number;
-  column: ProjectColumn;
-  task: ProjectTaskDto;
-}) {
-  const { ref, isDragging } = useSortable({
-    id,
-    index,
-    type: "item",
-    accept: "item",
-    group: column.id,
-  });
-
-  return (
-    <div className="cursor-pointer" ref={ref} data-dragging={isDragging}>
-      <div className="flex flex-col rounded-md bg-neutral-700">
-        <span className="truncate px-2 py-1 text-xs font-medium">
-          {task.name}
-        </span>
-        <div className="flex flex-col rounded-md border border-neutral-600 bg-neutral-800 px-2 py-2">
-          <div className="flex items-center justify-between">
-            <Avatar className="size-5">
-              <AvatarImage src={task.executor?.user.picture_url} />
-              <AvatarFallback>
-                <User className="size-5" />
-              </AvatarFallback>
-            </Avatar>
-
-            <div className="flex items-center">
-              <div>
-                <ChevronsUp className="size-5" />
-              </div>
-            </div>
-          </div>
-          <span className="text-sm font-medium">
-            {task?.description || task.name}
-          </span>
-        </div>
-      </div>
-    </div>
+    </DragDropProvider>
   );
 }
 

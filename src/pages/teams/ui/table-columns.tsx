@@ -1,5 +1,6 @@
 import {
   getTeamQueryKey,
+  type MemberDto,
   type ProjectRightsDto,
   type UpdateTeamMemberBodySchema,
   updateTeamMemberBodySchema,
@@ -70,12 +71,16 @@ const ActionsCell = ({
   member_role,
   user_role,
   projects_rights,
+  user_id,
+  members,
 }: {
   member_id: number;
   team_id: number;
   member_role: string;
   user_role: string;
   projects_rights?: ProjectRightsDto[];
+  user_id?: number;
+  members: MemberDto[];
 }) => {
   const queryClient = useQueryClient();
 
@@ -113,7 +118,12 @@ const ActionsCell = ({
     setOpenDialog(true);
   };
 
-  if (isMemberOwner || isUserMember) return null;
+  if (
+    isUserMember ||
+    (isUserAdmin && isMemberOwner) ||
+    member_id === members.find((m) => m.user.id === user_id)?.id
+  )
+    return null;
 
   return (
     <div className="flex justify-end gap-x-2">

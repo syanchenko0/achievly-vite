@@ -18,7 +18,7 @@ type TableData = {
   projects_rights?: ProjectRightsDto[];
 };
 
-const useTableData = (team: TeamDto) => {
+const useTableData = (team: TeamDto, user_id?: number) => {
   const data: TableData[] = useMemo(
     () =>
       team.members.map((member) => ({
@@ -80,6 +80,8 @@ const useTableData = (team: TeamDto) => {
             member_role={row.original.role}
             user_role={team.user_role}
             projects_rights={row.original.projects_rights}
+            user_id={user_id}
+            members={team.members}
           />
         ),
       },

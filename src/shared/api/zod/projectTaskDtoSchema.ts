@@ -19,6 +19,8 @@ export const projectTaskDtoSchema = z.object({
     .describe("Исполнитель задачи")
     .nullable()
     .nullish(),
+  deadline_date: z.string().describe("Дедлайн задачи").nullable().nullish(),
+  done_date: z.string().describe("Дата завершения задачи").nullable().nullish(),
 });
 
 export type ProjectTaskDtoSchema = z.infer<typeof projectTaskDtoSchema>;

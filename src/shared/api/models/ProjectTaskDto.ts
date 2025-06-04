@@ -39,4 +39,14 @@ export type ProjectTaskDto = {
    * @description Исполнитель задачи
    */
   executor?: MemberDto | null;
+  /**
+   * @description Дедлайн задачи
+   * @type string
+   */
+  deadline_date?: string | null;
+  /**
+   * @description Дата завершения задачи
+   * @type string
+   */
+  done_date?: string | null;
 };

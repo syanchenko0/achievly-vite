@@ -5,13 +5,11 @@
 
 import { z } from 'zod'
 
-export const projectColumnSchema = z.object({
-  id: z.string().describe('ID столбца проекта'),
+export const createProjectColumnBodySchema = z.object({
   name: z.string().describe('Название столбца'),
-  order: z.number().describe('Порядковый номер столбца'),
   is_removable: z.boolean().describe('Признак удаления столбца').nullable().nullish(),
   is_task_creation_allowed: z.boolean().describe('Признак разрешения создания задач в столбце').nullable().nullish(),
   is_final_stage: z.boolean().describe('Признак столбца финального этапа').nullable().nullish(),
 })
 
-export type ProjectColumnSchema = z.infer<typeof projectColumnSchema>
+export type CreateProjectColumnBodySchema = z.infer<typeof createProjectColumnBodySchema>

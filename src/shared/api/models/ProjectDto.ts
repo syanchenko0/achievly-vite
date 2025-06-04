@@ -4,6 +4,7 @@
  */
 
 import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectRightsDto } from "./ProjectRightsDto";
 import type { ProjectTaskDto } from "./ProjectTaskDto";
 import type { TeamDto } from "./TeamDto";
 
@@ -27,6 +28,10 @@ export type ProjectDto = {
    * @description Команда проекта
    */
   team: TeamDto;
+  /**
+   * @description Права пользователя в текущем проекте
+   */
+  user_project_rights?: ProjectRightsDto;
   /**
    * @description Команда проекта
    * @type array

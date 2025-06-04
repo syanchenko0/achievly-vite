@@ -18,14 +18,16 @@ import { PROJECT_TASK_PRIORITY } from "@/shared/constants/projects";
 import { Button } from "@/shared/ui/button";
 import { Loader2 } from "lucide-react";
 import {
+  DeadlineDateField,
   DescriptionField,
+  ExecutorField,
   NameField,
   PriorityField,
 } from "@/shared/ui/projects-fields";
 import { useParams } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
-function CreateProjectTaskDialog({
+function ProjectTaskCreateDialog({
   open,
   column,
   onOpenChange,
@@ -124,6 +126,12 @@ function Content({
             label="Приоритет"
             className="w-full"
           />
+          <ExecutorField
+            control={form.control}
+            label="Исполнитель"
+            className="w-full"
+          />
+          <DeadlineDateField control={form.control} label="Дата дедлайна" />
           <DescriptionField control={form.control} label="Описание" />
         </div>
 
@@ -141,4 +149,4 @@ function Content({
   );
 }
 
-export { CreateProjectTaskDialog };
+export { ProjectTaskCreateDialog };

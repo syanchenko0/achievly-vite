@@ -31,4 +31,9 @@ export type CreateProjectTaskBody = {
    * @type number
    */
   executor_member_id?: number | null;
+  /**
+   * @description Дедлайн задачи
+   * @type string
+   */
+  deadline_date?: string | null;
 };
