@@ -15,9 +15,11 @@ export function declension(value: number, words: string[]) {
 }
 
 type PathParams<T extends string> =
-  T extends `${infer Start}:${infer Param}/${infer Rest}`
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  T extends `${infer _Start}:${infer Param}/${infer Rest}`
     ? { [K in Param | keyof PathParams<Rest>]: string | number }
-    : T extends `${infer Start}:${infer Param}`
+    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      T extends `${infer _Start}:${infer Param}`
       ? { [K in Param]: string | number }
       : object;
 
