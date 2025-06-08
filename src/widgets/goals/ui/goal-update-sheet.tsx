@@ -25,6 +25,7 @@ import {
 } from "@/shared/ui/goals-fields";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import {
+  getGoalsGeneralInfoQueryKey,
   getGoalsQueryKey,
   getTasksQueryKey,
   type GoalDto,
@@ -95,7 +96,11 @@ function Content({
 
   const { mutate: updateGoal, isPending: updateGoalPending } = useUpdateGoal({
     mutation: {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         queryClient
           .invalidateQueries({ queryKey: getGoalsQueryKey() })
           .then(() => {
@@ -109,7 +114,11 @@ function Content({
 
   const { mutate: deleteGoal, isPending: deleteGoalPending } = useDeleteGoal({
     mutation: {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         queryClient
           .invalidateQueries({ queryKey: getGoalsQueryKey() })
           .then(() => {

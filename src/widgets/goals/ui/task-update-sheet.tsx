@@ -1,6 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  getGoalsGeneralInfoQueryKey,
   getGoalsQueryKey,
   getTasksQueryKey,
   type GoalBodyTask,
@@ -80,13 +81,18 @@ function Content({
 
   const { mutate: updateTask, isPending: updateTaskPending } = useUpdateTask({
     mutation: {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         queryClient
           .invalidateQueries({ queryKey: getGoalsQueryKey() })
           .then(() => {
             onOpenChange(false);
             form.reset();
           });
+
         queryClient.invalidateQueries({ queryKey: getTasksQueryKey() }).then();
       },
     },
@@ -95,6 +101,10 @@ function Content({
   const { mutate: deleteTask, isPending: deleteTaskPending } = useDeleteTask({
     mutation: {
       onMutate: async (deleted) => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         await queryClient.cancelQueries({ queryKey: getTasksQueryKey() });
         const previousTasks =
           queryClient.getQueryData<TaskDto[]>(getTasksQueryKey());

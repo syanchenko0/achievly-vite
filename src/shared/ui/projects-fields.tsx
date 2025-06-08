@@ -362,7 +362,7 @@ function DeadlineDateField<T extends FieldValues, K extends Path<T>>({
                 onSelect={(date) =>
                   date ? field.onChange(format(date, "yyyy-MM-dd")) : undefined
                 }
-                disabled={(date) => date <= new Date()}
+                // disabled={(date) => date <= new Date()}
                 initialFocus
               />
             </PopoverContent>

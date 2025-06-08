@@ -68,7 +68,7 @@ function ProjectsGroup() {
   }
 
   return (
-    <SidebarGroup>
+    <SidebarGroup className="flex h-full max-h-full min-h-0 flex-col">
       <SidebarGroupLabel>Проекты</SidebarGroupLabel>
       {isOwner && (
         <SidebarGroupAction
@@ -80,7 +80,7 @@ function ProjectsGroup() {
           <span className="sr-only">Добавить проект</span>
         </SidebarGroupAction>
       )}
-      <SidebarGroupContent>
+      <SidebarGroupContent className="scroll overflow-y-auto">
         <SidebarMenu>
           {!items.length && (
             <div className="flex items-center gap-2 pl-2 text-neutral-300 [&>svg]:size-[18px]">

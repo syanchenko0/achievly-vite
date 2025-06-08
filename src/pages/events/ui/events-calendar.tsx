@@ -11,7 +11,7 @@ import type {
 } from "@fullcalendar/core";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
-import { endOfWeek, format, startOfWeek, subDays } from "date-fns";
+import { endOfWeek, format, startOfWeek } from "date-fns";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -45,10 +45,7 @@ function EventsCalendar() {
 
   const handleDatesSet = (dateInfo: DatesSetArg) => {
     const start = dateInfo.startStr.split("T")[0];
-    const end = format(
-      subDays(new Date(dateInfo.endStr.split("T")[0]), 1),
-      "yyyy-MM-dd",
-    );
+    const end = dateInfo.endStr.split("T")[0];
     setPeriod([start, end]);
   };
 

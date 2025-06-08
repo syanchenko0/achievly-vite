@@ -6,6 +6,7 @@ import {
   useUpdateEvent,
 } from "@/shared/api";
 import { useQueryClient } from "@tanstack/react-query";
+import { addDays, format } from "date-fns";
 
 const useEventsCalendarQueries = ({ period }: { period: string[] }) => {
   const queryClient = useQueryClient();
@@ -20,6 +21,13 @@ const useEventsCalendarQueries = ({ period }: { period: string[] }) => {
   const { mutate: updateEvent } = useUpdateEvent({
     mutation: {
       onMutate: async (updated) => {
+        await queryClient.invalidateQueries({
+          queryKey: getEventsQueryKey({
+            start_period: format(new Date(), "yyyy-MM-dd"),
+            end_period: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+          }),
+        });
+
         await queryClient.cancelQueries({
           queryKey: getEventsQueryKey({
             start_period: period[0],
@@ -60,6 +68,13 @@ const useEventsCalendarQueries = ({ period }: { period: string[] }) => {
   const { mutate: deleteEvent } = useDeleteEvent({
     mutation: {
       onMutate: async (deleted) => {
+        await queryClient.invalidateQueries({
+          queryKey: getEventsQueryKey({
+            start_period: format(new Date(), "yyyy-MM-dd"),
+            end_period: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+          }),
+        });
+
         await queryClient.cancelQueries({
           queryKey: getEventsQueryKey({
             start_period: period[0],

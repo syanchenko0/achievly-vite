@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
 } from "@/shared/ui/alert-dialog";
 import { ForbiddenEditAlertDialog } from "@/pages/projects/ui/forbidden-edit-alert-dialog";
+import { ForbiddenCreateAlertDialog } from "@/pages/projects/ui/forbidden-create-alert-dialog";
 
 function ProjectSortableColumn({
   index,
@@ -37,6 +38,8 @@ function ProjectSortableColumn({
   onOpenColumnEditDialog: () => void;
 }) {
   const [openCreateTaskDialog, setOpenCreateTaskDialog] =
+    useState<boolean>(false);
+  const [openForbiddenCreateAlertDialog, setOpenForbiddenCreateAlertDialog] =
     useState<boolean>(false);
   const [openForbiddenEditAlertDialog, setOpenForbiddenEditAlertDialog] =
     useState<boolean>(false);
@@ -67,7 +70,13 @@ function ProjectSortableColumn({
                   <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => setOpenCreateTaskDialog(true)}
+                    onClick={() => {
+                      if (!project?.user_project_rights?.create) {
+                        setOpenForbiddenCreateAlertDialog(true);
+                      } else {
+                        setOpenCreateTaskDialog(true);
+                      }
+                    }}
                   >
                     <Plus />
                   </Button>
@@ -119,6 +128,11 @@ function ProjectSortableColumn({
         />
       )}
 
+      <ForbiddenCreateAlertDialog
+        open={openForbiddenCreateAlertDialog}
+        onOpenChange={setOpenForbiddenCreateAlertDialog}
+      />
+
       <ForbiddenEditAlertDialog
         open={openForbiddenEditAlertDialog}
         onOpenChange={setOpenForbiddenEditAlertDialog}
@@ -138,10 +152,9 @@ function ProjectSortableColumn({
             <AlertDialogDescription className="flex flex-col">
               {!project?.user_project_rights?.delete && (
                 <span>
-                  Данный столбец нельзя удалить из-за его настроек. <br />
-                  Вы можете изменить настройки столбца, если у вас есть права на
-                  редактирование. <br />В ином случае, обратитесь к создателю
-                  проекта
+                  У вас нет прав на удаление данных в проекте.
+                  <br />
+                  Запросите доступ у создателя проекта
                 </span>
               )}
               {!column?.is_removable &&

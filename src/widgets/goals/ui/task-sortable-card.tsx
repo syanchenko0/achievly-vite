@@ -1,8 +1,9 @@
 import type { TaskDto } from "@/shared/api";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { CalendarIcon, GripVertical, Trash2 } from "lucide-react";
-import { format } from "date-fns";
+import { format, intervalToDuration } from "date-fns";
 import { ru } from "date-fns/locale";
+import { declension } from "@/app/lib/utils";
 import { Button } from "@/shared/ui/button";
 
 function TaskSortableCard({
@@ -26,6 +27,17 @@ function TaskSortableCard({
 }) {
   const { ref } = useSortable({ id, index, group, type, accept });
 
+  const isTaskOverdue = task.deadline_date
+    ? new Date(task.deadline_date) < new Date()
+    : false;
+
+  const taskOverdue = task.deadline_date
+    ? intervalToDuration({
+        start: task.deadline_date,
+        end: new Date(),
+      })
+    : null;
+
   return (
     <div
       ref={ref}
@@ -39,11 +51,27 @@ function TaskSortableCard({
           <div className="flex items-center gap-x-2">
             <CalendarIcon className="size-4" />
             <span className="text-xs">
-              {task.deadline_date
-                ? format(new Date(task.deadline_date), "PPPP", {
-                    locale: ru,
-                  })
-                : "Дата окончания задачи не указана"}
+              {isTaskOverdue && task.deadline_date && (
+                <span className="text-red-400">
+                  Просрочена на{" "}
+                  {(taskOverdue?.days ?? 0) > 0 &&
+                    `${taskOverdue?.days ?? 0} ${declension(
+                      taskOverdue?.days ?? 0,
+                      ["день", "дня", "дней"],
+                    )}`}{" "}
+                  {(taskOverdue?.hours ?? 0) > 0 &&
+                    `${taskOverdue?.hours ?? 0} ${declension(
+                      taskOverdue?.hours ?? 0,
+                      ["час", "часа", "часов"],
+                    )}`}{" "}
+                </span>
+              )}
+              {!isTaskOverdue &&
+                task.deadline_date &&
+                format(new Date(task.deadline_date), "PPPP", {
+                  locale: ru,
+                })}
+              {!task.deadline_date && "Дата окончания задачи не указана"}
             </span>
           </div>
         </div>

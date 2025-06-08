@@ -9,14 +9,17 @@ import { Skeleton } from "@/shared/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { TaskSortableCard } from "@/widgets/goals/ui/task-sortable-card";
 import { TaskUpdateSheet } from "@/widgets/goals";
-import { useGoalsBoardQueries } from "@/pages/goals/hooks/use-goals-board-queries";
+import { useGoalsTasksQueries } from "@/pages/goals/hooks/use-goals-tasks-queries";
+import { useSearchParams } from "react-router";
 
 type TasksState = {
   active: TaskDto[];
   done: TaskDto[];
 };
 
-function GoalsBoard() {
+function GoalsTasks() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [openSheet, setOpenSheet] = useState<boolean>(false);
   const [taskForUpdate, setTaskForUpdate] = useState<TaskDto>();
   const [tasks, setTasks] = useState<TasksState>({
@@ -25,11 +28,20 @@ function GoalsBoard() {
   });
 
   const { initialTasks, allTasksLoading, updateTask, updateTaskListOrder } =
-    useGoalsBoardQueries();
+    useGoalsTasksQueries();
 
   useEffect(() => {
     if (initialTasks) {
       setTasks(initialTasks);
+    }
+
+    if (searchParams.get("task_id")) {
+      setOpenSheet(true);
+      setTaskForUpdate(
+        initialTasks.active.find(
+          (task) => task.id === Number(searchParams.get("task_id")),
+        ),
+      );
     }
   }, [initialTasks]);
 
@@ -137,7 +149,8 @@ function GoalsBoard() {
         task={taskForUpdate}
         onOpenChange={(value) => {
           setOpenSheet(value);
-          setTaskForUpdate(undefined);
+          searchParams.delete("task_id");
+          setSearchParams(searchParams);
         }}
       />
     </DragDropProvider>
@@ -176,4 +189,4 @@ function Column({
   );
 }
 
-export { GoalsBoard };
+export { GoalsTasks };

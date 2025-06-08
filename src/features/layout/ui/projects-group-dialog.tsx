@@ -19,7 +19,7 @@ import { Loader2 } from "lucide-react";
 import {
   type CreateProjectBodySchema,
   createProjectBodySchema,
-  type GeneralInfoProjectDto,
+  type ShortInfoProjectDto,
   getProjectsQueryKey,
   useCreateProject,
 } from "@/shared/api";
@@ -65,7 +65,7 @@ function Content({
           });
 
           const previousProjects = queryClient.getQueryData<
-            GeneralInfoProjectDto[]
+            ShortInfoProjectDto[]
           >(getProjectsQueryKey({ team_id }));
 
           queryClient.setQueryData(getProjectsQueryKey({ team_id }), [

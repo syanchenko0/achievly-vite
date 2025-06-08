@@ -16,6 +16,7 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import {
   type CreateGoalBody,
   createGoalBodySchema,
+  getGoalsGeneralInfoQueryKey,
   getGoalsQueryKey,
   getTasksQueryKey,
   type TaskDto,
@@ -74,7 +75,11 @@ function Content({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
 
   const { mutate: createGoal, isPending: createGoalPending } = useCreateGoal({
     mutation: {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         queryClient
           .invalidateQueries({ queryKey: getGoalsQueryKey() })
           .then(() => {

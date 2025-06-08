@@ -8,6 +8,7 @@ export type { CreateGoalMutationKey } from "./hooks/goals/useCreateGoal";
 export type { DeleteGoalMutationKey } from "./hooks/goals/useDeleteGoal";
 export type { DeleteTaskMutationKey } from "./hooks/goals/useDeleteTask";
 export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
+export type { GetGoalsGeneralInfoQueryKey } from "./hooks/goals/useGetGoalsGeneralInfo";
 export type { GetTasksQueryKey } from "./hooks/goals/useGetTasks";
 export type { UpdateGoalMutationKey } from "./hooks/goals/useUpdateGoal";
 export type { UpdateGoalListOrderMutationKey } from "./hooks/goals/useUpdateGoalListOrder";
@@ -17,10 +18,12 @@ export type { CreateNotificationMutationKey } from "./hooks/notifications/useCre
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
 export type { CreateProjectColumnMutationKey } from "./hooks/projects/useCreateProjectColumn";
 export type { CreateProjectTaskMutationKey } from "./hooks/projects/useCreateProjectTask";
+export type { DeleteProjectMutationKey } from "./hooks/projects/useDeleteProject";
 export type { DeleteProjectColumnMutationKey } from "./hooks/projects/useDeleteProjectColumn";
 export type { DeleteProjectTaskMutationKey } from "./hooks/projects/useDeleteProjectTask";
 export type { GetProjectQueryKey } from "./hooks/projects/useGetProject";
 export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
+export type { GetProjectsGeneralInfoQueryKey } from "./hooks/projects/useGetProjectsGeneralInfo";
 export type { UpdateProjectMutationKey } from "./hooks/projects/useUpdateProject";
 export type { UpdateProjectColumnMutationKey } from "./hooks/projects/useUpdateProjectColumn";
 export type { UpdateProjectTaskMutationKey } from "./hooks/projects/useUpdateProjectTask";
@@ -90,6 +93,7 @@ export type {
   UpdateEventMutationResponse,
   UpdateEventMutation,
 } from "./models/events/UpdateEvent";
+export type { GeneralInfoProjectDto } from "./models/GeneralInfoProjectDto";
 export type { GoalBodyTask } from "./models/GoalBodyTask";
 export type { GoalDto } from "./models/GoalDto";
 export type {
@@ -120,6 +124,12 @@ export type {
   GetGoalsQueryResponse,
   GetGoalsQuery,
 } from "./models/goals/GetGoals";
+export type {
+  GetGoalsGeneralInfo200,
+  GetGoalsGeneralInfo400,
+  GetGoalsGeneralInfoQueryResponse,
+  GetGoalsGeneralInfoQuery,
+} from "./models/goals/GetGoalsGeneralInfo";
 export type {
   GetTasksQueryParams,
   GetTasks200,
@@ -196,6 +206,13 @@ export type {
   CreateProjectTaskMutation,
 } from "./models/projects/CreateProjectTask";
 export type {
+  DeleteProjectPathParams,
+  DeleteProject200,
+  DeleteProject400,
+  DeleteProjectMutationResponse,
+  DeleteProjectMutation,
+} from "./models/projects/DeleteProject";
+export type {
   DeleteProjectColumnPathParams,
   DeleteProjectColumn200,
   DeleteProjectColumn400,
@@ -223,6 +240,13 @@ export type {
   GetProjectsQueryResponse,
   GetProjectsQuery,
 } from "./models/projects/GetProjects";
+export type {
+  GetProjectsGeneralInfoQueryParams,
+  GetProjectsGeneralInfo200,
+  GetProjectsGeneralInfo400,
+  GetProjectsGeneralInfoQueryResponse,
+  GetProjectsGeneralInfoQuery,
+} from "./models/projects/GetProjectsGeneralInfo";
 export type {
   UpdateProjectPathParams,
   UpdateProject200,
@@ -408,6 +432,7 @@ export type {
   UpdateEventMutationRequestSchema,
   UpdateEventMutationResponseSchema,
 } from "./zod/events/updateEventSchema";
+export type { GeneralInfoProjectDtoSchema } from "./zod/generalInfoProjectDtoSchema";
 export type { GoalBodyTaskSchema } from "./zod/goalBodyTaskSchema";
 export type { GoalDtoSchema } from "./zod/goalDtoSchema";
 export type {
@@ -428,6 +453,11 @@ export type {
   DeleteTask400Schema,
   DeleteTaskMutationResponseSchema,
 } from "./zod/goals/deleteTaskSchema";
+export type {
+  GetGoalsGeneralInfo200Schema,
+  GetGoalsGeneralInfo400Schema,
+  GetGoalsGeneralInfoQueryResponseSchema,
+} from "./zod/goals/getGoalsGeneralInfoSchema";
 export type {
   GetGoalsQueryParamsSchema,
   GetGoals200Schema,
@@ -507,6 +537,12 @@ export type {
   DeleteProjectColumnMutationResponseSchema,
 } from "./zod/projects/deleteProjectColumnSchema";
 export type {
+  DeleteProjectPathParamsSchema,
+  DeleteProject200Schema,
+  DeleteProject400Schema,
+  DeleteProjectMutationResponseSchema,
+} from "./zod/projects/deleteProjectSchema";
+export type {
   DeleteProjectTaskPathParamsSchema,
   DeleteProjectTask200Schema,
   DeleteProjectTask400Schema,
@@ -518,6 +554,12 @@ export type {
   GetProject400Schema,
   GetProjectQueryResponseSchema,
 } from "./zod/projects/getProjectSchema";
+export type {
+  GetProjectsGeneralInfoQueryParamsSchema,
+  GetProjectsGeneralInfo200Schema,
+  GetProjectsGeneralInfo400Schema,
+  GetProjectsGeneralInfoQueryResponseSchema,
+} from "./zod/projects/getProjectsGeneralInfoSchema";
 export type {
   GetProjectsQueryParamsSchema,
   GetProjects200Schema,
@@ -696,6 +738,12 @@ export {
   useGetGoals,
 } from "./hooks/goals/useGetGoals";
 export {
+  getGoalsGeneralInfoQueryKey,
+  getGoalsGeneralInfo,
+  getGoalsGeneralInfoQueryOptions,
+  useGetGoalsGeneralInfo,
+} from "./hooks/goals/useGetGoalsGeneralInfo";
+export {
   getTasksQueryKey,
   getTasks,
   getTasksQueryOptions,
@@ -742,6 +790,11 @@ export {
   useCreateProjectTask,
 } from "./hooks/projects/useCreateProjectTask";
 export {
+  deleteProjectMutationKey,
+  deleteProject,
+  useDeleteProject,
+} from "./hooks/projects/useDeleteProject";
+export {
   deleteProjectColumnMutationKey,
   deleteProjectColumn,
   useDeleteProjectColumn,
@@ -763,6 +816,12 @@ export {
   getProjectsQueryOptions,
   useGetProjects,
 } from "./hooks/projects/useGetProjects";
+export {
+  getProjectsGeneralInfoQueryKey,
+  getProjectsGeneralInfo,
+  getProjectsGeneralInfoQueryOptions,
+  useGetProjectsGeneralInfo,
+} from "./hooks/projects/useGetProjectsGeneralInfo";
 export {
   updateProjectMutationKey,
   updateProject,
@@ -900,6 +959,7 @@ export {
   updateEventMutationRequestSchema,
   updateEventMutationResponseSchema,
 } from "./zod/events/updateEventSchema";
+export { generalInfoProjectDtoSchema } from "./zod/generalInfoProjectDtoSchema";
 export { goalBodyTaskSchema } from "./zod/goalBodyTaskSchema";
 export { goalDtoSchema } from "./zod/goalDtoSchema";
 export {
@@ -920,6 +980,11 @@ export {
   deleteTask400Schema,
   deleteTaskMutationResponseSchema,
 } from "./zod/goals/deleteTaskSchema";
+export {
+  getGoalsGeneralInfo200Schema,
+  getGoalsGeneralInfo400Schema,
+  getGoalsGeneralInfoQueryResponseSchema,
+} from "./zod/goals/getGoalsGeneralInfoSchema";
 export {
   getGoalsQueryParamsSchema,
   getGoals200Schema,
@@ -999,6 +1064,12 @@ export {
   deleteProjectColumnMutationResponseSchema,
 } from "./zod/projects/deleteProjectColumnSchema";
 export {
+  deleteProjectPathParamsSchema,
+  deleteProject200Schema,
+  deleteProject400Schema,
+  deleteProjectMutationResponseSchema,
+} from "./zod/projects/deleteProjectSchema";
+export {
   deleteProjectTaskPathParamsSchema,
   deleteProjectTask200Schema,
   deleteProjectTask400Schema,
@@ -1010,6 +1081,12 @@ export {
   getProject400Schema,
   getProjectQueryResponseSchema,
 } from "./zod/projects/getProjectSchema";
+export {
+  getProjectsGeneralInfoQueryParamsSchema,
+  getProjectsGeneralInfo200Schema,
+  getProjectsGeneralInfo400Schema,
+  getProjectsGeneralInfoQueryResponseSchema,
+} from "./zod/projects/getProjectsGeneralInfoSchema";
 export {
   getProjectsQueryParamsSchema,
   getProjects200Schema,

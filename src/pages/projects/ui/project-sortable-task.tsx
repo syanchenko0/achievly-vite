@@ -31,7 +31,11 @@ function ProjectSortableTask({
     group: column.id,
   });
 
-  const duration =
+  const isTaskOverdue = task.deadline_date
+    ? new Date(task.deadline_date) < new Date()
+    : false;
+
+  const taskOverdue =
     task?.deadline_date && !task?.done_date
       ? intervalToDuration({
           start: new Date(),
@@ -111,17 +115,33 @@ function ProjectSortableTask({
             </div>
           </div>
 
-          {duration && (
+          {isTaskOverdue && taskOverdue && (
+            <span className="text-xs text-red-400">
+              Просрочена на{" "}
+              {Math.abs(taskOverdue?.days ?? 0) > 0 &&
+                `${Math.abs(taskOverdue?.days ?? 0)} ${declension(
+                  Math.abs(taskOverdue?.days ?? 0),
+                  ["день", "дня", "дней"],
+                )}`}{" "}
+              {Math.abs(taskOverdue?.hours ?? 0) > 0 &&
+                `${Math.abs(taskOverdue?.hours ?? 0)} ${declension(
+                  Math.abs(taskOverdue?.hours ?? 0),
+                  ["час", "часа", "часов"],
+                )}`}{" "}
+            </span>
+          )}
+
+          {!isTaskOverdue && taskOverdue && (
             <span>
               <span className="text-xs font-medium text-neutral-400">
                 До конца срока выполнения задачи:
               </span>{" "}
               <span className="text-xs">
-                {(duration?.days ?? 0) > 0 && (
+                {(taskOverdue?.days ?? 0) > 0 && (
                   <>
                     <span>
-                      {String(duration.days)}{" "}
-                      {declension(Number(String(duration.days ?? 0)), [
+                      {String(taskOverdue.days)}{" "}
+                      {declension(Number(String(taskOverdue.days ?? 0)), [
                         "день",
                         "дня",
                         "дней",
@@ -133,11 +153,11 @@ function ProjectSortableTask({
 
                 <span
                   className={cn({
-                    ["text-red-400"]: !duration?.days,
+                    ["text-red-400"]: !taskOverdue?.days,
                   })}
                 >
-                  {String(duration.hours ?? 0)}{" "}
-                  {declension(Number(String(duration.hours ?? 0)), [
+                  {String(taskOverdue.hours ?? 0)}{" "}
+                  {declension(Number(String(taskOverdue.hours ?? 0)), [
                     "час",
                     "часа",
                     "часов",

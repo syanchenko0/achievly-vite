@@ -1,4 +1,5 @@
 import {
+  getGoalsGeneralInfoQueryKey,
   getGoalsQueryKey,
   type GoalDto,
   type TaskDto,
@@ -19,6 +20,10 @@ const useGoalsListQueries = () => {
   const { mutate: updateGoal } = useUpdateGoal({
     mutation: {
       onMutate: async (updated) => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         await queryClient.cancelQueries({ queryKey: getGoalsQueryKey() });
 
         const previousGoals =
@@ -48,6 +53,10 @@ const useGoalsListQueries = () => {
   const { mutate: updateGoalListOrder } = useUpdateGoalListOrder({
     mutation: {
       onMutate: async (updated) => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         await queryClient.cancelQueries({ queryKey: getGoalsQueryKey() });
 
         const previousGoals =

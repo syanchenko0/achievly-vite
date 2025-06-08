@@ -49,12 +49,7 @@ function ProjectTaskEditSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-[400px] sm:w-[580px] sm:max-w-[580px]">
-        {task && (
-          <ProjectTaskEditSheetContent
-            task={task}
-            onOpenChange={onOpenChange}
-          />
-        )}
+        <ProjectTaskEditSheetContent task={task} onOpenChange={onOpenChange} />
       </SheetContent>
     </Sheet>
   );
@@ -64,19 +59,20 @@ function ProjectTaskEditSheetContent({
   task,
   onOpenChange,
 }: {
-  task: ProjectTaskDto;
+  task?: ProjectTaskDto;
   onOpenChange: (value: boolean) => void;
 }) {
   const { project_id } = useParams<{ project_id: string }>();
 
   const form = useForm<UpdateProjectTaskBody>({
-    defaultValues: { ...task, executor_member_id: task.executor?.id },
+    defaultValues: { ...task, executor_member_id: task?.executor?.id },
     resolver: zodResolver(updateProjectTaskBodySchema),
     mode: "onBlur",
     reValidateMode: "onBlur",
   });
 
   const {
+    project,
     updateProjectTask,
     updateProjectTaskPending,
     deleteProjectTask,
@@ -84,15 +80,17 @@ function ProjectTaskEditSheetContent({
   } = useProjectQueries();
 
   const handleUpdateProjectTask = async (data: UpdateProjectTaskBody) => {
-    updateProjectTask({
-      task_id: task.id,
-      project_id: Number(project_id),
-      data: {
-        ...data,
-        priority: data.priority === "null" ? null : data.priority,
-      },
-    });
-    onOpenChange(false);
+    if (project?.user_project_rights?.update && task?.id !== undefined) {
+      updateProjectTask({
+        task_id: task?.id,
+        project_id: Number(project_id),
+        data: {
+          ...data,
+          priority: data.priority === "null" ? null : data.priority,
+        },
+      });
+      onOpenChange(false);
+    }
   };
 
   return (
@@ -109,11 +107,16 @@ function ProjectTaskEditSheetContent({
         </SheetHeader>
 
         <div className="scroll flex flex-col gap-y-4 overflow-y-auto px-4">
-          <NameField control={form.control} label="Наименование" />
+          <NameField
+            control={form.control}
+            label="Наименование"
+            disabled={!project?.user_project_rights?.update}
+          />
           <PriorityField
             control={form.control}
             label="Приоритет"
             className="w-full"
+            disabled={!project?.user_project_rights?.update}
           />
           <AuthorField
             control={form.control}
@@ -125,9 +128,18 @@ function ProjectTaskEditSheetContent({
             control={form.control}
             label="Исполнитель"
             className="w-full"
+            disabled={!project?.user_project_rights?.update}
           />
-          <DeadlineDateField control={form.control} label="Дата дедлайна" />
-          <DescriptionField control={form.control} label="Описание" />
+          <DeadlineDateField
+            control={form.control}
+            label="Дата дедлайна"
+            disabled={!project?.user_project_rights?.update}
+          />
+          <DescriptionField
+            control={form.control}
+            label="Описание"
+            disabled={!project?.user_project_rights?.update}
+          />
         </div>
 
         <SheetFooter className="bg-background sticky bottom-0 w-full pr-6 pb-6">
@@ -135,9 +147,12 @@ function ProjectTaskEditSheetContent({
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
-                  disabled={deleteProjectTaskPending}
                   variant="destructive"
                   size="icon"
+                  disabled={
+                    deleteProjectTaskPending ||
+                    !project?.user_project_rights?.delete
+                  }
                 >
                   <Trash2 />
                   {deleteProjectTaskPending && (
@@ -159,11 +174,16 @@ function ProjectTaskEditSheetContent({
                   <AlertDialogCancel>Отменить</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => {
-                      deleteProjectTask({
-                        task_id: task.id,
-                        project_id: project_id as string,
-                      });
-                      onOpenChange(false);
+                      if (
+                        project?.user_project_rights?.delete &&
+                        task?.id !== undefined
+                      ) {
+                        deleteProjectTask({
+                          task_id: task.id,
+                          project_id: project_id as string,
+                        });
+                        onOpenChange(false);
+                      }
                     }}
                   >
                     Подтвердить
@@ -174,7 +194,10 @@ function ProjectTaskEditSheetContent({
 
             <Button
               type="submit"
-              disabled={updateProjectTaskPending}
+              disabled={
+                updateProjectTaskPending ||
+                !project?.user_project_rights?.update
+              }
               className="flex-1"
             >
               <Save />

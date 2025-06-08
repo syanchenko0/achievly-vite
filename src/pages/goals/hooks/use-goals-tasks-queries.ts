@@ -1,4 +1,5 @@
 import {
+  getGoalsGeneralInfoQueryKey,
   getTasksQueryKey,
   type TaskDto,
   useGetTasks,
@@ -8,7 +9,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-const useGoalsBoardQueries = () => {
+const useGoalsTasksQueries = () => {
   const { data: allTasks, isLoading: allTasksLoading } = useGetTasks({
     params: undefined,
   });
@@ -18,6 +19,10 @@ const useGoalsBoardQueries = () => {
   const { mutate: updateTask } = useUpdateTask({
     mutation: {
       onMutate: async (updated) => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         await queryClient.cancelQueries({ queryKey: getTasksQueryKey() });
 
         const previousTasks =
@@ -44,6 +49,10 @@ const useGoalsBoardQueries = () => {
   const { mutate: updateTaskListOrder } = useUpdateTaskListOrder({
     mutation: {
       onMutate: async (updated) => {
+        await queryClient.invalidateQueries({
+          queryKey: getGoalsGeneralInfoQueryKey(),
+        });
+
         await queryClient.cancelQueries({ queryKey: getTasksQueryKey() });
 
         const previousTasks =
@@ -91,4 +100,4 @@ const useGoalsBoardQueries = () => {
   };
 };
 
-export { useGoalsBoardQueries };
+export { useGoalsTasksQueries };

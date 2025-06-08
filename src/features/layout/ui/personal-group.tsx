@@ -25,7 +25,7 @@ function PersonalGroup() {
       title: "Цели",
       icon: Goal,
       items: [
-        { label: "Список задач", link: ROUTES.goals_board },
+        { label: "Список задач", link: ROUTES.goals_tasks },
         { label: "Список целей", link: ROUTES.goals_list },
         {
           label: "Статистика",

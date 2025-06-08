@@ -4,6 +4,9 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
 } from "@/shared/ui/sidebar";
@@ -14,12 +17,12 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Separator } from "@/shared/ui/separator";
-import { matchPath, Outlet, useLocation } from "react-router";
+import { Link, matchPath, Outlet, useLocation } from "react-router";
 import { RequireAuth } from "@/shared/ui/require-auth";
 import { TeamSwitcher } from "@/features/layout/ui/team-switcher";
 import { PersonalGroup } from "@/features/layout/ui/personal-group";
 import { ProjectsGroup } from "@/features/layout/ui/projects-group";
-import { Plus } from "lucide-react";
+import { Home, Plus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import { GoalCreateSheet } from "@/widgets/goals/ui/goal-create-sheet";
@@ -43,7 +46,7 @@ function Layout() {
   });
 
   const isGoals =
-    route === ROUTES.goals_board ||
+    route === ROUTES.goals_tasks ||
     route === ROUTES.goals_list ||
     route === ROUTES.goals_statistics;
 
@@ -52,14 +55,32 @@ function Layout() {
   return (
     <RequireAuth>
       <SidebarProvider>
-        <Sidebar variant="floating">
+        <Sidebar variant="floating" className="h-svh max-h-svh">
           <SidebarHeader>
             <TeamSwitcher />
           </SidebarHeader>
-          <SidebarContent className="gap-0">
-            <PersonalGroup />
-            <ProjectsGroup />
-          </SidebarContent>
+          <div className="h-full max-h-full min-h-0 flex-1">
+            <SidebarContent className="flex h-full max-h-full min-h-0 flex-col">
+              <SidebarMenu className="px-2">
+                <SidebarMenuItem>
+                  <Link to={ROUTES.home} className="w-full">
+                    <SidebarMenuButton
+                      tooltip={"Главная"}
+                      isActive={!!matchPath(ROUTES.home, pathname)}
+                      className="cursor-pointer"
+                    >
+                      {<Home />}
+                      <span className="w-full">
+                        {ROUTE_LABELS[ROUTES.home]}
+                      </span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              </SidebarMenu>
+              <PersonalGroup />
+              <ProjectsGroup />
+            </SidebarContent>
+          </div>
           <SidebarFooter>
             <UserDropdown />
           </SidebarFooter>

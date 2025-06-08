@@ -26,9 +26,9 @@ const TeamSettingsPage = lazy(() =>
     default: module.TeamSettings,
   })),
 );
-const GoalsBoardPage = lazy(() =>
+const GoalsTasksPage = lazy(() =>
   import("@/pages/goals").then((module) => ({
-    default: module.GoalsBoard,
+    default: module.GoalsTasks,
   })),
 );
 const GoalsListPage = lazy(() =>
@@ -95,11 +95,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: ROUTES.goals_board,
+        path: ROUTES.goals_tasks,
         element: (
           <Suspense fallback={<PageLoader />}>
             <RequireAuth>
-              <GoalsBoardPage />
+              <GoalsTasksPage />
             </RequireAuth>
           </Suspense>
         ),
