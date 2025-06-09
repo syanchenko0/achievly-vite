@@ -7,6 +7,7 @@ export type { UpdateEventMutationKey } from "./hooks/events/useUpdateEvent";
 export type { CreateGoalMutationKey } from "./hooks/goals/useCreateGoal";
 export type { DeleteGoalMutationKey } from "./hooks/goals/useDeleteGoal";
 export type { DeleteTaskMutationKey } from "./hooks/goals/useDeleteTask";
+export type { GenerateGoalsMutationKey } from "./hooks/goals/useGenerateGoals";
 export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
 export type { GetGoalsGeneralInfoQueryKey } from "./hooks/goals/useGetGoalsGeneralInfo";
 export type { GetTasksQueryKey } from "./hooks/goals/useGetTasks";
@@ -117,6 +118,13 @@ export type {
   DeleteTaskMutationResponse,
   DeleteTaskMutation,
 } from "./models/goals/DeleteTask";
+export type {
+  GenerateGoals200,
+  GenerateGoals400,
+  GenerateGoalsMutationRequest,
+  GenerateGoalsMutationResponse,
+  GenerateGoalsMutation,
+} from "./models/goals/GenerateGoals";
 export type {
   GetGoalsQueryParams,
   GetGoals200,
@@ -454,6 +462,12 @@ export type {
   DeleteTaskMutationResponseSchema,
 } from "./zod/goals/deleteTaskSchema";
 export type {
+  GenerateGoals200Schema,
+  GenerateGoals400Schema,
+  GenerateGoalsMutationRequestSchema,
+  GenerateGoalsMutationResponseSchema,
+} from "./zod/goals/generateGoalsSchema";
+export type {
   GetGoalsGeneralInfo200Schema,
   GetGoalsGeneralInfo400Schema,
   GetGoalsGeneralInfoQueryResponseSchema,
@@ -732,6 +746,11 @@ export {
   useDeleteTask,
 } from "./hooks/goals/useDeleteTask";
 export {
+  generateGoalsMutationKey,
+  generateGoals,
+  useGenerateGoals,
+} from "./hooks/goals/useGenerateGoals";
+export {
   getGoalsQueryKey,
   getGoals,
   getGoalsQueryOptions,
@@ -980,6 +999,12 @@ export {
   deleteTask400Schema,
   deleteTaskMutationResponseSchema,
 } from "./zod/goals/deleteTaskSchema";
+export {
+  generateGoals200Schema,
+  generateGoals400Schema,
+  generateGoalsMutationRequestSchema,
+  generateGoalsMutationResponseSchema,
+} from "./zod/goals/generateGoalsSchema";
 export {
   getGoalsGeneralInfo200Schema,
   getGoalsGeneralInfo400Schema,

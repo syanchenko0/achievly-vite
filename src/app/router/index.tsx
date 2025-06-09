@@ -51,6 +51,11 @@ const ProjectPage = lazy(() =>
     default: module.Project,
   })),
 );
+const GenerateUserPage = lazy(() =>
+  import("@/pages/generate-user").then((module) => ({
+    default: module.GenerateUser,
+  })),
+);
 
 const router = createBrowserRouter([
   {
@@ -74,6 +79,7 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+
       {
         path: ROUTES.team_join,
         element: (
@@ -141,6 +147,14 @@ const router = createBrowserRouter([
             <RequireAuth>
               <ProjectPage />
             </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.generate_user,
+        element: (
+          <Suspense fallback={<AuthLoader />}>
+            <GenerateUserPage />
           </Suspense>
         ),
       },
