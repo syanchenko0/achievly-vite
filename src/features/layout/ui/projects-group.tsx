@@ -9,14 +9,16 @@ import {
 } from "@/shared/ui/sidebar";
 import { FolderX, Plus } from "lucide-react";
 import { useTeamSettingsStore } from "@/app/store/team";
-import { useGetProjects, useGetTeams } from "@/shared/api";
+import { getProjectsQueryKey, useGetProjects, useGetTeams } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { MEMBER_ROLES } from "@/shared/constants/teams";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { replacePathParams } from "@/app/lib/utils";
 import { ROUTES } from "@/shared/constants/router";
 import { Link, matchPath, useLocation } from "react-router";
 import { ProjectsGroupDialog } from "@/features/layout/ui/projects-group-dialog";
+import { socket } from "@/app/lib/socket";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ProjectsGroup() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -54,6 +56,22 @@ function ProjectsGroup() {
   }, [projects]);
 
   const isOwner = currentTeam?.user_role === MEMBER_ROLES.owner;
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    socket.on("projects_list_invalidation", () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: getProjectsQueryKey({ team_id: String(activeTeamId) }),
+        })
+        .then();
+    });
+
+    return () => {
+      socket.off("projects_list_invalidation");
+    };
+  }, []);
 
   if (projectsLoading || teamsLoading) {
     return (

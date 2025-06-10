@@ -1,1 +1,1 @@
-export { ProjectWrapper } from "./ui/project-wrapper";
+export { Project } from "./ui/project";

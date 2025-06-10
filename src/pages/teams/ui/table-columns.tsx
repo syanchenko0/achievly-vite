@@ -1,11 +1,8 @@
 import {
-  getTeamQueryKey,
   type MemberDto,
   type ProjectRightsDto,
   type UpdateTeamMemberBodySchema,
   updateTeamMemberBodySchema,
-  useDeleteTeamMember,
-  useUpdateTeamMember,
 } from "@/shared/api";
 import {
   Tooltip,
@@ -63,7 +60,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/shared/ui/accordion";
-import { useQueryClient } from "@tanstack/react-query";
+import { useTeamsQueries } from "@/pages/teams/hooks/use-teams-queries";
 
 const ActionsCell = ({
   member_id,
@@ -82,24 +79,11 @@ const ActionsCell = ({
   user_id?: number;
   members: MemberDto[];
 }) => {
-  const queryClient = useQueryClient();
-
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const [alertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
 
-  const { mutateAsync: deleteTeamMember, isPending: deleteTeamMemberPending } =
-    useDeleteTeamMember({
-      mutation: {
-        onSuccess: () => {
-          queryClient
-            .invalidateQueries({
-              queryKey: getTeamQueryKey({ team_id: String(team_id) }),
-            })
-            .then();
-        },
-      },
-    });
+  const { deleteTeamMember, deleteTeamMemberPending } = useTeamsQueries();
 
   const isMemberOwner = member_role === MEMBER_ROLES.owner;
 
@@ -208,19 +192,41 @@ const ActionsCellDialog = ({
   member_id: string;
   setOpenDialog: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const queryClient = useQueryClient();
+  return (
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <DialogContent className="h-[80%] max-h-[80%] px-0">
+        <DialogHeader className="px-6 pr-8">
+          <DialogTitle>Редактирование прав</DialogTitle>
+          <DialogDescription>
+            Вы можете изменить роль участника и его права для каждого проекта,
+            который существует в команде
+          </DialogDescription>
+        </DialogHeader>
+        <ActionsCellDialogContent
+          member_role={member_role}
+          projects_rights={projects_rights}
+          team_id={team_id}
+          member_id={member_id}
+          setOpenDialog={setOpenDialog}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
 
-  const { mutateAsync: updateTeamMember, isPending: updateTeamMemberPending } =
-    useUpdateTeamMember({
-      mutation: {
-        onSuccess: () => {
-          queryClient
-            .invalidateQueries({ queryKey: getTeamQueryKey({ team_id }) })
-            .then(() => setOpenDialog(false));
-        },
-      },
-    });
-
+function ActionsCellDialogContent({
+  member_role,
+  projects_rights,
+  team_id,
+  member_id,
+  setOpenDialog,
+}: {
+  projects_rights?: ProjectRightsDto[];
+  member_role: string;
+  team_id: string;
+  member_id: string;
+  setOpenDialog: Dispatch<SetStateAction<boolean>>;
+}) {
   const form = useForm({
     defaultValues: {
       role: member_role,
@@ -236,175 +242,168 @@ const ActionsCellDialog = ({
     name: "projects_rights",
   });
 
+  const { updateTeamMember, updateTeamMemberPending } = useTeamsQueries();
+
   const handleUpdateTeamMember = async (data: UpdateTeamMemberBodySchema) => {
     await updateTeamMember({ team_id, member_id, data });
+    setOpenDialog(false);
   };
 
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Редактирование прав</DialogTitle>
-          <DialogDescription>
-            Вы можете изменить роль участника и его права для каждого проекта,
-            который существует в команде
-          </DialogDescription>
-        </DialogHeader>
-
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleUpdateTeamMember)}
-            className="space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Роль</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-1/2">
-                        <SelectValue placeholder="Выберите роль" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value={MEMBER_ROLES.admin}>
-                            {MEMBER_ROLES_LABELS.admin}
-                          </SelectItem>
-                          <SelectItem value={MEMBER_ROLES.member}>
-                            {MEMBER_ROLES_LABELS.member}
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Accordion
-              type="single"
-              collapsible
-              className="flex w-full flex-col gap-y-2"
-            >
-              {fields.map((field, index) => (
-                <AccordionItem
-                  key={field.id}
-                  value={field.id}
-                  className="rounded-md border border-b px-2 last:border-b"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleUpdateTeamMember)}
+        className="flex h-full max-h-full min-h-0 flex-col gap-y-4"
+      >
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem className="px-6">
+              <FormLabel>Роль</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
                 >
-                  <AccordionTrigger>{field.project_name}</AccordionTrigger>
-                  <AccordionContent className="flex flex-col gap-y-2">
-                    <FormField
-                      control={form.control}
-                      name={`projects_rights.${index}.create`}
-                      render={({ field: formField }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                          <div className="space-y-0.5">
-                            <FormLabel>Создание</FormLabel>
-                            <FormDescription>
-                              Право на создание задач в проекте
-                            </FormDescription>
-                          </div>
-                          <FormControl>
-                            <Switch
-                              checked={formField.value}
-                              onCheckedChange={formField.onChange}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`projects_rights.${index}.read`}
-                      render={({ field: formField }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                          <div className="space-y-0.5">
-                            <FormLabel>Чтение</FormLabel>
-                            <FormDescription>
-                              Право на чтение данных проекта, отображение
-                              проекта в списке проектов участника
-                            </FormDescription>
-                          </div>
-                          <FormControl>
-                            <Switch
-                              checked={formField.value}
-                              onCheckedChange={formField.onChange}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`projects_rights.${index}.update`}
-                      render={({ field: formField }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                          <div className="space-y-0.5">
-                            <FormLabel>Редактирование</FormLabel>
-                            <FormDescription>
-                              Право на редактирование задач в проекте
-                            </FormDescription>
-                          </div>
-                          <FormControl>
-                            <Switch
-                              checked={formField.value}
-                              onCheckedChange={formField.onChange}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`projects_rights.${index}.delete`}
-                      render={({ field: formField }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                          <div className="space-y-0.5">
-                            <FormLabel>Удаление</FormLabel>
-                            <FormDescription>
-                              Право на удаление задач в проекте
-                            </FormDescription>
-                          </div>
-                          <FormControl>
-                            <Switch
-                              checked={formField.value}
-                              onCheckedChange={formField.onChange}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+                  <SelectTrigger className="w-1/2">
+                    <SelectValue placeholder="Выберите роль" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value={MEMBER_ROLES.admin}>
+                        {MEMBER_ROLES_LABELS.admin}
+                      </SelectItem>
+                      <SelectItem value={MEMBER_ROLES.member}>
+                        {MEMBER_ROLES_LABELS.member}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="reset" variant="destructive">
-                  Отменить
-                </Button>
-              </DialogClose>
-              <Button type="submit" disabled={updateTeamMemberPending}>
-                {updateTeamMemberPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Сохранить"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        <div className="flex h-full max-h-full min-h-0 flex-col px-4 pl-6">
+          <Accordion
+            type="single"
+            collapsible
+            className="scroll flex max-h-full flex-col gap-y-2 overflow-y-auto py-2 pr-2"
+          >
+            {fields.map((field, index) => (
+              <AccordionItem
+                key={field.id}
+                value={field.id}
+                className="rounded-md border border-b px-2 last:border-b"
+              >
+                <AccordionTrigger>{field.project_name}</AccordionTrigger>
+                <AccordionContent className="flex flex-col gap-y-2">
+                  <FormField
+                    control={form.control}
+                    name={`projects_rights.${index}.create`}
+                    render={({ field: formField }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel>Создание</FormLabel>
+                          <FormDescription>
+                            Право на создание задач в проекте
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={formField.value}
+                            onCheckedChange={formField.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`projects_rights.${index}.read`}
+                    render={({ field: formField }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel>Чтение</FormLabel>
+                          <FormDescription>
+                            Право на чтение данных проекта, отображение проекта
+                            в списке проектов участника
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={formField.value}
+                            onCheckedChange={formField.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`projects_rights.${index}.update`}
+                    render={({ field: formField }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel>Редактирование</FormLabel>
+                          <FormDescription>
+                            Право на редактирование задач в проекте
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={formField.value}
+                            onCheckedChange={formField.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`projects_rights.${index}.delete`}
+                    render={({ field: formField }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                        <div className="space-y-0.5">
+                          <FormLabel>Удаление</FormLabel>
+                          <FormDescription>
+                            Право на удаление задач в проекте
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={formField.value}
+                            onCheckedChange={formField.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+
+        <DialogFooter className="px-8">
+          <DialogClose asChild>
+            <Button type="reset" variant="destructive">
+              Отменить
+            </Button>
+          </DialogClose>
+          <Button type="submit" disabled={updateTeamMemberPending}>
+            {updateTeamMemberPending ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Сохранить"
+            )}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
   );
-};
+}
 
 export { ActionsCell };

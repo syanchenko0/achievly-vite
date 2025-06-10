@@ -272,6 +272,7 @@ function UsersTable({ team }: { team: TeamDto }) {
   const { data: profile } = useGetProfile();
 
   const { data, columns } = useTableData(team, profile?.id);
+
   const { mutateAsync: deleteMembers, isPending: deleteMembersLoading } =
     useDeleteTeamMembers();
 

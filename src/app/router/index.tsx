@@ -48,12 +48,7 @@ const EventsCalendarPage = lazy(() =>
 );
 const ProjectPage = lazy(() =>
   import("@/pages/projects").then((module) => ({
-    default: module.ProjectWrapper,
-  })),
-);
-const GenerateUserPage = lazy(() =>
-  import("@/pages/generate-user").then((module) => ({
-    default: module.GenerateUser,
+    default: module.Project,
   })),
 );
 
@@ -147,14 +142,6 @@ const router = createBrowserRouter([
             <RequireAuth>
               <ProjectPage />
             </RequireAuth>
-          </Suspense>
-        ),
-      },
-      {
-        path: ROUTES.generate_user,
-        element: (
-          <Suspense fallback={<AuthLoader />}>
-            <GenerateUserPage />
           </Suspense>
         ),
       },

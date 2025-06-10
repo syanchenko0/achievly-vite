@@ -1,5 +1,9 @@
 import { useParams, useSearchParams } from "react-router";
-import { type ProjectColumn, type ProjectTaskDto } from "@/shared/api";
+import {
+  getProjectQueryKey,
+  type ProjectColumn,
+  type ProjectTaskDto,
+} from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { DragDropProvider } from "@dnd-kit/react";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
@@ -19,6 +23,8 @@ import { ForbiddenEditAlertDialog } from "@/pages/projects/ui/forbidden-edit-ale
 import { ForbiddenCreateAlertDialog } from "@/pages/projects/ui/forbidden-create-alert-dialog";
 import { ProjectDeleteAlertDialog } from "@/pages/projects/ui/project-delete-alert-dialog";
 import { ForbiddenDeleteAlertDialog } from "@/pages/projects/ui/forbidden-delete-alert-dialog";
+import { useQueryClient } from "@tanstack/react-query";
+import { socket } from "@/app/lib/socket";
 
 function Project() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,6 +62,24 @@ function Project() {
     updateProjectTask,
     updateProjectTaskListOrder,
   } = useProjectQueries();
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    socket.on("project_invalidation", () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        })
+        .then();
+    });
+
+    return () => {
+      socket.off("project_invalidation");
+    };
+  }, []);
 
   useEffect(() => {
     if (project) {

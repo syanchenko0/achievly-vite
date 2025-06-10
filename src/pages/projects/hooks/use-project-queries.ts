@@ -20,7 +20,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useTeamSettingsStore } from "@/app/store/team";
 import { ROUTES } from "@/shared/constants/router";
-import { useProjectSocket } from "@/pages/projects/ui/project-wrapper";
+import { socket } from "@/app/lib/socket";
 
 const useProjectQueries = () => {
   const { project_id } = useParams<{ project_id: string }>();
@@ -28,8 +28,6 @@ const useProjectQueries = () => {
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
 
   const navigate = useNavigate();
-
-  const projectsSocket = useProjectSocket();
 
   const { data: project, isLoading: projectLoading } = useGetProject(
     {
@@ -79,8 +77,16 @@ const useProjectQueries = () => {
           return { previousProjectData };
         },
         onSuccess: () => {
-          projectsSocket.emit("project_invalidation", {
-            project_id,
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
           });
         },
       },
@@ -118,8 +124,16 @@ const useProjectQueries = () => {
           return { previousProjectData };
         },
         onSuccess: () => {
-          projectsSocket.emit("project_invalidation", {
-            project_id,
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
           });
         },
       },
@@ -163,8 +177,16 @@ const useProjectQueries = () => {
         return { previousProjectData };
       },
       onSuccess: () => {
-        projectsSocket.emit("project_invalidation", {
-          project_id,
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
         });
       },
     },
@@ -224,8 +246,16 @@ const useProjectQueries = () => {
           return { previousProjectData };
         },
         onSuccess: () => {
-          projectsSocket.emit("project_invalidation", {
-            project_id,
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
           });
         },
       },
@@ -290,8 +320,16 @@ const useProjectQueries = () => {
         return { previousProjectData };
       },
       onSuccess: () => {
-        projectsSocket.emit("project_invalidation", {
-          project_id,
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
         });
       },
     },
@@ -343,8 +381,16 @@ const useProjectQueries = () => {
         return { previousProjectData };
       },
       onSuccess: () => {
-        projectsSocket.emit("project_invalidation", {
-          project_id,
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
         });
       },
     },
@@ -391,8 +437,16 @@ const useProjectQueries = () => {
           return { previousProjectData };
         },
         onSuccess: () => {
-          projectsSocket.emit("project_invalidation", {
-            project_id,
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
           });
         },
       },
@@ -439,8 +493,16 @@ const useProjectQueries = () => {
           return { previousProjectData };
         },
         onSuccess: () => {
-          projectsSocket.emit("project_invalidation", {
-            project_id,
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
           });
         },
       },
@@ -480,8 +542,16 @@ const useProjectQueries = () => {
           return { previousProjects };
         },
         onSuccess: () => {
-          projectsSocket.emit("project_invalidation", {
-            project_id,
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
           });
         },
       },

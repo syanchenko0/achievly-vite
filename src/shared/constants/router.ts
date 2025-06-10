@@ -8,7 +8,6 @@ const ROUTES = {
   team_join: "/teams/:team_id/join",
   team_settings: "/teams/:team_id/settings",
   project: "/projects/:project_id",
-  generate_user: "/generate-user",
 };
 
 const ROUTE_LABELS = {

@@ -22,6 +22,7 @@ import {
   type ShortInfoProjectDto,
   getProjectsQueryKey,
   useCreateProject,
+  getTeamQueryKey,
 } from "@/shared/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -72,6 +73,12 @@ function Content({
             ...(previousProjects || []),
             newProject,
           ]);
+
+          queryClient
+            .invalidateQueries({
+              queryKey: getTeamQueryKey({ team_id }),
+            })
+            .then();
 
           onOpenChange(false);
           form.reset();
