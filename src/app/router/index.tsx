@@ -48,7 +48,7 @@ const EventsCalendarPage = lazy(() =>
 );
 const ProjectPage = lazy(() =>
   import("@/pages/projects").then((module) => ({
-    default: module.Project,
+    default: module.ProjectWrapper,
   })),
 );
 const GenerateUserPage = lazy(() =>

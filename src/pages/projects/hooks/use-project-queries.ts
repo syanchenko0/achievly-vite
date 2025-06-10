@@ -7,6 +7,7 @@ import {
   type ProjectTaskDto,
   type ShortInfoProjectDto,
   useCreateProjectColumn,
+  useCreateProjectTask,
   useDeleteProject,
   useDeleteProjectColumn,
   useDeleteProjectTask,
@@ -19,6 +20,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useTeamSettingsStore } from "@/app/store/team";
 import { ROUTES } from "@/shared/constants/router";
+import { useProjectSocket } from "@/pages/projects/ui/project-wrapper";
 
 const useProjectQueries = () => {
   const { project_id } = useParams<{ project_id: string }>();
@@ -26,6 +28,8 @@ const useProjectQueries = () => {
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
 
   const navigate = useNavigate();
+
+  const projectsSocket = useProjectSocket();
 
   const { data: project, isLoading: projectLoading } = useGetProject(
     {
@@ -60,7 +64,7 @@ const useProjectQueries = () => {
             }),
           );
 
-          if (created && previousProjectData)
+          if (created && previousProjectData) {
             queryClient.setQueryData<ProjectDto>(
               getProjectQueryKey({
                 project_id: project_id as string,
@@ -70,8 +74,53 @@ const useProjectQueries = () => {
                 columns: [...(previousProjectData?.columns ?? []), created],
               },
             );
+          }
 
           return { previousProjectData };
+        },
+        onSuccess: () => {
+          projectsSocket.emit("project_invalidation", {
+            project_id,
+          });
+        },
+      },
+    });
+
+  const { mutate: createProjectTask, isPending: createProjectTaskPending } =
+    useCreateProjectTask({
+      mutation: {
+        onSettled: async (newProjectTask) => {
+          await queryClient.cancelQueries({
+            queryKey: getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          });
+
+          const previousProjectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
+
+          queryClient.setQueryData(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+            {
+              ...previousProjectData,
+              project_tasks: [
+                ...(previousProjectData?.project_tasks ?? []),
+                newProjectTask,
+              ],
+            },
+          );
+
+          return { previousProjectData };
+        },
+        onSuccess: () => {
+          projectsSocket.emit("project_invalidation", {
+            project_id,
+          });
         },
       },
     });
@@ -99,7 +148,7 @@ const useProjectQueries = () => {
           }),
         );
 
-        if (updated && previousProjectData)
+        if (updated && previousProjectData) {
           queryClient.setQueryData<ProjectDto>(
             getProjectQueryKey({
               project_id: project_id as string,
@@ -109,8 +158,14 @@ const useProjectQueries = () => {
               columns: updated?.data?.columns ?? previousProjectData?.columns,
             },
           );
+        }
 
         return { previousProjectData };
+      },
+      onSuccess: () => {
+        projectsSocket.emit("project_invalidation", {
+          project_id,
+        });
       },
     },
   });
@@ -167,6 +222,11 @@ const useProjectQueries = () => {
           );
 
           return { previousProjectData };
+        },
+        onSuccess: () => {
+          projectsSocket.emit("project_invalidation", {
+            project_id,
+          });
         },
       },
     });
@@ -229,6 +289,11 @@ const useProjectQueries = () => {
 
         return { previousProjectData };
       },
+      onSuccess: () => {
+        projectsSocket.emit("project_invalidation", {
+          project_id,
+        });
+      },
     },
   });
 
@@ -274,6 +339,13 @@ const useProjectQueries = () => {
             },
           );
         }
+
+        return { previousProjectData };
+      },
+      onSuccess: () => {
+        projectsSocket.emit("project_invalidation", {
+          project_id,
+        });
       },
     },
   });
@@ -318,6 +390,11 @@ const useProjectQueries = () => {
 
           return { previousProjectData };
         },
+        onSuccess: () => {
+          projectsSocket.emit("project_invalidation", {
+            project_id,
+          });
+        },
       },
     });
 
@@ -361,6 +438,11 @@ const useProjectQueries = () => {
 
           return { previousProjectData };
         },
+        onSuccess: () => {
+          projectsSocket.emit("project_invalidation", {
+            project_id,
+          });
+        },
       },
     });
 
@@ -397,6 +479,11 @@ const useProjectQueries = () => {
 
           return { previousProjects };
         },
+        onSuccess: () => {
+          projectsSocket.emit("project_invalidation", {
+            project_id,
+          });
+        },
       },
     });
 
@@ -405,6 +492,8 @@ const useProjectQueries = () => {
     projectLoading,
     createProjectColumn,
     createProjectColumnPending,
+    createProjectTask,
+    createProjectTaskPending,
     updateProject,
     updateProjectTask,
     updateProjectTaskPending,
