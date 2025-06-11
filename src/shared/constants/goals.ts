@@ -1,3 +1,22 @@
+import {
+  BicepsFlexed,
+  BriefcaseBusiness,
+  Church,
+  Drum,
+  GraduationCap,
+  HandHeart,
+  Handshake,
+  HeartHandshake,
+  HeartPulse,
+  Image,
+  Palette,
+  Plane,
+  SmilePlus,
+  Trees,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
+
 const GOALS_CATEGORIES = {
   education: "education",
   career: "career",
@@ -34,9 +53,23 @@ const GOAL_CATEGORIES_LABELS = {
   [GOALS_CATEGORIES.socialActivity]: "Социальная активность",
 };
 
-const GOALS_STATUS = {
-  ongoing: "ongoing",
-  achieved: "achieved",
+const GOAL_CATEGORY_ICONS = {
+  [GOALS_CATEGORIES.education]: GraduationCap,
+  [GOALS_CATEGORIES.career]: BriefcaseBusiness,
+  [GOALS_CATEGORIES.finance]: Wallet,
+  [GOALS_CATEGORIES.health]: HeartPulse,
+  [GOALS_CATEGORIES.sports]: BicepsFlexed,
+  [GOALS_CATEGORIES.relationships]: HandHeart,
+  [GOALS_CATEGORIES.travel]: Plane,
+  [GOALS_CATEGORIES.creativity]: Palette,
+  [GOALS_CATEGORIES.business]: Handshake,
+  [GOALS_CATEGORIES.personalGrowth]: TrendingUp,
+  [GOALS_CATEGORIES.charity]: HeartHandshake,
+  [GOALS_CATEGORIES.hobby]: Drum,
+  [GOALS_CATEGORIES.spirituality]: Church,
+  [GOALS_CATEGORIES.ecology]: Trees,
+  [GOALS_CATEGORIES.socialActivity]: SmilePlus,
+  default: Image,
 };
 
-export { GOALS_CATEGORIES, GOAL_CATEGORIES_LABELS, GOALS_STATUS };
+export { GOALS_CATEGORIES, GOAL_CATEGORIES_LABELS, GOAL_CATEGORY_ICONS };
