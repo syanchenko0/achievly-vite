@@ -58,6 +58,7 @@ function Project() {
   const {
     project,
     projectLoading,
+    projectError,
     updateProject,
     updateProjectTask,
     updateProjectTaskListOrder,
@@ -110,7 +111,7 @@ function Project() {
     return <Skeleton className="size-full" />;
   }
 
-  if (!project) {
+  if (!project || projectError) {
     return (
       <div className="bg-sidebar flex size-full items-center justify-center rounded-md border p-4">
         <Alert variant="destructive" className="w-1/2">

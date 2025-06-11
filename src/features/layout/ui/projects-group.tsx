@@ -16,9 +16,9 @@ import { useEffect, useMemo, useState } from "react";
 import { replacePathParams } from "@/app/lib/utils";
 import { ROUTES } from "@/shared/constants/router";
 import { Link, matchPath, useLocation } from "react-router";
-import { ProjectsGroupDialog } from "@/features/layout/ui/projects-group-dialog";
 import { socket } from "@/app/lib/socket";
 import { useQueryClient } from "@tanstack/react-query";
+import { ProjectCreateDialog } from "@/features/projects";
 
 function ProjectsGroup() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -124,11 +124,7 @@ function ProjectsGroup() {
         </SidebarMenu>
       </SidebarGroupContent>
 
-      <ProjectsGroupDialog
-        team_id={activeTeamId}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
+      <ProjectCreateDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </SidebarGroup>
   );
 }

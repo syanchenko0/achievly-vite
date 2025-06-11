@@ -9,12 +9,13 @@ import { addDays, format } from "date-fns";
 const useHomeQueries = () => {
   const activeTeamId = useTeamSettingsStore((state) => state.activeTeamId);
 
-  const { data: projectsGeneralInfo } = useGetProjectsGeneralInfo(
-    {
-      params: { team_id: Number(activeTeamId) },
-    },
-    { query: { enabled: !!activeTeamId } },
-  );
+  const { data: projectsGeneralInfo, error: projectsGeneralInfoError } =
+    useGetProjectsGeneralInfo(
+      {
+        params: { team_id: Number(activeTeamId) },
+      },
+      { query: { enabled: !!activeTeamId } },
+    );
 
   const { data: goalsGeneralInfo } = useGetGoalsGeneralInfo();
 
@@ -27,6 +28,7 @@ const useHomeQueries = () => {
 
   return {
     projectsGeneralInfo,
+    projectsGeneralInfoError,
     goalsGeneralInfo,
     eventsToday: (eventsToday ?? []).sort(
       (a, b) => a.start_timestamp - b.start_timestamp,

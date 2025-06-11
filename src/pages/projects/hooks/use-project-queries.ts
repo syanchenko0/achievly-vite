@@ -3,6 +3,7 @@ import {
   getProjectQueryKey,
   getProjectsGeneralInfoQueryKey,
   getProjectsQueryKey,
+  getTeamQueryKey,
   type ProjectDto,
   type ProjectTaskDto,
   type ShortInfoProjectDto,
@@ -29,7 +30,11 @@ const useProjectQueries = () => {
 
   const navigate = useNavigate();
 
-  const { data: project, isLoading: projectLoading } = useGetProject(
+  const {
+    data: project,
+    isLoading: projectLoading,
+    error: projectError,
+  } = useGetProject(
     {
       project_id: project_id as string,
     },
@@ -548,7 +553,29 @@ const useProjectQueries = () => {
             }),
           );
 
+          queryClient
+            .invalidateQueries({
+              queryKey: getTeamQueryKey({
+                team_id: String(projectData?.team?.id),
+              }),
+            })
+            .then();
+
+          queryClient
+            .invalidateQueries({
+              queryKey: getProjectsGeneralInfoQueryKey({
+                team_id: Number(projectData?.team?.id),
+              }),
+            })
+            .then();
+
           socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
+          });
+
+          socket.emit("projects_list_invalidation", {
             members: projectData?.team?.members?.map((member) =>
               String(member.id),
             ),
@@ -560,6 +587,7 @@ const useProjectQueries = () => {
   return {
     project,
     projectLoading,
+    projectError,
     createProjectColumn,
     createProjectColumnPending,
     createProjectTask,

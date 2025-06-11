@@ -8,6 +8,12 @@ import {
   DialogTitle,
 } from "@/shared/ui/dialog";
 import {
+  type CreateProjectBodySchema,
+  createProjectBodySchema,
+} from "@/shared/api";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
   Form,
   FormControl,
   FormField,
@@ -15,78 +21,32 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import { Loader2 } from "lucide-react";
-import {
-  type CreateProjectBodySchema,
-  createProjectBodySchema,
-  type ShortInfoProjectDto,
-  getProjectsQueryKey,
-  useCreateProject,
-  getTeamQueryKey,
-} from "@/shared/api";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import { useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import { useProjectsQueries } from "@/features/projects/hooks/use-projects-queries";
+import { useTeamSettingsStore } from "@/app/store/team";
 
-function ProjectsGroupDialog({
-  team_id,
+function ProjectCreateDialog({
   open,
   onOpenChange,
 }: {
-  team_id: string;
   open: boolean;
   onOpenChange: (value: boolean) => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <Content team_id={team_id} onOpenChange={onOpenChange} />
+        <Content onOpenChange={onOpenChange} />
       </DialogContent>
     </Dialog>
   );
 }
 
-function Content({
-  team_id,
-  onOpenChange,
-}: {
-  team_id: string;
-  onOpenChange: (value: boolean) => void;
-}) {
-  const queryClient = useQueryClient();
+function Content({ onOpenChange }: { onOpenChange: (value: boolean) => void }) {
+  const team_id = useTeamSettingsStore((state) => state.activeTeamId);
 
-  const { mutateAsync: createProject, isPending: createProjectPending } =
-    useCreateProject({
-      mutation: {
-        onSettled: async (newProject) => {
-          await queryClient.cancelQueries({
-            queryKey: getProjectsQueryKey({ team_id }),
-          });
-
-          const previousProjects = queryClient.getQueryData<
-            ShortInfoProjectDto[]
-          >(getProjectsQueryKey({ team_id }));
-
-          queryClient.setQueryData(getProjectsQueryKey({ team_id }), [
-            ...(previousProjects || []),
-            newProject,
-          ]);
-
-          queryClient
-            .invalidateQueries({
-              queryKey: getTeamQueryKey({ team_id }),
-            })
-            .then();
-
-          onOpenChange(false);
-          form.reset();
-
-          return { previousProjects };
-        },
-      },
-    });
+  const { createProject, createProjectPending } = useProjectsQueries();
 
   const form = useForm({
     defaultValues: {
@@ -98,8 +58,9 @@ function Content({
   });
 
   const onSubmit = async (data: CreateProjectBodySchema) => {
-    await createProject({ data, params: { team_id } });
+    await createProject({ data, params: { team_id: team_id as string } });
     onOpenChange(false);
+    form.reset();
   };
 
   return (
@@ -144,4 +105,4 @@ function Content({
   );
 }
 
-export { ProjectsGroupDialog };
+export { ProjectCreateDialog };
