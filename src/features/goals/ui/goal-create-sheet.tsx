@@ -15,7 +15,6 @@ import {
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import {
   type CreateGoalBody,
-  createGoalBodySchema,
   getGoalsGeneralInfoQueryKey,
   getGoalsQueryKey,
   getTasksQueryKey,
@@ -26,10 +25,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shared/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, Plus } from "lucide-react";
-import { TaskSortableCard } from "@/widgets/goals/ui/task-sortable-card";
-import { TaskCreateSheet } from "@/widgets/goals/ui/task-create-sheet";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useState } from "react";
+import { createGoalBodySchema } from "@/shared/zod/createGoalBodySchema";
+import { TaskSortableCard } from "@/pages/goals/ui/task-sortable-card";
+import { TaskCreateSheet } from "@/pages/goals/ui/task-create-sheet";
 
 function GoalCreateSheet({
   open,

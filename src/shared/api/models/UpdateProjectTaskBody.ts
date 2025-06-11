@@ -3,41 +3,41 @@
  * Do not edit manually.
  */
 
-import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectColumn } from './ProjectColumn.ts'
 
 export type UpdateProjectTaskBody = {
   /**
    * @description Наименование задачи
    * @type string
    */
-  name?: string | null;
+  name?: string | null
   /**
    * @description Описание задачи
    * @type string
    */
-  description?: string | null;
+  description?: string | null
   /**
    * @description Столбец задачи
    */
-  column?: ProjectColumn | null;
+  column?: ProjectColumn | null
   /**
    * @description Приоритет задачи
    * @type string
    */
-  priority?: string | null;
+  priority?: string | null
   /**
    * @description ID исполнителя задачи
    * @type number
    */
-  executor_member_id?: number | null;
+  executor_member_id?: number | null
   /**
    * @description Дедлайн задачи
    * @type string
    */
-  deadline_date?: string | null;
+  deadline_date?: string | null
   /**
    * @description Дата завершения задачи
    * @type string
    */
-  done_date?: string | null;
-};
+  done_date?: string | null
+}

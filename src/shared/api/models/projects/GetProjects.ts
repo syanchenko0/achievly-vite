@@ -3,24 +3,24 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { ShortInfoProjectDto } from "../ShortInfoProjectDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { ShortInfoProjectDto } from '../ShortInfoProjectDto.ts'
 
 export type GetProjectsQueryParams = {
   /**
    * @type string
    */
-  team_id: string;
-};
+  team_id: string
+}
 
-export type GetProjects200 = ShortInfoProjectDto[];
+export type GetProjects200 = ShortInfoProjectDto[]
 
-export type GetProjects400 = BadRequest;
+export type GetProjects400 = BadRequest
 
-export type GetProjectsQueryResponse = GetProjects200;
+export type GetProjectsQueryResponse = GetProjects200
 
 export type GetProjectsQuery = {
-  Response: GetProjects200;
-  QueryParams: GetProjectsQueryParams;
-  Errors: GetProjects400;
-};
+  Response: GetProjects200
+  QueryParams: GetProjectsQueryParams
+  Errors: GetProjects400
+}

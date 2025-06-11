@@ -3,53 +3,32 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  DeleteProjectTaskMutationResponse,
-  DeleteProjectTaskPathParams,
-  DeleteProjectTask400,
-} from "../../models/projects/DeleteProjectTask";
-import { useMutation } from "@tanstack/react-query";
-import { deleteProjectTaskMutationResponseSchema } from "../../zod/projects/deleteProjectTaskSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { DeleteProjectTaskMutationResponse, DeleteProjectTaskPathParams, DeleteProjectTask400 } from '../../models/projects/DeleteProjectTask.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const deleteProjectTaskMutationKey = () =>
-  [{ url: "/projects/{project_id}/tasks/{task_id}" }] as const;
+export const deleteProjectTaskMutationKey = () => [{ url: '/projects/{project_id}/tasks/{task_id}' }] as const
 
-export type DeleteProjectTaskMutationKey = ReturnType<
-  typeof deleteProjectTaskMutationKey
->;
+export type DeleteProjectTaskMutationKey = ReturnType<typeof deleteProjectTaskMutationKey>
 
 /**
  * @summary Delete project task
  * {@link /projects/:project_id/tasks/:task_id}
  */
 export async function deleteProjectTask(
-  {
-    task_id,
-    project_id,
-  }: {
-    task_id: DeleteProjectTaskPathParams["task_id"];
-    project_id: DeleteProjectTaskPathParams["project_id"];
-  },
+  { task_id, project_id }: { task_id: DeleteProjectTaskPathParams['task_id']; project_id: DeleteProjectTaskPathParams['project_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    DeleteProjectTaskMutationResponse,
-    ResponseErrorConfig<DeleteProjectTask400>,
-    unknown
-  >({
-    method: "DELETE",
+  const res = await request<DeleteProjectTaskMutationResponse, ResponseErrorConfig<DeleteProjectTask400>, unknown>({
+    method: 'DELETE',
     url: `/projects/${project_id}/tasks/${task_id}`,
     ...requestConfig,
-  });
-  return deleteProjectTaskMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -61,36 +40,29 @@ export function useDeleteProjectTask<TContext>(
     mutation?: UseMutationOptions<
       DeleteProjectTaskMutationResponse,
       ResponseErrorConfig<DeleteProjectTask400>,
-      {
-        task_id: DeleteProjectTaskPathParams["task_id"];
-        project_id: DeleteProjectTaskPathParams["project_id"];
-      },
+      { task_id: DeleteProjectTaskPathParams['task_id']; project_id: DeleteProjectTaskPathParams['project_id'] },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? deleteProjectTaskMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? deleteProjectTaskMutationKey()
 
   return useMutation<
     DeleteProjectTaskMutationResponse,
     ResponseErrorConfig<DeleteProjectTask400>,
-    {
-      task_id: DeleteProjectTaskPathParams["task_id"];
-      project_id: DeleteProjectTaskPathParams["project_id"];
-    },
+    { task_id: DeleteProjectTaskPathParams['task_id']; project_id: DeleteProjectTaskPathParams['project_id'] },
     TContext
   >(
     {
       mutationFn: async ({ task_id, project_id }) => {
-        return deleteProjectTask({ task_id, project_id }, config);
+        return deleteProjectTask({ task_id, project_id }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

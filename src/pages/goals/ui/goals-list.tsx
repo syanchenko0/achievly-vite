@@ -6,11 +6,11 @@ import { type GoalDto } from "@/shared/api";
 import { InfoIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { GoalUpdateSheet } from "@/widgets/goals";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { GoalSortableCard } from "@/widgets/goals/ui/goal-sortable-card";
 import { useGoalsListQueries } from "@/pages/goals/hooks/use-goals-list-queries";
 import { useSearchParams } from "react-router";
+import { GoalSortableCard } from "@/pages/goals/ui/goal-sortable-card";
+import { GoalUpdateSheet } from "@/pages/goals/ui/goal-update-sheet";
 
 type GoalsState = {
   active: GoalDto[];

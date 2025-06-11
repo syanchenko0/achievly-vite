@@ -43,106 +43,110 @@ const useProjectQueries = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: createProjectColumn, isPending: createProjectColumnPending } =
-    useCreateProjectColumn({
-      mutation: {
-        onSettled: async (created) => {
-          if (activeTeamId !== null) {
-            await queryClient.invalidateQueries({
-              queryKey: getProjectsGeneralInfoQueryKey({
-                team_id: Number(activeTeamId),
-              }),
-            });
-          }
-
-          await queryClient.cancelQueries({
-            queryKey: getProjectQueryKey({
-              project_id: project_id as string,
+  const {
+    mutateAsync: createProjectColumn,
+    isPending: createProjectColumnPending,
+  } = useCreateProjectColumn({
+    mutation: {
+      onSettled: async (created) => {
+        if (activeTeamId !== null) {
+          await queryClient.invalidateQueries({
+            queryKey: getProjectsGeneralInfoQueryKey({
+              team_id: Number(activeTeamId),
             }),
           });
+        }
 
-          const previousProjectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
+        await queryClient.cancelQueries({
+          queryKey: getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        });
 
-          if (created && previousProjectData) {
-            queryClient.setQueryData<ProjectDto>(
-              getProjectQueryKey({
-                project_id: project_id as string,
-              }),
-              {
-                ...previousProjectData,
-                columns: [...(previousProjectData?.columns ?? []), created],
-              },
-            );
-          }
+        const previousProjectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
 
-          return { previousProjectData };
-        },
-        onSuccess: () => {
-          const projectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
-
-          socket.emit("project_invalidation", {
-            members: projectData?.team?.members?.map((member) =>
-              String(member.id),
-            ),
-          });
-        },
-      },
-    });
-
-  const { mutate: createProjectTask, isPending: createProjectTaskPending } =
-    useCreateProjectTask({
-      mutation: {
-        onSettled: async (newProjectTask) => {
-          await queryClient.cancelQueries({
-            queryKey: getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          });
-
-          const previousProjectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
-
-          queryClient.setQueryData(
+        if (created && previousProjectData) {
+          queryClient.setQueryData<ProjectDto>(
             getProjectQueryKey({
               project_id: project_id as string,
             }),
             {
               ...previousProjectData,
-              project_tasks: [
-                ...(previousProjectData?.project_tasks ?? []),
-                newProjectTask,
-              ],
+              columns: [...(previousProjectData?.columns ?? []), created],
             },
           );
+        }
 
-          return { previousProjectData };
-        },
-        onSuccess: () => {
-          const projectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
-
-          socket.emit("project_invalidation", {
-            members: projectData?.team?.members?.map((member) =>
-              String(member.id),
-            ),
-          });
-        },
+        return { previousProjectData };
       },
-    });
+      onSuccess: () => {
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
+        });
+      },
+    },
+  });
+
+  const {
+    mutateAsync: createProjectTask,
+    isPending: createProjectTaskPending,
+  } = useCreateProjectTask({
+    mutation: {
+      onSettled: async (newProjectTask) => {
+        await queryClient.cancelQueries({
+          queryKey: getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        });
+
+        const previousProjectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        queryClient.setQueryData(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+          {
+            ...previousProjectData,
+            project_tasks: [
+              ...(previousProjectData?.project_tasks ?? []),
+              newProjectTask,
+            ],
+          },
+        );
+
+        return { previousProjectData };
+      },
+      onSuccess: () => {
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
+        });
+      },
+    },
+  });
 
   const { mutate: updateProject } = useUpdateProject({
     mutation: {
@@ -197,74 +201,76 @@ const useProjectQueries = () => {
     },
   });
 
-  const { mutate: updateProjectTask, isPending: updateProjectTaskPending } =
-    useUpdateProjectTask({
-      mutation: {
-        onMutate: async (updated) => {
-          if (activeTeamId !== null) {
-            await queryClient.invalidateQueries({
-              queryKey: getProjectsGeneralInfoQueryKey({
-                team_id: Number(activeTeamId),
-              }),
-            });
-          }
-
-          await queryClient.cancelQueries({
-            queryKey: getProjectQueryKey({
-              project_id: project_id as string,
+  const {
+    mutateAsync: updateProjectTask,
+    isPending: updateProjectTaskPending,
+  } = useUpdateProjectTask({
+    mutation: {
+      onMutate: async (updated) => {
+        if (activeTeamId !== null) {
+          await queryClient.invalidateQueries({
+            queryKey: getProjectsGeneralInfoQueryKey({
+              team_id: Number(activeTeamId),
             }),
           });
+        }
 
-          const previousProjectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
+        await queryClient.cancelQueries({
+          queryKey: getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        });
 
-          queryClient.setQueryData(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-            {
-              ...previousProjectData,
-              project_tasks: (previousProjectData?.project_tasks ?? []).map(
-                (task) => {
-                  if (task.id === updated.task_id) {
-                    return {
-                      ...task,
-                      ...updated.data,
-                      executor:
-                        updated.data?.executor_member_id !== undefined
-                          ? previousProjectData?.team?.members?.find(
-                              (member) =>
-                                member.id === updated.data?.executor_member_id,
-                            )
-                          : task.executor,
-                    };
-                  }
-                  return task;
-                },
-              ),
-            },
-          );
+        const previousProjectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
 
-          return { previousProjectData };
-        },
-        onSuccess: () => {
-          const projectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
-
-          socket.emit("project_invalidation", {
-            members: projectData?.team?.members?.map((member) =>
-              String(member.id),
+        queryClient.setQueryData(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+          {
+            ...previousProjectData,
+            project_tasks: (previousProjectData?.project_tasks ?? []).map(
+              (task) => {
+                if (task.id === updated.task_id) {
+                  return {
+                    ...task,
+                    ...updated.data,
+                    executor:
+                      updated.data?.executor_member_id !== undefined
+                        ? previousProjectData?.team?.members?.find(
+                            (member) =>
+                              member.id === updated.data?.executor_member_id,
+                          )
+                        : task.executor,
+                  };
+                }
+                return task;
+              },
             ),
-          });
-        },
+          },
+        );
+
+        return { previousProjectData };
       },
-    });
+      onSuccess: () => {
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
+        });
+      },
+    },
+  });
 
   const { mutate: updateProjectTaskListOrder } = useUpdateProjectTaskListOrder({
     mutation: {
@@ -340,7 +346,10 @@ const useProjectQueries = () => {
     },
   });
 
-  const { mutate: updateProjectColumn } = useUpdateProjectColumn({
+  const {
+    mutateAsync: updateProjectColumn,
+    isPending: updateProjectColumnPending,
+  } = useUpdateProjectColumn({
     mutation: {
       onMutate: async (data) => {
         if (activeTeamId !== null) {
@@ -401,61 +410,63 @@ const useProjectQueries = () => {
     },
   });
 
-  const { mutate: deleteProjectTask, isPending: deleteProjectTaskPending } =
-    useDeleteProjectTask({
-      mutation: {
-        onMutate: async ({ task_id, project_id }) => {
-          if (activeTeamId !== null) {
-            await queryClient.invalidateQueries({
-              queryKey: getProjectsGeneralInfoQueryKey({
-                team_id: Number(activeTeamId),
-              }),
-            });
-          }
-
-          await queryClient.cancelQueries({
-            queryKey: getProjectQueryKey({
-              project_id: project_id as string,
+  const {
+    mutateAsync: deleteProjectTask,
+    isPending: deleteProjectTaskPending,
+  } = useDeleteProjectTask({
+    mutation: {
+      onMutate: async ({ task_id, project_id }) => {
+        if (activeTeamId !== null) {
+          await queryClient.invalidateQueries({
+            queryKey: getProjectsGeneralInfoQueryKey({
+              team_id: Number(activeTeamId),
             }),
           });
+        }
 
-          const previousProjectData = queryClient.getQueryData<ProjectDto>(
+        await queryClient.cancelQueries({
+          queryKey: getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        });
+
+        const previousProjectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        if (previousProjectData) {
+          queryClient.setQueryData<ProjectDto>(
             getProjectQueryKey({
               project_id: project_id as string,
             }),
+            {
+              ...previousProjectData,
+              project_tasks: previousProjectData?.project_tasks?.filter(
+                (task) => task.id !== Number(task_id),
+              ),
+            },
           );
+        }
 
-          if (previousProjectData) {
-            queryClient.setQueryData<ProjectDto>(
-              getProjectQueryKey({
-                project_id: project_id as string,
-              }),
-              {
-                ...previousProjectData,
-                project_tasks: previousProjectData?.project_tasks?.filter(
-                  (task) => task.id !== Number(task_id),
-                ),
-              },
-            );
-          }
-
-          return { previousProjectData };
-        },
-        onSuccess: () => {
-          const projectData = queryClient.getQueryData<ProjectDto>(
-            getProjectQueryKey({
-              project_id: project_id as string,
-            }),
-          );
-
-          socket.emit("project_invalidation", {
-            members: projectData?.team?.members?.map((member) =>
-              String(member.id),
-            ),
-          });
-        },
+        return { previousProjectData };
       },
-    });
+      onSuccess: () => {
+        const projectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        socket.emit("project_invalidation", {
+          members: projectData?.team?.members?.map((member) =>
+            String(member.id),
+          ),
+        });
+      },
+    },
+  });
 
   const { mutate: deleteProjectColumn, isPending: deleteProjectColumnPending } =
     useDeleteProjectColumn({
@@ -513,7 +524,7 @@ const useProjectQueries = () => {
       },
     });
 
-  const { mutate: deleteProject, isPending: deleteProjectPending } =
+  const { mutateAsync: deleteProject, isPending: deleteProjectPending } =
     useDeleteProject({
       mutation: {
         onMutate: async ({ project_id }) => {
@@ -597,6 +608,7 @@ const useProjectQueries = () => {
     updateProjectTaskPending,
     updateProjectTaskListOrder,
     updateProjectColumn,
+    updateProjectColumnPending,
     deleteProject,
     deleteProjectPending,
     deleteProjectTask,

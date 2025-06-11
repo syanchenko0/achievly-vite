@@ -3,31 +3,31 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
+import type { BadRequest } from '../BadRequest.ts'
 
 export type JoinTeamPathParams = {
   /**
    * @type string
    */
-  id: string;
-};
+  id: string
+}
 
 export type JoinTeamQueryParams = {
   /**
    * @type string
    */
-  jat: string;
-};
+  jat: string
+}
 
-export type JoinTeam200 = unknown;
+export type JoinTeam200 = unknown
 
-export type JoinTeam400 = BadRequest;
+export type JoinTeam400 = BadRequest
 
-export type JoinTeamMutationResponse = JoinTeam200;
+export type JoinTeamMutationResponse = JoinTeam200
 
 export type JoinTeamMutation = {
-  Response: JoinTeam200;
-  PathParams: JoinTeamPathParams;
-  QueryParams: JoinTeamQueryParams;
-  Errors: JoinTeam400;
-};
+  Response: JoinTeam200
+  PathParams: JoinTeamPathParams
+  QueryParams: JoinTeamQueryParams
+  Errors: JoinTeam400
+}

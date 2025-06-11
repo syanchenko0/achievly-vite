@@ -3,20 +3,20 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { CreateGoalBody } from "../CreateGoalBody";
-import type { GoalDto } from "../GoalDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { CreateGoalBody } from '../CreateGoalBody.ts'
+import type { GoalDto } from '../GoalDto.ts'
 
-export type CreateGoal200 = GoalDto;
+export type CreateGoal200 = GoalDto
 
-export type CreateGoal400 = BadRequest;
+export type CreateGoal400 = BadRequest
 
-export type CreateGoalMutationRequest = CreateGoalBody;
+export type CreateGoalMutationRequest = CreateGoalBody
 
-export type CreateGoalMutationResponse = CreateGoal200;
+export type CreateGoalMutationResponse = CreateGoal200
 
 export type CreateGoalMutation = {
-  Response: CreateGoal200;
-  Request: CreateGoalMutationRequest;
-  Errors: CreateGoal400;
-};
+  Response: CreateGoal200
+  Request: CreateGoalMutationRequest
+  Errors: CreateGoal400
+}

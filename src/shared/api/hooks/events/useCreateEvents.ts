@@ -3,28 +3,15 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  CreateEventsMutationRequest,
-  CreateEventsMutationResponse,
-  CreateEvents400,
-} from "../../models/events/CreateEvents";
-import { useMutation } from "@tanstack/react-query";
-import {
-  createEventsMutationResponseSchema,
-  createEventsMutationRequestSchema,
-} from "../../zod/events/createEventsSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { CreateEventsMutationRequest, CreateEventsMutationResponse, CreateEvents400 } from '../../models/events/CreateEvents.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const createEventsMutationKey = () => [{ url: "/events" }] as const;
+export const createEventsMutationKey = () => [{ url: '/events' }] as const
 
-export type CreateEventsMutationKey = ReturnType<
-  typeof createEventsMutationKey
->;
+export type CreateEventsMutationKey = ReturnType<typeof createEventsMutationKey>
 
 /**
  * @summary Create events
@@ -32,23 +19,17 @@ export type CreateEventsMutationKey = ReturnType<
  */
 export async function createEvents(
   { data }: { data: CreateEventsMutationRequest },
-  config: Partial<RequestConfig<CreateEventsMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  config: Partial<RequestConfig<CreateEventsMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    CreateEventsMutationResponse,
-    ResponseErrorConfig<CreateEvents400>,
-    CreateEventsMutationRequest
-  >({
-    method: "POST",
+  const res = await request<CreateEventsMutationResponse, ResponseErrorConfig<CreateEvents400>, CreateEventsMutationRequest>({
+    method: 'POST',
     url: `/events`,
-    data: createEventsMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return createEventsMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -57,36 +38,24 @@ export async function createEvents(
  */
 export function useCreateEvents<TContext>(
   options: {
-    mutation?: UseMutationOptions<
-      CreateEventsMutationResponse,
-      ResponseErrorConfig<CreateEvents400>,
-      { data: CreateEventsMutationRequest },
-      TContext
-    > & {
-      client?: QueryClient;
-    };
-    client?: Partial<RequestConfig<CreateEventsMutationRequest>> & {
-      client?: typeof client;
-    };
+    mutation?: UseMutationOptions<CreateEventsMutationResponse, ResponseErrorConfig<CreateEvents400>, { data: CreateEventsMutationRequest }, TContext> & {
+      client?: QueryClient
+    }
+    client?: Partial<RequestConfig<CreateEventsMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey = mutationOptions.mutationKey ?? createEventsMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? createEventsMutationKey()
 
-  return useMutation<
-    CreateEventsMutationResponse,
-    ResponseErrorConfig<CreateEvents400>,
-    { data: CreateEventsMutationRequest },
-    TContext
-  >(
+  return useMutation<CreateEventsMutationResponse, ResponseErrorConfig<CreateEvents400>, { data: CreateEventsMutationRequest }, TContext>(
     {
       mutationFn: async ({ data }) => {
-        return createEvents({ data }, config);
+        return createEvents({ data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

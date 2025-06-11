@@ -3,53 +3,32 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  DeleteProjectColumnMutationResponse,
-  DeleteProjectColumnPathParams,
-  DeleteProjectColumn400,
-} from "../../models/projects/DeleteProjectColumn";
-import { useMutation } from "@tanstack/react-query";
-import { deleteProjectColumnMutationResponseSchema } from "../../zod/projects/deleteProjectColumnSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { DeleteProjectColumnMutationResponse, DeleteProjectColumnPathParams, DeleteProjectColumn400 } from '../../models/projects/DeleteProjectColumn.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const deleteProjectColumnMutationKey = () =>
-  [{ url: "/projects/{project_id}/columns/{column_id}" }] as const;
+export const deleteProjectColumnMutationKey = () => [{ url: '/projects/{project_id}/columns/{column_id}' }] as const
 
-export type DeleteProjectColumnMutationKey = ReturnType<
-  typeof deleteProjectColumnMutationKey
->;
+export type DeleteProjectColumnMutationKey = ReturnType<typeof deleteProjectColumnMutationKey>
 
 /**
  * @summary Delete project column
  * {@link /projects/:project_id/columns/:column_id}
  */
 export async function deleteProjectColumn(
-  {
-    column_id,
-    project_id,
-  }: {
-    column_id: DeleteProjectColumnPathParams["column_id"];
-    project_id: DeleteProjectColumnPathParams["project_id"];
-  },
+  { column_id, project_id }: { column_id: DeleteProjectColumnPathParams['column_id']; project_id: DeleteProjectColumnPathParams['project_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    DeleteProjectColumnMutationResponse,
-    ResponseErrorConfig<DeleteProjectColumn400>,
-    unknown
-  >({
-    method: "DELETE",
+  const res = await request<DeleteProjectColumnMutationResponse, ResponseErrorConfig<DeleteProjectColumn400>, unknown>({
+    method: 'DELETE',
     url: `/projects/${project_id}/columns/${column_id}`,
     ...requestConfig,
-  });
-  return deleteProjectColumnMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -61,36 +40,29 @@ export function useDeleteProjectColumn<TContext>(
     mutation?: UseMutationOptions<
       DeleteProjectColumnMutationResponse,
       ResponseErrorConfig<DeleteProjectColumn400>,
-      {
-        column_id: DeleteProjectColumnPathParams["column_id"];
-        project_id: DeleteProjectColumnPathParams["project_id"];
-      },
+      { column_id: DeleteProjectColumnPathParams['column_id']; project_id: DeleteProjectColumnPathParams['project_id'] },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? deleteProjectColumnMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? deleteProjectColumnMutationKey()
 
   return useMutation<
     DeleteProjectColumnMutationResponse,
     ResponseErrorConfig<DeleteProjectColumn400>,
-    {
-      column_id: DeleteProjectColumnPathParams["column_id"];
-      project_id: DeleteProjectColumnPathParams["project_id"];
-    },
+    { column_id: DeleteProjectColumnPathParams['column_id']; project_id: DeleteProjectColumnPathParams['project_id'] },
     TContext
   >(
     {
       mutationFn: async ({ column_id, project_id }) => {
-        return deleteProjectColumn({ column_id, project_id }, config);
+        return deleteProjectColumn({ column_id, project_id }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

@@ -7,10 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog";
-import {
-  type CreateProjectBodySchema,
-  createProjectBodySchema,
-} from "@/shared/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -26,6 +22,10 @@ import { Button } from "@/shared/ui/button";
 import { Loader2 } from "lucide-react";
 import { useProjectsQueries } from "@/features/projects/hooks/use-projects-queries";
 import { useTeamSettingsStore } from "@/app/store/team";
+import {
+  type CreateProjectBodySchema,
+  createProjectBodySchema,
+} from "@/shared/zod/createProjectBodySchema";
 
 function ProjectCreateDialog({
   open,

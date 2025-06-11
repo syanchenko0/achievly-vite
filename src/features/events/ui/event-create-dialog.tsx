@@ -10,7 +10,6 @@ import { TitleField } from "@/shared/ui/goals-fields";
 import { FormProvider, useForm } from "react-hook-form";
 import {
   type CreateEventBody,
-  createEventBodySchema,
   type EventDto,
   getEventsQueryKey,
   useCreateEvents,
@@ -28,6 +27,7 @@ import { Button } from "@/shared/ui/button";
 import { useSearchParams } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { createEventBodySchema } from "@/shared/zod/createEventBodySchema";
 
 function EventCreateDialog({
   open,

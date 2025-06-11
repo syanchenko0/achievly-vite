@@ -3,45 +3,32 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  DeleteEventMutationResponse,
-  DeleteEventPathParams,
-  DeleteEvent400,
-} from "../../models/events/DeleteEvent";
-import { useMutation } from "@tanstack/react-query";
-import { deleteEventMutationResponseSchema } from "../../zod/events/deleteEventSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { DeleteEventMutationResponse, DeleteEventPathParams, DeleteEvent400 } from '../../models/events/DeleteEvent.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const deleteEventMutationKey = () =>
-  [{ url: "/events/{event_id}" }] as const;
+export const deleteEventMutationKey = () => [{ url: '/events/{event_id}' }] as const
 
-export type DeleteEventMutationKey = ReturnType<typeof deleteEventMutationKey>;
+export type DeleteEventMutationKey = ReturnType<typeof deleteEventMutationKey>
 
 /**
  * @summary Delete event
  * {@link /events/:event_id}
  */
 export async function deleteEvent(
-  { event_id }: { event_id: DeleteEventPathParams["event_id"] },
+  { event_id }: { event_id: DeleteEventPathParams['event_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    DeleteEventMutationResponse,
-    ResponseErrorConfig<DeleteEvent400>,
-    unknown
-  >({
-    method: "DELETE",
+  const res = await request<DeleteEventMutationResponse, ResponseErrorConfig<DeleteEvent400>, unknown>({
+    method: 'DELETE',
     url: `/events/${event_id}`,
     ...requestConfig,
-  });
-  return deleteEventMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -53,29 +40,24 @@ export function useDeleteEvent<TContext>(
     mutation?: UseMutationOptions<
       DeleteEventMutationResponse,
       ResponseErrorConfig<DeleteEvent400>,
-      { event_id: DeleteEventPathParams["event_id"] },
+      { event_id: DeleteEventPathParams['event_id'] },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey = mutationOptions.mutationKey ?? deleteEventMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? deleteEventMutationKey()
 
-  return useMutation<
-    DeleteEventMutationResponse,
-    ResponseErrorConfig<DeleteEvent400>,
-    { event_id: DeleteEventPathParams["event_id"] },
-    TContext
-  >(
+  return useMutation<DeleteEventMutationResponse, ResponseErrorConfig<DeleteEvent400>, { event_id: DeleteEventPathParams['event_id'] }, TContext>(
     {
       mutationFn: async ({ event_id }) => {
-        return deleteEvent({ event_id }, config);
+        return deleteEvent({ event_id }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

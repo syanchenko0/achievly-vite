@@ -3,24 +3,24 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { TeamGeneralInfoDto } from "../TeamGeneralInfoDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { TeamGeneralInfoDto } from '../TeamGeneralInfoDto.ts'
 
 export type GetTeamGeneralInfoPathParams = {
   /**
    * @type string
    */
-  team_id: string;
-};
+  team_id: string
+}
 
-export type GetTeamGeneralInfo200 = TeamGeneralInfoDto;
+export type GetTeamGeneralInfo200 = TeamGeneralInfoDto
 
-export type GetTeamGeneralInfo400 = BadRequest;
+export type GetTeamGeneralInfo400 = BadRequest
 
-export type GetTeamGeneralInfoQueryResponse = GetTeamGeneralInfo200;
+export type GetTeamGeneralInfoQueryResponse = GetTeamGeneralInfo200
 
 export type GetTeamGeneralInfoQuery = {
-  Response: GetTeamGeneralInfo200;
-  PathParams: GetTeamGeneralInfoPathParams;
-  Errors: GetTeamGeneralInfo400;
-};
+  Response: GetTeamGeneralInfo200
+  PathParams: GetTeamGeneralInfoPathParams
+  Errors: GetTeamGeneralInfo400
+}

@@ -3,75 +3,48 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import type {
-  GetTeamGeneralInfoQueryResponse,
-  GetTeamGeneralInfoPathParams,
-  GetTeamGeneralInfo400,
-} from "../../models/teams/GetTeamGeneralInfo";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getTeamGeneralInfoQueryResponseSchema } from "../../zod/teams/getTeamGeneralInfoSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import type { GetTeamGeneralInfoQueryResponse, GetTeamGeneralInfoPathParams, GetTeamGeneralInfo400 } from '../../models/teams/GetTeamGeneralInfo.ts'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getTeamGeneralInfoQueryKey = ({
-  team_id,
-}: {
-  team_id: GetTeamGeneralInfoPathParams["team_id"];
-}) => [{ url: "/teams/:team_id/info", params: { team_id: team_id } }] as const;
+export const getTeamGeneralInfoQueryKey = ({ team_id }: { team_id: GetTeamGeneralInfoPathParams['team_id'] }) =>
+  [{ url: '/teams/:team_id/info', params: { team_id: team_id } }] as const
 
-export type GetTeamGeneralInfoQueryKey = ReturnType<
-  typeof getTeamGeneralInfoQueryKey
->;
+export type GetTeamGeneralInfoQueryKey = ReturnType<typeof getTeamGeneralInfoQueryKey>
 
 /**
  * @summary Get team general info
  * {@link /teams/:team_id/info}
  */
 export async function getTeamGeneralInfo(
-  { team_id }: { team_id: GetTeamGeneralInfoPathParams["team_id"] },
+  { team_id }: { team_id: GetTeamGeneralInfoPathParams['team_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    GetTeamGeneralInfoQueryResponse,
-    ResponseErrorConfig<GetTeamGeneralInfo400>,
-    unknown
-  >({
-    method: "GET",
+  const res = await request<GetTeamGeneralInfoQueryResponse, ResponseErrorConfig<GetTeamGeneralInfo400>, unknown>({
+    method: 'GET',
     url: `/teams/${team_id}/info`,
     ...requestConfig,
-  });
-  return getTeamGeneralInfoQueryResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 export function getTeamGeneralInfoQueryOptions(
-  { team_id }: { team_id: GetTeamGeneralInfoPathParams["team_id"] },
+  { team_id }: { team_id: GetTeamGeneralInfoPathParams['team_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const queryKey = getTeamGeneralInfoQueryKey({ team_id });
-  return queryOptions<
-    GetTeamGeneralInfoQueryResponse,
-    ResponseErrorConfig<GetTeamGeneralInfo400>,
-    GetTeamGeneralInfoQueryResponse,
-    typeof queryKey
-  >({
+  const queryKey = getTeamGeneralInfoQueryKey({ team_id })
+  return queryOptions<GetTeamGeneralInfoQueryResponse, ResponseErrorConfig<GetTeamGeneralInfo400>, GetTeamGeneralInfoQueryResponse, typeof queryKey>({
     enabled: !!team_id,
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal;
-      return getTeamGeneralInfo({ team_id }, config);
+      config.signal = signal
+      return getTeamGeneralInfo({ team_id }, config)
     },
-  });
+  })
 }
 
 /**
@@ -83,44 +56,27 @@ export function useGetTeamGeneralInfo<
   TQueryData = GetTeamGeneralInfoQueryResponse,
   TQueryKey extends QueryKey = GetTeamGeneralInfoQueryKey,
 >(
-  { team_id }: { team_id: GetTeamGeneralInfoPathParams["team_id"] },
+  { team_id }: { team_id: GetTeamGeneralInfoPathParams['team_id'] },
   options: {
-    query?: Partial<
-      QueryObserverOptions<
-        GetTeamGeneralInfoQueryResponse,
-        ResponseErrorConfig<GetTeamGeneralInfo400>,
-        TData,
-        TQueryData,
-        TQueryKey
-      >
-    > & {
-      client?: QueryClient;
-    };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    query?: Partial<QueryObserverOptions<GetTeamGeneralInfoQueryResponse, ResponseErrorConfig<GetTeamGeneralInfo400>, TData, TQueryData, TQueryKey>> & {
+      client?: QueryClient
+    }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const {
-    query: { client: queryClient, ...queryOptions } = {},
-    client: config = {},
-  } = options ?? {};
-  const queryKey =
-    queryOptions?.queryKey ?? getTeamGeneralInfoQueryKey({ team_id });
+  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getTeamGeneralInfoQueryKey({ team_id })
 
   const query = useQuery(
     {
-      ...(getTeamGeneralInfoQueryOptions(
-        { team_id },
-        config,
-      ) as unknown as QueryObserverOptions),
+      ...(getTeamGeneralInfoQueryOptions({ team_id }, config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetTeamGeneralInfo400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetTeamGeneralInfo400>> & { queryKey: TQueryKey }
 
-  query.queryKey = queryKey as TQueryKey;
+  query.queryKey = queryKey as TQueryKey
 
-  return query;
+  return query
 }

@@ -3,60 +3,38 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
 import type {
   DeleteTeamMembersMutationRequest,
   DeleteTeamMembersMutationResponse,
   DeleteTeamMembersPathParams,
   DeleteTeamMembers400,
-} from "../../models/teams/DeleteTeamMembers";
-import { useMutation } from "@tanstack/react-query";
-import {
-  deleteTeamMembersMutationResponseSchema,
-  deleteTeamMembersMutationRequestSchema,
-} from "../../zod/teams/deleteTeamMembersSchema";
+} from '../../models/teams/DeleteTeamMembers.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const deleteTeamMembersMutationKey = () =>
-  [{ url: "/teams/{team_id}/members" }] as const;
+export const deleteTeamMembersMutationKey = () => [{ url: '/teams/{team_id}/members' }] as const
 
-export type DeleteTeamMembersMutationKey = ReturnType<
-  typeof deleteTeamMembersMutationKey
->;
+export type DeleteTeamMembersMutationKey = ReturnType<typeof deleteTeamMembersMutationKey>
 
 /**
  * @summary Delete team members
  * {@link /teams/:team_id/members}
  */
 export async function deleteTeamMembers(
-  {
-    team_id,
-    data,
-  }: {
-    team_id: DeleteTeamMembersPathParams["team_id"];
-    data: DeleteTeamMembersMutationRequest;
-  },
-  config: Partial<RequestConfig<DeleteTeamMembersMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  { team_id, data }: { team_id: DeleteTeamMembersPathParams['team_id']; data: DeleteTeamMembersMutationRequest },
+  config: Partial<RequestConfig<DeleteTeamMembersMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    DeleteTeamMembersMutationResponse,
-    ResponseErrorConfig<DeleteTeamMembers400>,
-    DeleteTeamMembersMutationRequest
-  >({
-    method: "DELETE",
+  const res = await request<DeleteTeamMembersMutationResponse, ResponseErrorConfig<DeleteTeamMembers400>, DeleteTeamMembersMutationRequest>({
+    method: 'DELETE',
     url: `/teams/${team_id}/members`,
-    data: deleteTeamMembersMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return deleteTeamMembersMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -68,38 +46,29 @@ export function useDeleteTeamMembers<TContext>(
     mutation?: UseMutationOptions<
       DeleteTeamMembersMutationResponse,
       ResponseErrorConfig<DeleteTeamMembers400>,
-      {
-        team_id: DeleteTeamMembersPathParams["team_id"];
-        data: DeleteTeamMembersMutationRequest;
-      },
+      { team_id: DeleteTeamMembersPathParams['team_id']; data: DeleteTeamMembersMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig<DeleteTeamMembersMutationRequest>> & {
-      client?: typeof client;
-    };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<DeleteTeamMembersMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? deleteTeamMembersMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? deleteTeamMembersMutationKey()
 
   return useMutation<
     DeleteTeamMembersMutationResponse,
     ResponseErrorConfig<DeleteTeamMembers400>,
-    {
-      team_id: DeleteTeamMembersPathParams["team_id"];
-      data: DeleteTeamMembersMutationRequest;
-    },
+    { team_id: DeleteTeamMembersPathParams['team_id']; data: DeleteTeamMembersMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ team_id, data }) => {
-        return deleteTeamMembers({ team_id, data }, config);
+        return deleteTeamMembers({ team_id, data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

@@ -3,23 +3,23 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
+import type { BadRequest } from '../BadRequest.ts'
 
 export type LeaveFromTeamPathParams = {
   /**
    * @type string
    */
-  team_id: string;
-};
+  team_id: string
+}
 
-export type LeaveFromTeam200 = unknown;
+export type LeaveFromTeam200 = unknown
 
-export type LeaveFromTeam400 = BadRequest;
+export type LeaveFromTeam400 = BadRequest
 
-export type LeaveFromTeamMutationResponse = LeaveFromTeam200;
+export type LeaveFromTeamMutationResponse = LeaveFromTeam200
 
 export type LeaveFromTeamMutation = {
-  Response: LeaveFromTeam200;
-  PathParams: LeaveFromTeamPathParams;
-  Errors: LeaveFromTeam400;
-};
+  Response: LeaveFromTeam200
+  PathParams: LeaveFromTeamPathParams
+  Errors: LeaveFromTeam400
+}

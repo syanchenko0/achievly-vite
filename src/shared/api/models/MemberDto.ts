@@ -3,27 +3,27 @@
  * Do not edit manually.
  */
 
-import type { ProjectRightsDto } from "./ProjectRightsDto";
-import type { UserDto } from "./UserDto";
+import type { ProjectRightsDto } from './ProjectRightsDto.ts'
+import type { UserDto } from './UserDto.ts'
 
 export type MemberDto = {
   /**
    * @description ID участника
    * @type number
    */
-  id: number;
+  id: number
   /**
    * @description Данные пользователя
    */
-  user: UserDto;
+  user: UserDto
   /**
    * @description Роль в команде
    * @type string
    */
-  role: string;
+  role: string
   /**
    * @description Массив прав в проектах
    * @type array | undefined
    */
-  projects_rights?: ProjectRightsDto[];
-};
+  projects_rights?: ProjectRightsDto[]
+}

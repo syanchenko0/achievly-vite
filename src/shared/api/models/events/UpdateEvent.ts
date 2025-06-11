@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { UpdateEventBody } from "../UpdateEventBody";
-import type { UpdateResult } from "../UpdateResult";
+import type { BadRequest } from '../BadRequest.ts'
+import type { UpdateEventBody } from '../UpdateEventBody.ts'
+import type { UpdateResult } from '../UpdateResult.ts'
 
 export type UpdateEventPathParams = {
   /**
    * @type string
    */
-  id: string;
-};
+  id: string
+}
 
-export type UpdateEvent200 = UpdateResult;
+export type UpdateEvent200 = UpdateResult
 
-export type UpdateEvent400 = BadRequest;
+export type UpdateEvent400 = BadRequest
 
-export type UpdateEventMutationRequest = UpdateEventBody;
+export type UpdateEventMutationRequest = UpdateEventBody
 
-export type UpdateEventMutationResponse = UpdateEvent200;
+export type UpdateEventMutationResponse = UpdateEvent200
 
 export type UpdateEventMutation = {
-  Response: UpdateEvent200;
-  Request: UpdateEventMutationRequest;
-  PathParams: UpdateEventPathParams;
-  Errors: UpdateEvent400;
-};
+  Response: UpdateEvent200
+  Request: UpdateEventMutationRequest
+  PathParams: UpdateEventPathParams
+  Errors: UpdateEvent400
+}

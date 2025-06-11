@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { CreateProjectBody } from "../CreateProjectBody";
-import type { ProjectDto } from "../ProjectDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { CreateProjectBody } from '../CreateProjectBody.ts'
+import type { ProjectDto } from '../ProjectDto.ts'
 
 export type CreateProjectQueryParams = {
   /**
    * @type string
    */
-  team_id: string;
-};
+  team_id: string
+}
 
-export type CreateProject200 = ProjectDto;
+export type CreateProject200 = ProjectDto
 
-export type CreateProject400 = BadRequest;
+export type CreateProject400 = BadRequest
 
-export type CreateProjectMutationRequest = CreateProjectBody;
+export type CreateProjectMutationRequest = CreateProjectBody
 
-export type CreateProjectMutationResponse = CreateProject200;
+export type CreateProjectMutationResponse = CreateProject200
 
 export type CreateProjectMutation = {
-  Response: CreateProject200;
-  Request: CreateProjectMutationRequest;
-  QueryParams: CreateProjectQueryParams;
-  Errors: CreateProject400;
-};
+  Response: CreateProject200
+  Request: CreateProjectMutationRequest
+  QueryParams: CreateProjectQueryParams
+  Errors: CreateProject400
+}

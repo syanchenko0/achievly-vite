@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-import type { ProjectRightsDto } from "./ProjectRightsDto";
+import type { ProjectRightsDto } from './ProjectRightsDto.ts'
 
 export type UpdateTeamMemberBody = {
   /**
@@ -11,10 +11,10 @@ export type UpdateTeamMemberBody = {
    * @minLength 1
    * @type string
    */
-  role: string;
+  role: string
   /**
    * @description Массив прав в проектах
    * @type array | undefined
    */
-  projects_rights?: ProjectRightsDto[];
-};
+  projects_rights?: ProjectRightsDto[]
+}

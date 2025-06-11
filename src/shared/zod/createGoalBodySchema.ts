@@ -5,16 +5,23 @@
 
 import { goalBodyTaskSchema } from "./goalBodyTaskSchema";
 import { z } from "zod";
+import { ZOD_ERROR } from "@/shared/constants/errors";
 
 export const createGoalBodySchema = z.object({
-  title: z.string().describe("Заголовок цели"),
-  category: z.string().describe("Категория цели"),
+  title: z
+    .string(ZOD_ERROR)
+    .nonempty({ message: "Заполните поле" })
+    .describe("Заголовок цели"),
+  category: z
+    .string(ZOD_ERROR)
+    .nonempty({ message: "Заполните поле" })
+    .describe("Категория цели"),
   deadline_date: z
-    .string()
+    .string(ZOD_ERROR)
     .describe("Дата окончания цели")
     .nullable()
     .nullish(),
-  note: z.string().describe("Примечание к цели").nullable().nullish(),
+  note: z.string(ZOD_ERROR).describe("Примечание к цели").nullable().nullish(),
   tasks: z
     .array(z.lazy(() => goalBodyTaskSchema))
     .describe("Задачи цели")

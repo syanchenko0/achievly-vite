@@ -3,50 +3,50 @@
  * Do not edit manually.
  */
 
-import type { MemberDto } from "./MemberDto";
-import type { ProjectColumn } from "./ProjectColumn";
+import type { MemberDto } from './MemberDto.ts'
+import type { ProjectColumn } from './ProjectColumn.ts'
 
 export type ProjectTaskDto = {
   /**
    * @description ID задачи
    * @type number
    */
-  id: number;
+  id: number
   /**
    * @description Наименование задачи
    * @type string
    */
-  name: string;
+  name: string
   /**
    * @description Описание задачи
    * @type string
    */
-  description?: string | null;
+  description?: string | null
   /**
    * @description Столбец задачи
    */
-  column: ProjectColumn;
+  column: ProjectColumn
   /**
    * @description Приоритет задачи
    * @type string
    */
-  priority?: string | null;
+  priority?: string | null
   /**
    * @description Автор задачи
    */
-  author: MemberDto;
+  author: MemberDto
   /**
    * @description Исполнитель задачи
    */
-  executor?: MemberDto | null;
+  executor?: MemberDto | null
   /**
    * @description Дедлайн задачи
    * @type string
    */
-  deadline_date?: string | null;
+  deadline_date?: string | null
   /**
    * @description Дата завершения задачи
    * @type string
    */
-  done_date?: string | null;
-};
+  done_date?: string | null
+}

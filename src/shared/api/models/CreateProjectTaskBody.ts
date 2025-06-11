@@ -3,7 +3,7 @@
  * Do not edit manually.
  */
 
-import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectColumn } from './ProjectColumn.ts'
 
 export type CreateProjectTaskBody = {
   /**
@@ -11,29 +11,29 @@ export type CreateProjectTaskBody = {
    * @minLength 1
    * @type string
    */
-  name: string;
+  name: string
   /**
    * @description Описание задачи
    * @type string
    */
-  description?: string | null;
+  description?: string | null
   /**
    * @description Столбец задачи
    */
-  column: ProjectColumn;
+  column: ProjectColumn
   /**
    * @description Приоритет задачи
    * @type string
    */
-  priority?: string | null;
+  priority?: string | null
   /**
    * @description ID исполнителя задачи
    * @type number
    */
-  executor_member_id?: number | null;
+  executor_member_id?: number | null
   /**
    * @description Дедлайн задачи
    * @type string
    */
-  deadline_date?: string | null;
-};
+  deadline_date?: string | null
+}

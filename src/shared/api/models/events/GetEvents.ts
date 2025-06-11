@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { EventDto } from "../EventDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { EventDto } from '../EventDto.ts'
 
 export type GetEventsQueryParams = {
   /**
    * @type string
    */
-  end_period: string;
+  end_period: string
   /**
    * @type string
    */
-  start_period: string;
-};
+  start_period: string
+}
 
-export type GetEvents200 = EventDto[];
+export type GetEvents200 = EventDto[]
 
-export type GetEvents400 = BadRequest;
+export type GetEvents400 = BadRequest
 
-export type GetEventsQueryResponse = GetEvents200;
+export type GetEventsQueryResponse = GetEvents200
 
 export type GetEventsQuery = {
-  Response: GetEvents200;
-  QueryParams: GetEventsQueryParams;
-  Errors: GetEvents400;
-};
+  Response: GetEvents200
+  QueryParams: GetEventsQueryParams
+  Errors: GetEvents400
+}

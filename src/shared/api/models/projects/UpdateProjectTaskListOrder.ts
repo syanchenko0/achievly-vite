@@ -3,30 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { UpdateProjectTaskListOrderBody } from "../UpdateProjectTaskListOrderBody";
-import type { UpdateResult } from "../UpdateResult";
+import type { BadRequest } from '../BadRequest.ts'
+import type { UpdateProjectTaskListOrderBody } from '../UpdateProjectTaskListOrderBody.ts'
+import type { UpdateResult } from '../UpdateResult.ts'
 
 export type UpdateProjectTaskListOrderPathParams = {
   /**
    * @type number
    */
-  project_id: number;
-};
+  project_id: number
+}
 
-export type UpdateProjectTaskListOrder200 = UpdateResult;
+export type UpdateProjectTaskListOrder200 = UpdateResult
 
-export type UpdateProjectTaskListOrder400 = BadRequest;
+export type UpdateProjectTaskListOrder400 = BadRequest
 
-export type UpdateProjectTaskListOrderMutationRequest =
-  UpdateProjectTaskListOrderBody[];
+export type UpdateProjectTaskListOrderMutationRequest = UpdateProjectTaskListOrderBody[]
 
-export type UpdateProjectTaskListOrderMutationResponse =
-  UpdateProjectTaskListOrder200;
+export type UpdateProjectTaskListOrderMutationResponse = UpdateProjectTaskListOrder200
 
 export type UpdateProjectTaskListOrderMutation = {
-  Response: UpdateProjectTaskListOrder200;
-  Request: UpdateProjectTaskListOrderMutationRequest;
-  PathParams: UpdateProjectTaskListOrderPathParams;
-  Errors: UpdateProjectTaskListOrder400;
-};
+  Response: UpdateProjectTaskListOrder200
+  Request: UpdateProjectTaskListOrderMutationRequest
+  PathParams: UpdateProjectTaskListOrderPathParams
+  Errors: UpdateProjectTaskListOrder400
+}

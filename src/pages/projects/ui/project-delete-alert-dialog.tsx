@@ -20,6 +20,13 @@ function ProjectDeleteAlertDialog({
 }) {
   const { project, deleteProject, deleteProjectPending } = useProjectQueries();
 
+  const handleConfirmDeleteProject = async () => {
+    await deleteProject({
+      project_id: String(project?.id),
+    });
+    onOpenChange(false);
+  };
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -33,12 +40,7 @@ function ProjectDeleteAlertDialog({
           <AlertDialogCancel>Отменить</AlertDialogCancel>
           <AlertDialogAction
             disabled={deleteProjectPending}
-            onClick={() => {
-              deleteProject({
-                project_id: String(project?.id),
-              });
-              onOpenChange(false);
-            }}
+            onClick={handleConfirmDeleteProject}
           >
             {deleteProjectPending ? (
               <Loader2 className="animate-spin" />

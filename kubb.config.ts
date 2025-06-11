@@ -2,7 +2,7 @@ import { defineConfig } from "@kubb/core";
 import { pluginOas } from "@kubb/plugin-oas";
 import { pluginReactQuery } from "@kubb/plugin-react-query";
 import { pluginTs } from "@kubb/plugin-ts";
-import { pluginZod } from "@kubb/plugin-zod";
+// import { pluginZod } from "@kubb/plugin-zod";
 
 const importPath = "@/shared/api/axios-client";
 
@@ -36,7 +36,7 @@ export default defineConfig(() => {
           name: ({ group }) => group.toLowerCase(),
         },
         client: { importPath, dataReturnType: "data" },
-        parser: "zod",
+        // parser: "zod",
         paramsType: "object",
         mutation: {
           methods: ["post", "put", "delete", "patch"],
@@ -48,13 +48,13 @@ export default defineConfig(() => {
         },
       }),
 
-      pluginZod({
-        output: { path: "zod" },
-        group: { type: "tag", name: ({ group }) => group.toLowerCase() },
-        dateType: "date",
-        unknownType: "unknown",
-        inferred: true,
-      }),
+      // pluginZod({
+      //   output: { path: "zod" },
+      //   group: { type: "tag", name: ({ group }) => group.toLowerCase() },
+      //   dateType: "date",
+      //   unknownType: "unknown",
+      //   inferred: true,
+      // }),
     ],
   };
 });

@@ -17,6 +17,7 @@ import {
   TaskCreationAllowedField,
 } from "@/shared/ui/projects-fields";
 import { Button } from "@/shared/ui/button";
+import { Loader2 } from "lucide-react";
 
 function ProjectColumnEditDialog({
   column,
@@ -54,10 +55,11 @@ function ProjectColumnEditDialogContent({
     defaultValues: { ...column },
   });
 
-  const { updateProjectColumn } = useProjectQueries();
+  const { updateProjectColumn, updateProjectColumnPending } =
+    useProjectQueries();
 
-  const handleUpdateProjectColumn = (data: ProjectColumn) => {
-    updateProjectColumn({
+  const handleUpdateProjectColumn = async (data: ProjectColumn) => {
+    await updateProjectColumn({
       column_id: column.id,
       project_id: Number(project_id),
       data,
@@ -97,8 +99,15 @@ function ProjectColumnEditDialogContent({
         <Button variant="destructive" onClick={() => onOpenChange(false)}>
           Закрыть
         </Button>
-        <Button onClick={form.handleSubmit(handleUpdateProjectColumn)}>
-          Сохранить
+        <Button
+          onClick={form.handleSubmit(handleUpdateProjectColumn)}
+          disabled={updateProjectColumnPending}
+        >
+          {updateProjectColumnPending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            "Сохранить"
+          )}
         </Button>
       </DialogFooter>
     </FormProvider>

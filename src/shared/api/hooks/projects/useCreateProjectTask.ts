@@ -3,60 +3,38 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
 import type {
   CreateProjectTaskMutationRequest,
   CreateProjectTaskMutationResponse,
   CreateProjectTaskPathParams,
   CreateProjectTask400,
-} from "../../models/projects/CreateProjectTask";
-import { useMutation } from "@tanstack/react-query";
-import {
-  createProjectTaskMutationResponseSchema,
-  createProjectTaskMutationRequestSchema,
-} from "../../zod/projects/createProjectTaskSchema";
+} from '../../models/projects/CreateProjectTask.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const createProjectTaskMutationKey = () =>
-  [{ url: "/projects/{project_id}/tasks" }] as const;
+export const createProjectTaskMutationKey = () => [{ url: '/projects/{project_id}/tasks' }] as const
 
-export type CreateProjectTaskMutationKey = ReturnType<
-  typeof createProjectTaskMutationKey
->;
+export type CreateProjectTaskMutationKey = ReturnType<typeof createProjectTaskMutationKey>
 
 /**
  * @summary Create project task
  * {@link /projects/:project_id/tasks}
  */
 export async function createProjectTask(
-  {
-    project_id,
-    data,
-  }: {
-    project_id: CreateProjectTaskPathParams["project_id"];
-    data: CreateProjectTaskMutationRequest;
-  },
-  config: Partial<RequestConfig<CreateProjectTaskMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  { project_id, data }: { project_id: CreateProjectTaskPathParams['project_id']; data: CreateProjectTaskMutationRequest },
+  config: Partial<RequestConfig<CreateProjectTaskMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    CreateProjectTaskMutationResponse,
-    ResponseErrorConfig<CreateProjectTask400>,
-    CreateProjectTaskMutationRequest
-  >({
-    method: "POST",
+  const res = await request<CreateProjectTaskMutationResponse, ResponseErrorConfig<CreateProjectTask400>, CreateProjectTaskMutationRequest>({
+    method: 'POST',
     url: `/projects/${project_id}/tasks`,
-    data: createProjectTaskMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return createProjectTaskMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -68,38 +46,29 @@ export function useCreateProjectTask<TContext>(
     mutation?: UseMutationOptions<
       CreateProjectTaskMutationResponse,
       ResponseErrorConfig<CreateProjectTask400>,
-      {
-        project_id: CreateProjectTaskPathParams["project_id"];
-        data: CreateProjectTaskMutationRequest;
-      },
+      { project_id: CreateProjectTaskPathParams['project_id']; data: CreateProjectTaskMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig<CreateProjectTaskMutationRequest>> & {
-      client?: typeof client;
-    };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<CreateProjectTaskMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? createProjectTaskMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? createProjectTaskMutationKey()
 
   return useMutation<
     CreateProjectTaskMutationResponse,
     ResponseErrorConfig<CreateProjectTask400>,
-    {
-      project_id: CreateProjectTaskPathParams["project_id"];
-      data: CreateProjectTaskMutationRequest;
-    },
+    { project_id: CreateProjectTaskPathParams['project_id']; data: CreateProjectTaskMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ project_id, data }) => {
-        return createProjectTask({ project_id, data }, config);
+        return createProjectTask({ project_id, data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

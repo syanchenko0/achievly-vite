@@ -3,103 +3,61 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import type {
-  GetProfileQueryResponse,
-  GetProfile404,
-} from "../../models/users/GetProfile";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getProfileQueryResponseSchema } from "../../zod/users/getProfileSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import type { GetProfileQueryResponse, GetProfile404 } from '../../models/users/GetProfile.ts'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getProfileQueryKey = () => [{ url: "/users/profile" }] as const;
+export const getProfileQueryKey = () => [{ url: '/users/profile' }] as const
 
-export type GetProfileQueryKey = ReturnType<typeof getProfileQueryKey>;
+export type GetProfileQueryKey = ReturnType<typeof getProfileQueryKey>
 
 /**
  * @summary Get user profile
  * {@link /users/profile}
  */
-export async function getProfile(
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const { client: request = client, ...requestConfig } = config;
+export async function getProfile(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    GetProfileQueryResponse,
-    ResponseErrorConfig<GetProfile404>,
-    unknown
-  >({ method: "GET", url: `/users/profile`, ...requestConfig });
-  return getProfileQueryResponseSchema.parse(res.data);
+  const res = await request<GetProfileQueryResponse, ResponseErrorConfig<GetProfile404>, unknown>({ method: 'GET', url: `/users/profile`, ...requestConfig })
+  return res.data
 }
 
-export function getProfileQueryOptions(
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const queryKey = getProfileQueryKey();
-  return queryOptions<
-    GetProfileQueryResponse,
-    ResponseErrorConfig<GetProfile404>,
-    GetProfileQueryResponse,
-    typeof queryKey
-  >({
+export function getProfileQueryOptions(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const queryKey = getProfileQueryKey()
+  return queryOptions<GetProfileQueryResponse, ResponseErrorConfig<GetProfile404>, GetProfileQueryResponse, typeof queryKey>({
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal;
-      return getProfile(config);
+      config.signal = signal
+      return getProfile(config)
     },
-  });
+  })
 }
 
 /**
  * @summary Get user profile
  * {@link /users/profile}
  */
-export function useGetProfile<
-  TData = GetProfileQueryResponse,
-  TQueryData = GetProfileQueryResponse,
-  TQueryKey extends QueryKey = GetProfileQueryKey,
->(
+export function useGetProfile<TData = GetProfileQueryResponse, TQueryData = GetProfileQueryResponse, TQueryKey extends QueryKey = GetProfileQueryKey>(
   options: {
-    query?: Partial<
-      QueryObserverOptions<
-        GetProfileQueryResponse,
-        ResponseErrorConfig<GetProfile404>,
-        TData,
-        TQueryData,
-        TQueryKey
-      >
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    query?: Partial<QueryObserverOptions<GetProfileQueryResponse, ResponseErrorConfig<GetProfile404>, TData, TQueryData, TQueryKey>> & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const {
-    query: { client: queryClient, ...queryOptions } = {},
-    client: config = {},
-  } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getProfileQueryKey();
+  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getProfileQueryKey()
 
   const query = useQuery(
     {
       ...(getProfileQueryOptions(config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetProfile404>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetProfile404>> & { queryKey: TQueryKey }
 
-  query.queryKey = queryKey as TQueryKey;
+  query.queryKey = queryKey as TQueryKey
 
-  return query;
+  return query
 }

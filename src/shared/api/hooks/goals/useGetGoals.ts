@@ -3,111 +3,62 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import type {
-  GetGoalsQueryResponse,
-  GetGoalsQueryParams,
-  GetGoals400,
-} from "../../models/goals/GetGoals";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getGoalsQueryResponseSchema } from "../../zod/goals/getGoalsSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import type { GetGoalsQueryResponse, GetGoalsQueryParams, GetGoals400 } from '../../models/goals/GetGoals.ts'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getGoalsQueryKey = (params?: GetGoalsQueryParams) =>
-  [{ url: "/goals" }, ...(params ? [params] : [])] as const;
+export const getGoalsQueryKey = (params?: GetGoalsQueryParams) => [{ url: '/goals' }, ...(params ? [params] : [])] as const
 
-export type GetGoalsQueryKey = ReturnType<typeof getGoalsQueryKey>;
+export type GetGoalsQueryKey = ReturnType<typeof getGoalsQueryKey>
 
 /**
  * @summary Get goals
  * {@link /goals}
  */
-export async function getGoals(
-  { params }: { params?: GetGoalsQueryParams },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const { client: request = client, ...requestConfig } = config;
+export async function getGoals({ params }: { params?: GetGoalsQueryParams }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    GetGoalsQueryResponse,
-    ResponseErrorConfig<GetGoals400>,
-    unknown
-  >({ method: "GET", url: `/goals`, params, ...requestConfig });
-  return getGoalsQueryResponseSchema.parse(res.data);
+  const res = await request<GetGoalsQueryResponse, ResponseErrorConfig<GetGoals400>, unknown>({ method: 'GET', url: `/goals`, params, ...requestConfig })
+  return res.data
 }
 
-export function getGoalsQueryOptions(
-  { params }: { params?: GetGoalsQueryParams },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const queryKey = getGoalsQueryKey(params);
-  return queryOptions<
-    GetGoalsQueryResponse,
-    ResponseErrorConfig<GetGoals400>,
-    GetGoalsQueryResponse,
-    typeof queryKey
-  >({
+export function getGoalsQueryOptions({ params }: { params?: GetGoalsQueryParams }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const queryKey = getGoalsQueryKey(params)
+  return queryOptions<GetGoalsQueryResponse, ResponseErrorConfig<GetGoals400>, GetGoalsQueryResponse, typeof queryKey>({
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal;
-      return getGoals({ params }, config);
+      config.signal = signal
+      return getGoals({ params }, config)
     },
-  });
+  })
 }
 
 /**
  * @summary Get goals
  * {@link /goals}
  */
-export function useGetGoals<
-  TData = GetGoalsQueryResponse,
-  TQueryData = GetGoalsQueryResponse,
-  TQueryKey extends QueryKey = GetGoalsQueryKey,
->(
+export function useGetGoals<TData = GetGoalsQueryResponse, TQueryData = GetGoalsQueryResponse, TQueryKey extends QueryKey = GetGoalsQueryKey>(
   { params }: { params?: GetGoalsQueryParams },
   options: {
-    query?: Partial<
-      QueryObserverOptions<
-        GetGoalsQueryResponse,
-        ResponseErrorConfig<GetGoals400>,
-        TData,
-        TQueryData,
-        TQueryKey
-      >
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    query?: Partial<QueryObserverOptions<GetGoalsQueryResponse, ResponseErrorConfig<GetGoals400>, TData, TQueryData, TQueryKey>> & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const {
-    query: { client: queryClient, ...queryOptions } = {},
-    client: config = {},
-  } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getGoalsQueryKey(params);
+  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getGoalsQueryKey(params)
 
   const query = useQuery(
     {
-      ...(getGoalsQueryOptions(
-        { params },
-        config,
-      ) as unknown as QueryObserverOptions),
+      ...(getGoalsQueryOptions({ params }, config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetGoals400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetGoals400>> & { queryKey: TQueryKey }
 
-  query.queryKey = queryKey as TQueryKey;
+  query.queryKey = queryKey as TQueryKey
 
-  return query;
+  return query
 }

@@ -3,20 +3,20 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { UpdateResult } from "../UpdateResult";
-import type { UpdateTaskListOrderBody } from "../UpdateTaskListOrderBody";
+import type { BadRequest } from '../BadRequest.ts'
+import type { UpdateResult } from '../UpdateResult.ts'
+import type { UpdateTaskListOrderBody } from '../UpdateTaskListOrderBody.ts'
 
-export type UpdateTaskListOrder200 = UpdateResult;
+export type UpdateTaskListOrder200 = UpdateResult
 
-export type UpdateTaskListOrder400 = BadRequest;
+export type UpdateTaskListOrder400 = BadRequest
 
-export type UpdateTaskListOrderMutationRequest = UpdateTaskListOrderBody[];
+export type UpdateTaskListOrderMutationRequest = UpdateTaskListOrderBody[]
 
-export type UpdateTaskListOrderMutationResponse = UpdateTaskListOrder200;
+export type UpdateTaskListOrderMutationResponse = UpdateTaskListOrder200
 
 export type UpdateTaskListOrderMutation = {
-  Response: UpdateTaskListOrder200;
-  Request: UpdateTaskListOrderMutationRequest;
-  Errors: UpdateTaskListOrder400;
-};
+  Response: UpdateTaskListOrder200
+  Request: UpdateTaskListOrderMutationRequest
+  Errors: UpdateTaskListOrder400
+}

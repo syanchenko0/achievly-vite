@@ -1,8 +1,4 @@
-import {
-  type ProjectTaskDto,
-  type UpdateProjectTaskBody,
-  updateProjectTaskBodySchema,
-} from "@/shared/api";
+import { type ProjectTaskDto, type UpdateProjectTaskBody } from "@/shared/api";
 import {
   Sheet,
   SheetContent,
@@ -36,6 +32,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { useProjectQueries } from "@/pages/projects/hooks/use-project-queries";
+import { updateProjectTaskBodySchema } from "@/shared/zod/updateProjectTaskBodySchema";
 
 function ProjectTaskEditSheet({
   task,
@@ -81,7 +78,7 @@ function ProjectTaskEditSheetContent({
 
   const handleUpdateProjectTask = async (data: UpdateProjectTaskBody) => {
     if (project?.user_project_rights?.update && task?.id !== undefined) {
-      updateProjectTask({
+      await updateProjectTask({
         task_id: task?.id,
         project_id: Number(project_id),
         data: {
@@ -89,6 +86,18 @@ function ProjectTaskEditSheetContent({
           priority: data.priority === "null" ? null : data.priority,
         },
       });
+
+      onOpenChange(false);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (project?.user_project_rights?.delete && task?.id !== undefined) {
+      await deleteProjectTask({
+        task_id: task.id,
+        project_id: project_id as string,
+      });
+
       onOpenChange(false);
     }
   };
@@ -172,20 +181,7 @@ function ProjectTaskEditSheetContent({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Отменить</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      if (
-                        project?.user_project_rights?.delete &&
-                        task?.id !== undefined
-                      ) {
-                        deleteProjectTask({
-                          task_id: task.id,
-                          project_id: project_id as string,
-                        });
-                        onOpenChange(false);
-                      }
-                    }}
-                  >
+                  <AlertDialogAction onClick={handleConfirmDelete}>
                     Подтвердить
                   </AlertDialogAction>
                 </AlertDialogFooter>

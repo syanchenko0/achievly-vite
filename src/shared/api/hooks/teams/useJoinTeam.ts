@@ -3,46 +3,33 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  JoinTeamMutationResponse,
-  JoinTeamPathParams,
-  JoinTeamQueryParams,
-  JoinTeam400,
-} from "../../models/teams/JoinTeam";
-import { useMutation } from "@tanstack/react-query";
-import { joinTeamMutationResponseSchema } from "../../zod/teams/joinTeamSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { JoinTeamMutationResponse, JoinTeamPathParams, JoinTeamQueryParams, JoinTeam400 } from '../../models/teams/JoinTeam.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const joinTeamMutationKey = () => [{ url: "/teams/{id}/join" }] as const;
+export const joinTeamMutationKey = () => [{ url: '/teams/{id}/join' }] as const
 
-export type JoinTeamMutationKey = ReturnType<typeof joinTeamMutationKey>;
+export type JoinTeamMutationKey = ReturnType<typeof joinTeamMutationKey>
 
 /**
  * @summary Join to team
  * {@link /teams/:id/join}
  */
 export async function joinTeam(
-  { id, params }: { id: JoinTeamPathParams["id"]; params: JoinTeamQueryParams },
+  { id, params }: { id: JoinTeamPathParams['id']; params: JoinTeamQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    JoinTeamMutationResponse,
-    ResponseErrorConfig<JoinTeam400>,
-    unknown
-  >({
-    method: "POST",
+  const res = await request<JoinTeamMutationResponse, ResponseErrorConfig<JoinTeam400>, unknown>({
+    method: 'POST',
     url: `/teams/${id}/join`,
     params,
     ...requestConfig,
-  });
-  return joinTeamMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -54,29 +41,24 @@ export function useJoinTeam<TContext>(
     mutation?: UseMutationOptions<
       JoinTeamMutationResponse,
       ResponseErrorConfig<JoinTeam400>,
-      { id: JoinTeamPathParams["id"]; params: JoinTeamQueryParams },
+      { id: JoinTeamPathParams['id']; params: JoinTeamQueryParams },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey = mutationOptions.mutationKey ?? joinTeamMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? joinTeamMutationKey()
 
-  return useMutation<
-    JoinTeamMutationResponse,
-    ResponseErrorConfig<JoinTeam400>,
-    { id: JoinTeamPathParams["id"]; params: JoinTeamQueryParams },
-    TContext
-  >(
+  return useMutation<JoinTeamMutationResponse, ResponseErrorConfig<JoinTeam400>, { id: JoinTeamPathParams['id']; params: JoinTeamQueryParams }, TContext>(
     {
       mutationFn: async ({ id, params }) => {
-        return joinTeam({ id, params }, config);
+        return joinTeam({ id, params }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

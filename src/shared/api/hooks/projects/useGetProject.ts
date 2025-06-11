@@ -3,122 +3,74 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import type {
-  GetProjectQueryResponse,
-  GetProjectPathParams,
-  GetProject400,
-} from "../../models/projects/GetProject";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getProjectQueryResponseSchema } from "../../zod/projects/getProjectSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import type { GetProjectQueryResponse, GetProjectPathParams, GetProject400 } from '../../models/projects/GetProject.ts'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getProjectQueryKey = ({
-  project_id,
-}: {
-  project_id: GetProjectPathParams["project_id"];
-}) =>
-  [
-    { url: "/projects/:project_id", params: { project_id: project_id } },
-  ] as const;
+export const getProjectQueryKey = ({ project_id }: { project_id: GetProjectPathParams['project_id'] }) =>
+  [{ url: '/projects/:project_id', params: { project_id: project_id } }] as const
 
-export type GetProjectQueryKey = ReturnType<typeof getProjectQueryKey>;
+export type GetProjectQueryKey = ReturnType<typeof getProjectQueryKey>
 
 /**
  * @summary Get project
  * {@link /projects/:project_id}
  */
 export async function getProject(
-  { project_id }: { project_id: GetProjectPathParams["project_id"] },
+  { project_id }: { project_id: GetProjectPathParams['project_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    GetProjectQueryResponse,
-    ResponseErrorConfig<GetProject400>,
-    unknown
-  >({
-    method: "GET",
+  const res = await request<GetProjectQueryResponse, ResponseErrorConfig<GetProject400>, unknown>({
+    method: 'GET',
     url: `/projects/${project_id}`,
     ...requestConfig,
-  });
-  return getProjectQueryResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 export function getProjectQueryOptions(
-  { project_id }: { project_id: GetProjectPathParams["project_id"] },
+  { project_id }: { project_id: GetProjectPathParams['project_id'] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const queryKey = getProjectQueryKey({ project_id });
-  return queryOptions<
-    GetProjectQueryResponse,
-    ResponseErrorConfig<GetProject400>,
-    GetProjectQueryResponse,
-    typeof queryKey
-  >({
+  const queryKey = getProjectQueryKey({ project_id })
+  return queryOptions<GetProjectQueryResponse, ResponseErrorConfig<GetProject400>, GetProjectQueryResponse, typeof queryKey>({
     enabled: !!project_id,
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal;
-      return getProject({ project_id }, config);
+      config.signal = signal
+      return getProject({ project_id }, config)
     },
-  });
+  })
 }
 
 /**
  * @summary Get project
  * {@link /projects/:project_id}
  */
-export function useGetProject<
-  TData = GetProjectQueryResponse,
-  TQueryData = GetProjectQueryResponse,
-  TQueryKey extends QueryKey = GetProjectQueryKey,
->(
-  { project_id }: { project_id: GetProjectPathParams["project_id"] },
+export function useGetProject<TData = GetProjectQueryResponse, TQueryData = GetProjectQueryResponse, TQueryKey extends QueryKey = GetProjectQueryKey>(
+  { project_id }: { project_id: GetProjectPathParams['project_id'] },
   options: {
-    query?: Partial<
-      QueryObserverOptions<
-        GetProjectQueryResponse,
-        ResponseErrorConfig<GetProject400>,
-        TData,
-        TQueryData,
-        TQueryKey
-      >
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    query?: Partial<QueryObserverOptions<GetProjectQueryResponse, ResponseErrorConfig<GetProject400>, TData, TQueryData, TQueryKey>> & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const {
-    query: { client: queryClient, ...queryOptions } = {},
-    client: config = {},
-  } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getProjectQueryKey({ project_id });
+  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getProjectQueryKey({ project_id })
 
   const query = useQuery(
     {
-      ...(getProjectQueryOptions(
-        { project_id },
-        config,
-      ) as unknown as QueryObserverOptions),
+      ...(getProjectQueryOptions({ project_id }, config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetProject400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetProject400>> & { queryKey: TQueryKey }
 
-  query.queryKey = queryKey as TQueryKey;
+  query.queryKey = queryKey as TQueryKey
 
-  return query;
+  return query
 }

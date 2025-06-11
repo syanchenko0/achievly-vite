@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type GoalBodyTask, goalBodyTaskSchema } from "@/shared/api";
+import { type GoalBodyTask } from "@/shared/api";
 import {
   Sheet,
   SheetContent,
@@ -15,6 +15,7 @@ import {
   NoteField,
   TitleField,
 } from "@/shared/ui/goals-fields";
+import { goalBodyTaskSchema } from "@/shared/zod/goalBodyTaskSchema";
 
 function TaskCreateSheet({
   open,

@@ -3,12 +3,12 @@
  * Do not edit manually.
  */
 
-import type { CreateEventBody } from "./CreateEventBody";
+import type { CreateEventBody } from './CreateEventBody.ts'
 
 export type CreateEventsBody = {
   /**
    * @description Список событий
    * @type array
    */
-  events: CreateEventBody[];
-};
+  events: CreateEventBody[]
+}

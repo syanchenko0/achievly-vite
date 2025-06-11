@@ -5,9 +5,13 @@
 
 import { projectRightsDtoSchema } from "./projectRightsDtoSchema";
 import { z } from "zod";
+import { ZOD_ERROR } from "@/shared/constants/errors";
 
 export const updateTeamMemberBodySchema = z.object({
-  role: z.string().min(1).describe("Роль участника команды"),
+  role: z
+    .string(ZOD_ERROR)
+    .nonempty({ message: "Заполните поле" })
+    .describe("Роль участника команды"),
   projects_rights: z
     .array(z.lazy(() => projectRightsDtoSchema))
     .describe("Массив прав в проектах")

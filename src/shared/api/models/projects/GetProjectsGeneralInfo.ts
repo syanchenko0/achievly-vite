@@ -3,24 +3,24 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { GeneralInfoProjectDto } from "../GeneralInfoProjectDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { GeneralInfoProjectDto } from '../GeneralInfoProjectDto.ts'
 
 export type GetProjectsGeneralInfoQueryParams = {
   /**
    * @type number
    */
-  team_id: number;
-};
+  team_id: number
+}
 
-export type GetProjectsGeneralInfo200 = GeneralInfoProjectDto;
+export type GetProjectsGeneralInfo200 = GeneralInfoProjectDto
 
-export type GetProjectsGeneralInfo400 = BadRequest;
+export type GetProjectsGeneralInfo400 = BadRequest
 
-export type GetProjectsGeneralInfoQueryResponse = GetProjectsGeneralInfo200;
+export type GetProjectsGeneralInfoQueryResponse = GetProjectsGeneralInfo200
 
 export type GetProjectsGeneralInfoQuery = {
-  Response: GetProjectsGeneralInfo200;
-  QueryParams: GetProjectsGeneralInfoQueryParams;
-  Errors: GetProjectsGeneralInfo400;
-};
+  Response: GetProjectsGeneralInfo200
+  QueryParams: GetProjectsGeneralInfoQueryParams
+  Errors: GetProjectsGeneralInfo400
+}

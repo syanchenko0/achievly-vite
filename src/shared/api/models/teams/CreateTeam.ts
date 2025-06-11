@@ -3,20 +3,20 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { CreateTeamBody } from "../CreateTeamBody";
-import type { TeamDto } from "../TeamDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { CreateTeamBody } from '../CreateTeamBody.ts'
+import type { TeamDto } from '../TeamDto.ts'
 
-export type CreateTeam200 = TeamDto;
+export type CreateTeam200 = TeamDto
 
-export type CreateTeam400 = BadRequest;
+export type CreateTeam400 = BadRequest
 
-export type CreateTeamMutationRequest = CreateTeamBody;
+export type CreateTeamMutationRequest = CreateTeamBody
 
-export type CreateTeamMutationResponse = CreateTeam200;
+export type CreateTeamMutationResponse = CreateTeam200
 
 export type CreateTeamMutation = {
-  Response: CreateTeam200;
-  Request: CreateTeamMutationRequest;
-  Errors: CreateTeam400;
-};
+  Response: CreateTeam200
+  Request: CreateTeamMutationRequest
+  Errors: CreateTeam400
+}

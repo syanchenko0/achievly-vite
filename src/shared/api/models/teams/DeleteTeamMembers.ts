@@ -3,27 +3,27 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { DeleteTeamMembersBody } from "../DeleteTeamMembersBody";
+import type { BadRequest } from '../BadRequest.ts'
+import type { DeleteTeamMembersBody } from '../DeleteTeamMembersBody.ts'
 
 export type DeleteTeamMembersPathParams = {
   /**
    * @type string
    */
-  team_id: string;
-};
+  team_id: string
+}
 
-export type DeleteTeamMembers200 = unknown;
+export type DeleteTeamMembers200 = unknown
 
-export type DeleteTeamMembers400 = BadRequest;
+export type DeleteTeamMembers400 = BadRequest
 
-export type DeleteTeamMembersMutationRequest = DeleteTeamMembersBody;
+export type DeleteTeamMembersMutationRequest = DeleteTeamMembersBody
 
-export type DeleteTeamMembersMutationResponse = DeleteTeamMembers200;
+export type DeleteTeamMembersMutationResponse = DeleteTeamMembers200
 
 export type DeleteTeamMembersMutation = {
-  Response: DeleteTeamMembers200;
-  Request: DeleteTeamMembersMutationRequest;
-  PathParams: DeleteTeamMembersPathParams;
-  Errors: DeleteTeamMembers400;
-};
+  Response: DeleteTeamMembers200
+  Request: DeleteTeamMembersMutationRequest
+  PathParams: DeleteTeamMembersPathParams
+  Errors: DeleteTeamMembers400
+}

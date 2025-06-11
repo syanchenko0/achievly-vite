@@ -3,30 +3,20 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
 import type {
   UpdateProjectTaskMutationRequest,
   UpdateProjectTaskMutationResponse,
   UpdateProjectTaskPathParams,
   UpdateProjectTask400,
-} from "../../models/projects/UpdateProjectTask";
-import { useMutation } from "@tanstack/react-query";
-import {
-  updateProjectTaskMutationResponseSchema,
-  updateProjectTaskMutationRequestSchema,
-} from "../../zod/projects/updateProjectTaskSchema";
+} from '../../models/projects/UpdateProjectTask.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const updateProjectTaskMutationKey = () =>
-  [{ url: "/projects/{project_id}/tasks/{task_id}" }] as const;
+export const updateProjectTaskMutationKey = () => [{ url: '/projects/{project_id}/tasks/{task_id}' }] as const
 
-export type UpdateProjectTaskMutationKey = ReturnType<
-  typeof updateProjectTaskMutationKey
->;
+export type UpdateProjectTaskMutationKey = ReturnType<typeof updateProjectTaskMutationKey>
 
 /**
  * @summary Update project task
@@ -37,28 +27,18 @@ export async function updateProjectTask(
     task_id,
     project_id,
     data,
-  }: {
-    task_id: UpdateProjectTaskPathParams["task_id"];
-    project_id: UpdateProjectTaskPathParams["project_id"];
-    data?: UpdateProjectTaskMutationRequest;
-  },
-  config: Partial<RequestConfig<UpdateProjectTaskMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  }: { task_id: UpdateProjectTaskPathParams['task_id']; project_id: UpdateProjectTaskPathParams['project_id']; data?: UpdateProjectTaskMutationRequest },
+  config: Partial<RequestConfig<UpdateProjectTaskMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    UpdateProjectTaskMutationResponse,
-    ResponseErrorConfig<UpdateProjectTask400>,
-    UpdateProjectTaskMutationRequest
-  >({
-    method: "PATCH",
+  const res = await request<UpdateProjectTaskMutationResponse, ResponseErrorConfig<UpdateProjectTask400>, UpdateProjectTaskMutationRequest>({
+    method: 'PATCH',
     url: `/projects/${project_id}/tasks/${task_id}`,
-    data: updateProjectTaskMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return updateProjectTaskMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -70,40 +50,29 @@ export function useUpdateProjectTask<TContext>(
     mutation?: UseMutationOptions<
       UpdateProjectTaskMutationResponse,
       ResponseErrorConfig<UpdateProjectTask400>,
-      {
-        task_id: UpdateProjectTaskPathParams["task_id"];
-        project_id: UpdateProjectTaskPathParams["project_id"];
-        data?: UpdateProjectTaskMutationRequest;
-      },
+      { task_id: UpdateProjectTaskPathParams['task_id']; project_id: UpdateProjectTaskPathParams['project_id']; data?: UpdateProjectTaskMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig<UpdateProjectTaskMutationRequest>> & {
-      client?: typeof client;
-    };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<UpdateProjectTaskMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? updateProjectTaskMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? updateProjectTaskMutationKey()
 
   return useMutation<
     UpdateProjectTaskMutationResponse,
     ResponseErrorConfig<UpdateProjectTask400>,
-    {
-      task_id: UpdateProjectTaskPathParams["task_id"];
-      project_id: UpdateProjectTaskPathParams["project_id"];
-      data?: UpdateProjectTaskMutationRequest;
-    },
+    { task_id: UpdateProjectTaskPathParams['task_id']; project_id: UpdateProjectTaskPathParams['project_id']; data?: UpdateProjectTaskMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ task_id, project_id, data }) => {
-        return updateProjectTask({ task_id, project_id, data }, config);
+        return updateProjectTask({ task_id, project_id, data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

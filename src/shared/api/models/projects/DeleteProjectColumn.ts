@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { ProjectColumn } from "../ProjectColumn";
+import type { BadRequest } from '../BadRequest.ts'
+import type { ProjectColumn } from '../ProjectColumn.ts'
 
 export type DeleteProjectColumnPathParams = {
   /**
    * @type string
    */
-  column_id: string;
+  column_id: string
   /**
    * @type number
    */
-  project_id: number;
-};
+  project_id: number
+}
 
-export type DeleteProjectColumn200 = ProjectColumn;
+export type DeleteProjectColumn200 = ProjectColumn
 
-export type DeleteProjectColumn400 = BadRequest;
+export type DeleteProjectColumn400 = BadRequest
 
-export type DeleteProjectColumnMutationResponse = DeleteProjectColumn200;
+export type DeleteProjectColumnMutationResponse = DeleteProjectColumn200
 
 export type DeleteProjectColumnMutation = {
-  Response: DeleteProjectColumn200;
-  PathParams: DeleteProjectColumnPathParams;
-  Errors: DeleteProjectColumn400;
-};
+  Response: DeleteProjectColumn200
+  PathParams: DeleteProjectColumnPathParams
+  Errors: DeleteProjectColumn400
+}

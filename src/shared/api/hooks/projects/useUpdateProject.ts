@@ -3,60 +3,38 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
 import type {
   UpdateProjectMutationRequest,
   UpdateProjectMutationResponse,
   UpdateProjectPathParams,
   UpdateProject400,
-} from "../../models/projects/UpdateProject";
-import { useMutation } from "@tanstack/react-query";
-import {
-  updateProjectMutationResponseSchema,
-  updateProjectMutationRequestSchema,
-} from "../../zod/projects/updateProjectSchema";
+} from '../../models/projects/UpdateProject.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const updateProjectMutationKey = () =>
-  [{ url: "/projects/{project_id}" }] as const;
+export const updateProjectMutationKey = () => [{ url: '/projects/{project_id}' }] as const
 
-export type UpdateProjectMutationKey = ReturnType<
-  typeof updateProjectMutationKey
->;
+export type UpdateProjectMutationKey = ReturnType<typeof updateProjectMutationKey>
 
 /**
  * @summary Update project
  * {@link /projects/:project_id}
  */
 export async function updateProject(
-  {
-    project_id,
-    data,
-  }: {
-    project_id: UpdateProjectPathParams["project_id"];
-    data?: UpdateProjectMutationRequest;
-  },
-  config: Partial<RequestConfig<UpdateProjectMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  { project_id, data }: { project_id: UpdateProjectPathParams['project_id']; data?: UpdateProjectMutationRequest },
+  config: Partial<RequestConfig<UpdateProjectMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    UpdateProjectMutationResponse,
-    ResponseErrorConfig<UpdateProject400>,
-    UpdateProjectMutationRequest
-  >({
-    method: "PATCH",
+  const res = await request<UpdateProjectMutationResponse, ResponseErrorConfig<UpdateProject400>, UpdateProjectMutationRequest>({
+    method: 'PATCH',
     url: `/projects/${project_id}`,
-    data: updateProjectMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return updateProjectMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -68,37 +46,29 @@ export function useUpdateProject<TContext>(
     mutation?: UseMutationOptions<
       UpdateProjectMutationResponse,
       ResponseErrorConfig<UpdateProject400>,
-      {
-        project_id: UpdateProjectPathParams["project_id"];
-        data?: UpdateProjectMutationRequest;
-      },
+      { project_id: UpdateProjectPathParams['project_id']; data?: UpdateProjectMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig<UpdateProjectMutationRequest>> & {
-      client?: typeof client;
-    };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<UpdateProjectMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey = mutationOptions.mutationKey ?? updateProjectMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? updateProjectMutationKey()
 
   return useMutation<
     UpdateProjectMutationResponse,
     ResponseErrorConfig<UpdateProject400>,
-    {
-      project_id: UpdateProjectPathParams["project_id"];
-      data?: UpdateProjectMutationRequest;
-    },
+    { project_id: UpdateProjectPathParams['project_id']; data?: UpdateProjectMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ project_id, data }) => {
-        return updateProject({ project_id, data }, config);
+        return updateProject({ project_id, data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

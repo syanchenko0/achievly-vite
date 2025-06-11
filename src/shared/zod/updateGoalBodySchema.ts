@@ -5,19 +5,20 @@
 
 import { goalBodyTaskSchema } from "./goalBodyTaskSchema";
 import { z } from "zod";
+import { ZOD_ERROR } from "@/shared/constants/errors";
 
 export const updateGoalBodySchema = z.object({
-  title: z.string().describe("Заголовок цели").optional(),
-  category: z.string().describe("Категория цели").optional(),
-  status: z.string().describe("Статус цели").optional(),
+  title: z.string(ZOD_ERROR).describe("Заголовок цели").optional(),
+  category: z.string(ZOD_ERROR).describe("Категория цели").optional(),
+  status: z.string(ZOD_ERROR).describe("Статус цели").optional(),
   deadline_date: z
-    .string()
+    .string(ZOD_ERROR)
     .describe("Дата окончания цели")
     .nullable()
     .nullish(),
-  note: z.string().describe("Примечание к цели").nullable().nullish(),
+  note: z.string(ZOD_ERROR).describe("Примечание к цели").nullable().nullish(),
   achieved_date: z
-    .string()
+    .string(ZOD_ERROR)
     .describe("Дата выполнения цели")
     .nullable()
     .nullish(),

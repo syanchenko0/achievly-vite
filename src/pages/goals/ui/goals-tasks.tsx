@@ -7,10 +7,10 @@ import { InfoIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { TaskSortableCard } from "@/widgets/goals/ui/task-sortable-card";
-import { TaskUpdateSheet } from "@/widgets/goals";
 import { useGoalsTasksQueries } from "@/pages/goals/hooks/use-goals-tasks-queries";
 import { useSearchParams } from "react-router";
+import { TaskSortableCard } from "@/pages/goals/ui/task-sortable-card";
+import { TaskUpdateSheet } from "@/pages/goals/ui/task-update-sheet";
 
 type TasksState = {
   active: TaskDto[];

@@ -3,15 +3,15 @@
  * Do not edit manually.
  */
 
-import type { ProjectDto } from "./ProjectDto";
+import type { ProjectDto } from './ProjectDto.ts'
 
 export type GeneralInfoProjectDto = {
   /**
    * @type array
    */
-  upcoming_deadline: ProjectDto[];
+  upcoming_deadline: ProjectDto[]
   /**
    * @type array
    */
-  assigned_me: ProjectDto[];
-};
+  assigned_me: ProjectDto[]
+}

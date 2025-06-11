@@ -3,112 +3,63 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import type {
-  GetEventsQueryResponse,
-  GetEventsQueryParams,
-  GetEvents400,
-} from "../../models/events/GetEvents";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getEventsQueryResponseSchema } from "../../zod/events/getEventsSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import type { GetEventsQueryResponse, GetEventsQueryParams, GetEvents400 } from '../../models/events/GetEvents.ts'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getEventsQueryKey = (params: GetEventsQueryParams) =>
-  [{ url: "/events" }, ...(params ? [params] : [])] as const;
+export const getEventsQueryKey = (params: GetEventsQueryParams) => [{ url: '/events' }, ...(params ? [params] : [])] as const
 
-export type GetEventsQueryKey = ReturnType<typeof getEventsQueryKey>;
+export type GetEventsQueryKey = ReturnType<typeof getEventsQueryKey>
 
 /**
  * @summary Get events
  * {@link /events}
  */
-export async function getEvents(
-  { params }: { params: GetEventsQueryParams },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const { client: request = client, ...requestConfig } = config;
+export async function getEvents({ params }: { params: GetEventsQueryParams }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    GetEventsQueryResponse,
-    ResponseErrorConfig<GetEvents400>,
-    unknown
-  >({ method: "GET", url: `/events`, params, ...requestConfig });
-  return getEventsQueryResponseSchema.parse(res.data);
+  const res = await request<GetEventsQueryResponse, ResponseErrorConfig<GetEvents400>, unknown>({ method: 'GET', url: `/events`, params, ...requestConfig })
+  return res.data
 }
 
-export function getEventsQueryOptions(
-  { params }: { params: GetEventsQueryParams },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const queryKey = getEventsQueryKey(params);
-  return queryOptions<
-    GetEventsQueryResponse,
-    ResponseErrorConfig<GetEvents400>,
-    GetEventsQueryResponse,
-    typeof queryKey
-  >({
+export function getEventsQueryOptions({ params }: { params: GetEventsQueryParams }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const queryKey = getEventsQueryKey(params)
+  return queryOptions<GetEventsQueryResponse, ResponseErrorConfig<GetEvents400>, GetEventsQueryResponse, typeof queryKey>({
     enabled: !!params,
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal;
-      return getEvents({ params }, config);
+      config.signal = signal
+      return getEvents({ params }, config)
     },
-  });
+  })
 }
 
 /**
  * @summary Get events
  * {@link /events}
  */
-export function useGetEvents<
-  TData = GetEventsQueryResponse,
-  TQueryData = GetEventsQueryResponse,
-  TQueryKey extends QueryKey = GetEventsQueryKey,
->(
+export function useGetEvents<TData = GetEventsQueryResponse, TQueryData = GetEventsQueryResponse, TQueryKey extends QueryKey = GetEventsQueryKey>(
   { params }: { params: GetEventsQueryParams },
   options: {
-    query?: Partial<
-      QueryObserverOptions<
-        GetEventsQueryResponse,
-        ResponseErrorConfig<GetEvents400>,
-        TData,
-        TQueryData,
-        TQueryKey
-      >
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    query?: Partial<QueryObserverOptions<GetEventsQueryResponse, ResponseErrorConfig<GetEvents400>, TData, TQueryData, TQueryKey>> & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const {
-    query: { client: queryClient, ...queryOptions } = {},
-    client: config = {},
-  } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getEventsQueryKey(params);
+  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getEventsQueryKey(params)
 
   const query = useQuery(
     {
-      ...(getEventsQueryOptions(
-        { params },
-        config,
-      ) as unknown as QueryObserverOptions),
+      ...(getEventsQueryOptions({ params }, config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetEvents400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetEvents400>> & { queryKey: TQueryKey }
 
-  query.queryKey = queryKey as TQueryKey;
+  query.queryKey = queryKey as TQueryKey
 
-  return query;
+  return query
 }

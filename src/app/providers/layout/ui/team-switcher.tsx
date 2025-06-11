@@ -15,12 +15,12 @@ import { ChevronsUpDown, Plus, Settings, User, Users } from "lucide-react";
 import { useGetTeams } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useMemo, useState } from "react";
-import { TeamSwitcherDialog } from "@/features/layout/ui/team-switcher-dialog";
 import { useTeamSettingsStore } from "@/app/store/team";
 import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router";
 import { ROUTES } from "@/shared/constants/router";
 import { replacePathParams } from "@/app/lib/utils";
+import { TeamCreateDialog } from "@/features/teams/ui/team-create-dialog";
 
 function TeamSwitcher() {
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
@@ -138,7 +138,7 @@ function TeamSwitcher() {
         </DropdownMenu>
       </SidebarMenuItem>
 
-      <TeamSwitcherDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <TeamCreateDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </SidebarMenu>
   );
 }

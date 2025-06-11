@@ -3,45 +3,29 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  DeleteTaskMutationResponse,
-  DeleteTaskPathParams,
-  DeleteTask400,
-} from "../../models/goals/DeleteTask";
-import { useMutation } from "@tanstack/react-query";
-import { deleteTaskMutationResponseSchema } from "../../zod/goals/deleteTaskSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { DeleteTaskMutationResponse, DeleteTaskPathParams, DeleteTask400 } from '../../models/goals/DeleteTask.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const deleteTaskMutationKey = () =>
-  [{ url: "/goals/tasks/{task_id}" }] as const;
+export const deleteTaskMutationKey = () => [{ url: '/goals/tasks/{task_id}' }] as const
 
-export type DeleteTaskMutationKey = ReturnType<typeof deleteTaskMutationKey>;
+export type DeleteTaskMutationKey = ReturnType<typeof deleteTaskMutationKey>
 
 /**
  * @summary Delete task
  * {@link /goals/tasks/:task_id}
  */
-export async function deleteTask(
-  { task_id }: { task_id: DeleteTaskPathParams["task_id"] },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const { client: request = client, ...requestConfig } = config;
+export async function deleteTask({ task_id }: { task_id: DeleteTaskPathParams['task_id'] }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    DeleteTaskMutationResponse,
-    ResponseErrorConfig<DeleteTask400>,
-    unknown
-  >({
-    method: "DELETE",
+  const res = await request<DeleteTaskMutationResponse, ResponseErrorConfig<DeleteTask400>, unknown>({
+    method: 'DELETE',
     url: `/goals/tasks/${task_id}`,
     ...requestConfig,
-  });
-  return deleteTaskMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -50,34 +34,24 @@ export async function deleteTask(
  */
 export function useDeleteTask<TContext>(
   options: {
-    mutation?: UseMutationOptions<
-      DeleteTaskMutationResponse,
-      ResponseErrorConfig<DeleteTask400>,
-      { task_id: DeleteTaskPathParams["task_id"] },
-      TContext
-    > & {
-      client?: QueryClient;
-    };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    mutation?: UseMutationOptions<DeleteTaskMutationResponse, ResponseErrorConfig<DeleteTask400>, { task_id: DeleteTaskPathParams['task_id'] }, TContext> & {
+      client?: QueryClient
+    }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey = mutationOptions.mutationKey ?? deleteTaskMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? deleteTaskMutationKey()
 
-  return useMutation<
-    DeleteTaskMutationResponse,
-    ResponseErrorConfig<DeleteTask400>,
-    { task_id: DeleteTaskPathParams["task_id"] },
-    TContext
-  >(
+  return useMutation<DeleteTaskMutationResponse, ResponseErrorConfig<DeleteTask400>, { task_id: DeleteTaskPathParams['task_id'] }, TContext>(
     {
       mutationFn: async ({ task_id }) => {
-        return deleteTask({ task_id }, config);
+        return deleteTask({ task_id }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

@@ -3,23 +3,23 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
+import type { BadRequest } from '../BadRequest.ts'
 
 export type DeleteTaskPathParams = {
   /**
    * @type string
    */
-  task_id: string;
-};
+  task_id: string
+}
 
-export type DeleteTask200 = unknown;
+export type DeleteTask200 = unknown
 
-export type DeleteTask400 = BadRequest;
+export type DeleteTask400 = BadRequest
 
-export type DeleteTaskMutationResponse = DeleteTask200;
+export type DeleteTaskMutationResponse = DeleteTask200
 
 export type DeleteTaskMutation = {
-  Response: DeleteTask200;
-  PathParams: DeleteTaskPathParams;
-  Errors: DeleteTask400;
-};
+  Response: DeleteTask200
+  PathParams: DeleteTaskPathParams
+  Errors: DeleteTask400
+}

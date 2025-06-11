@@ -3,60 +3,38 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
 import type {
   CreateProjectColumnMutationRequest,
   CreateProjectColumnMutationResponse,
   CreateProjectColumnPathParams,
   CreateProjectColumn400,
-} from "../../models/projects/CreateProjectColumn";
-import { useMutation } from "@tanstack/react-query";
-import {
-  createProjectColumnMutationResponseSchema,
-  createProjectColumnMutationRequestSchema,
-} from "../../zod/projects/createProjectColumnSchema";
+} from '../../models/projects/CreateProjectColumn.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const createProjectColumnMutationKey = () =>
-  [{ url: "/projects/{project_id}/columns" }] as const;
+export const createProjectColumnMutationKey = () => [{ url: '/projects/{project_id}/columns' }] as const
 
-export type CreateProjectColumnMutationKey = ReturnType<
-  typeof createProjectColumnMutationKey
->;
+export type CreateProjectColumnMutationKey = ReturnType<typeof createProjectColumnMutationKey>
 
 /**
  * @summary Create project column
  * {@link /projects/:project_id/columns}
  */
 export async function createProjectColumn(
-  {
-    project_id,
-    data,
-  }: {
-    project_id: CreateProjectColumnPathParams["project_id"];
-    data: CreateProjectColumnMutationRequest;
-  },
-  config: Partial<RequestConfig<CreateProjectColumnMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  { project_id, data }: { project_id: CreateProjectColumnPathParams['project_id']; data: CreateProjectColumnMutationRequest },
+  config: Partial<RequestConfig<CreateProjectColumnMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    CreateProjectColumnMutationResponse,
-    ResponseErrorConfig<CreateProjectColumn400>,
-    CreateProjectColumnMutationRequest
-  >({
-    method: "POST",
+  const res = await request<CreateProjectColumnMutationResponse, ResponseErrorConfig<CreateProjectColumn400>, CreateProjectColumnMutationRequest>({
+    method: 'POST',
     url: `/projects/${project_id}/columns`,
-    data: createProjectColumnMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return createProjectColumnMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -68,38 +46,29 @@ export function useCreateProjectColumn<TContext>(
     mutation?: UseMutationOptions<
       CreateProjectColumnMutationResponse,
       ResponseErrorConfig<CreateProjectColumn400>,
-      {
-        project_id: CreateProjectColumnPathParams["project_id"];
-        data: CreateProjectColumnMutationRequest;
-      },
+      { project_id: CreateProjectColumnPathParams['project_id']; data: CreateProjectColumnMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig<CreateProjectColumnMutationRequest>> & {
-      client?: typeof client;
-    };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<CreateProjectColumnMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? createProjectColumnMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? createProjectColumnMutationKey()
 
   return useMutation<
     CreateProjectColumnMutationResponse,
     ResponseErrorConfig<CreateProjectColumn400>,
-    {
-      project_id: CreateProjectColumnPathParams["project_id"];
-      data: CreateProjectColumnMutationRequest;
-    },
+    { project_id: CreateProjectColumnPathParams['project_id']; data: CreateProjectColumnMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ project_id, data }) => {
-        return createProjectColumn({ project_id, data }, config);
+        return createProjectColumn({ project_id, data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

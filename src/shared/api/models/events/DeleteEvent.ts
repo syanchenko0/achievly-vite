@@ -3,23 +3,23 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
+import type { BadRequest } from '../BadRequest.ts'
 
 export type DeleteEventPathParams = {
   /**
    * @type string
    */
-  event_id: string;
-};
+  event_id: string
+}
 
-export type DeleteEvent200 = unknown;
+export type DeleteEvent200 = unknown
 
-export type DeleteEvent400 = BadRequest;
+export type DeleteEvent400 = BadRequest
 
-export type DeleteEventMutationResponse = DeleteEvent200;
+export type DeleteEventMutationResponse = DeleteEvent200
 
 export type DeleteEventMutation = {
-  Response: DeleteEvent200;
-  PathParams: DeleteEventPathParams;
-  Errors: DeleteEvent400;
-};
+  Response: DeleteEvent200
+  PathParams: DeleteEventPathParams
+  Errors: DeleteEvent400
+}

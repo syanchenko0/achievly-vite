@@ -1,9 +1,4 @@
-import {
-  type MemberDto,
-  type ProjectRightsDto,
-  type UpdateTeamMemberBodySchema,
-  updateTeamMemberBodySchema,
-} from "@/shared/api";
+import { type MemberDto, type ProjectRightsDto } from "@/shared/api";
 import {
   Tooltip,
   TooltipContent,
@@ -62,6 +57,10 @@ import {
 } from "@/shared/ui/accordion";
 import { useTeamsQueries } from "@/pages/teams/hooks/use-teams-queries";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import {
+  type UpdateTeamMemberBodySchema,
+  updateTeamMemberBodySchema,
+} from "@/shared/zod/updateTeamMemberBodySchema";
 
 const ActionsCell = ({
   member_id,

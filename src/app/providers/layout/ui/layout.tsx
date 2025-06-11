@@ -19,17 +19,17 @@ import {
 import { Separator } from "@/shared/ui/separator";
 import { Link, matchPath, Outlet, useLocation } from "react-router";
 import { RequireAuth } from "@/shared/ui/require-auth";
-import { TeamSwitcher } from "@/features/layout/ui/team-switcher";
-import { PersonalGroup } from "@/features/layout/ui/personal-group";
-import { ProjectsGroup } from "@/features/layout/ui/projects-group";
 import { Home, Plus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useState } from "react";
-import { GoalCreateSheet } from "@/widgets/goals/ui/goal-create-sheet";
 import { ROUTE_LABELS, ROUTES } from "@/shared/constants/router";
-import { EventCreateDialog } from "@/widgets/events";
-import { EventCreateFromTasksDialog } from "@/widgets/events/ui/event-create-from-tasks-dialog";
-import { UserDropdown } from "@/features/layout/ui/user-dropdown";
+import { GoalCreateSheet } from "@/features/goals";
+import { EventCreateDialog } from "@/features/events";
+import { EventCreateFromTasksDialog } from "@/features/events/ui/event-create-from-tasks-dialog";
+import { TeamSwitcher } from "@/app/providers/layout/ui/team-switcher";
+import { ProjectsGroup } from "@/app/providers/layout/ui/projects-group";
+import { PersonalGroup } from "@/app/providers/layout/ui/personal-group";
+import { UserDropdown } from "@/app/providers/layout/ui/user-dropdown";
 
 function Layout() {
   const [openCreateGoalSheet, setOpenCreateGoalSheet] =

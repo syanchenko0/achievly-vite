@@ -60,9 +60,8 @@ function Content({
   const { createProjectTask, createProjectTaskPending } = useProjectQueries();
 
   const handleCreateProjectTask = async (data: CreateProjectTaskBody) => {
-    createProjectTask({ data, project_id: Number(project_id) });
+    await createProjectTask({ data, project_id: Number(project_id) });
     onOpenChange(false);
-    form.reset();
   };
 
   return (

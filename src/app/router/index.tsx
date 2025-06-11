@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { Layout } from "@/features/layout";
+import { Layout } from "@/app/providers/layout";
 import { ROUTES } from "@/shared/constants/router";
 import { lazy, Suspense } from "react";
 import { RequireAuth } from "@/shared/ui/require-auth";

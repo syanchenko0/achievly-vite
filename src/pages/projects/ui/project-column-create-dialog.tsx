@@ -1,8 +1,4 @@
 import {
-  type CreateProjectColumnBody,
-  createProjectColumnBodySchema,
-} from "@/shared/api";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -22,6 +18,8 @@ import {
 import { Button } from "@/shared/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import type { CreateProjectColumnBody } from "@/shared/api";
+import { createProjectColumnBodySchema } from "@/shared/zod/createProjectColumnBodySchema";
 
 function ProjectColumnCreateDialog({
   open,
@@ -61,8 +59,8 @@ function ProjectColumnCreateDialogContent({
   const { createProjectColumn, createProjectColumnPending } =
     useProjectQueries();
 
-  const handleCreateProjectColumn = (data: CreateProjectColumnBody) => {
-    createProjectColumn({
+  const handleCreateProjectColumn = async (data: CreateProjectColumnBody) => {
+    await createProjectColumn({
       project_id: Number(project_id),
       data,
     });

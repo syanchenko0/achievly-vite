@@ -3,60 +3,37 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
 import type {
   UpdateProjectTaskListOrderMutationRequest,
   UpdateProjectTaskListOrderMutationResponse,
   UpdateProjectTaskListOrderPathParams,
   UpdateProjectTaskListOrder400,
-} from "../../models/projects/UpdateProjectTaskListOrder";
-import { useMutation } from "@tanstack/react-query";
-import {
-  updateProjectTaskListOrderMutationResponseSchema,
-  updateProjectTaskListOrderMutationRequestSchema,
-} from "../../zod/projects/updateProjectTaskListOrderSchema";
+} from '../../models/projects/UpdateProjectTaskListOrder.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const updateProjectTaskListOrderMutationKey = () =>
-  [{ url: "/projects/{project_id}/tasks/list_order" }] as const;
+export const updateProjectTaskListOrderMutationKey = () => [{ url: '/projects/{project_id}/tasks/list_order' }] as const
 
-export type UpdateProjectTaskListOrderMutationKey = ReturnType<
-  typeof updateProjectTaskListOrderMutationKey
->;
+export type UpdateProjectTaskListOrderMutationKey = ReturnType<typeof updateProjectTaskListOrderMutationKey>
 
 /**
  * @summary Update project task list order
  * {@link /projects/:project_id/tasks/list_order}
  */
 export async function updateProjectTaskListOrder(
-  {
-    project_id,
-    data,
-  }: {
-    project_id: UpdateProjectTaskListOrderPathParams["project_id"];
-    data?: UpdateProjectTaskListOrderMutationRequest;
-  },
-  config: Partial<RequestConfig<UpdateProjectTaskListOrderMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  { project_id, data }: { project_id: UpdateProjectTaskListOrderPathParams['project_id']; data?: UpdateProjectTaskListOrderMutationRequest },
+  config: Partial<RequestConfig<UpdateProjectTaskListOrderMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
   const res = await request<
     UpdateProjectTaskListOrderMutationResponse,
     ResponseErrorConfig<UpdateProjectTaskListOrder400>,
     UpdateProjectTaskListOrderMutationRequest
-  >({
-    method: "POST",
-    url: `/projects/${project_id}/tasks/list_order`,
-    data: updateProjectTaskListOrderMutationRequestSchema.parse(data),
-    ...requestConfig,
-  });
-  return updateProjectTaskListOrderMutationResponseSchema.parse(res.data);
+  >({ method: 'POST', url: `/projects/${project_id}/tasks/list_order`, data, ...requestConfig })
+  return res.data
 }
 
 /**
@@ -68,38 +45,29 @@ export function useUpdateProjectTaskListOrder<TContext>(
     mutation?: UseMutationOptions<
       UpdateProjectTaskListOrderMutationResponse,
       ResponseErrorConfig<UpdateProjectTaskListOrder400>,
-      {
-        project_id: UpdateProjectTaskListOrderPathParams["project_id"];
-        data?: UpdateProjectTaskListOrderMutationRequest;
-      },
+      { project_id: UpdateProjectTaskListOrderPathParams['project_id']; data?: UpdateProjectTaskListOrderMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<
-      RequestConfig<UpdateProjectTaskListOrderMutationRequest>
-    > & { client?: typeof client };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<UpdateProjectTaskListOrderMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? updateProjectTaskListOrderMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? updateProjectTaskListOrderMutationKey()
 
   return useMutation<
     UpdateProjectTaskListOrderMutationResponse,
     ResponseErrorConfig<UpdateProjectTaskListOrder400>,
-    {
-      project_id: UpdateProjectTaskListOrderPathParams["project_id"];
-      data?: UpdateProjectTaskListOrderMutationRequest;
-    },
+    { project_id: UpdateProjectTaskListOrderPathParams['project_id']; data?: UpdateProjectTaskListOrderMutationRequest },
     TContext
   >(
     {
       mutationFn: async ({ project_id, data }) => {
-        return updateProjectTaskListOrder({ project_id, data }, config);
+        return updateProjectTaskListOrder({ project_id, data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

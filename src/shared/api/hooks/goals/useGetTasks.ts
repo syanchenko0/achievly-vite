@@ -3,111 +3,62 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import type {
-  GetTasksQueryResponse,
-  GetTasksQueryParams,
-  GetTasks400,
-} from "../../models/goals/GetTasks";
-import { queryOptions, useQuery } from "@tanstack/react-query";
-import { getTasksQueryResponseSchema } from "../../zod/goals/getTasksSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import type { GetTasksQueryResponse, GetTasksQueryParams, GetTasks400 } from '../../models/goals/GetTasks.ts'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getTasksQueryKey = (params?: GetTasksQueryParams) =>
-  [{ url: "/goals/tasks" }, ...(params ? [params] : [])] as const;
+export const getTasksQueryKey = (params?: GetTasksQueryParams) => [{ url: '/goals/tasks' }, ...(params ? [params] : [])] as const
 
-export type GetTasksQueryKey = ReturnType<typeof getTasksQueryKey>;
+export type GetTasksQueryKey = ReturnType<typeof getTasksQueryKey>
 
 /**
  * @summary Get tasks
  * {@link /goals/tasks}
  */
-export async function getTasks(
-  { params }: { params?: GetTasksQueryParams },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const { client: request = client, ...requestConfig } = config;
+export async function getTasks({ params }: { params?: GetTasksQueryParams }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    GetTasksQueryResponse,
-    ResponseErrorConfig<GetTasks400>,
-    unknown
-  >({ method: "GET", url: `/goals/tasks`, params, ...requestConfig });
-  return getTasksQueryResponseSchema.parse(res.data);
+  const res = await request<GetTasksQueryResponse, ResponseErrorConfig<GetTasks400>, unknown>({ method: 'GET', url: `/goals/tasks`, params, ...requestConfig })
+  return res.data
 }
 
-export function getTasksQueryOptions(
-  { params }: { params?: GetTasksQueryParams },
-  config: Partial<RequestConfig> & { client?: typeof client } = {},
-) {
-  const queryKey = getTasksQueryKey(params);
-  return queryOptions<
-    GetTasksQueryResponse,
-    ResponseErrorConfig<GetTasks400>,
-    GetTasksQueryResponse,
-    typeof queryKey
-  >({
+export function getTasksQueryOptions({ params }: { params?: GetTasksQueryParams }, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const queryKey = getTasksQueryKey(params)
+  return queryOptions<GetTasksQueryResponse, ResponseErrorConfig<GetTasks400>, GetTasksQueryResponse, typeof queryKey>({
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal;
-      return getTasks({ params }, config);
+      config.signal = signal
+      return getTasks({ params }, config)
     },
-  });
+  })
 }
 
 /**
  * @summary Get tasks
  * {@link /goals/tasks}
  */
-export function useGetTasks<
-  TData = GetTasksQueryResponse,
-  TQueryData = GetTasksQueryResponse,
-  TQueryKey extends QueryKey = GetTasksQueryKey,
->(
+export function useGetTasks<TData = GetTasksQueryResponse, TQueryData = GetTasksQueryResponse, TQueryKey extends QueryKey = GetTasksQueryKey>(
   { params }: { params?: GetTasksQueryParams },
   options: {
-    query?: Partial<
-      QueryObserverOptions<
-        GetTasksQueryResponse,
-        ResponseErrorConfig<GetTasks400>,
-        TData,
-        TQueryData,
-        TQueryKey
-      >
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig> & { client?: typeof client };
+    query?: Partial<QueryObserverOptions<GetTasksQueryResponse, ResponseErrorConfig<GetTasks400>, TData, TQueryData, TQueryKey>> & { client?: QueryClient }
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const {
-    query: { client: queryClient, ...queryOptions } = {},
-    client: config = {},
-  } = options ?? {};
-  const queryKey = queryOptions?.queryKey ?? getTasksQueryKey(params);
+  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getTasksQueryKey(params)
 
   const query = useQuery(
     {
-      ...(getTasksQueryOptions(
-        { params },
-        config,
-      ) as unknown as QueryObserverOptions),
+      ...(getTasksQueryOptions({ params }, config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetTasks400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetTasks400>> & { queryKey: TQueryKey }
 
-  query.queryKey = queryKey as TQueryKey;
+  query.queryKey = queryKey as TQueryKey
 
-  return query;
+  return query
 }

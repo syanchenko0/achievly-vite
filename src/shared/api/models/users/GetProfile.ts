@@ -3,16 +3,16 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from "../BadRequest";
-import type { ProfileDto } from "../ProfileDto";
+import type { BadRequest } from '../BadRequest.ts'
+import type { ProfileDto } from '../ProfileDto.ts'
 
-export type GetProfile200 = ProfileDto;
+export type GetProfile200 = ProfileDto
 
-export type GetProfile404 = BadRequest;
+export type GetProfile404 = BadRequest
 
-export type GetProfileQueryResponse = GetProfile200;
+export type GetProfileQueryResponse = GetProfile200
 
 export type GetProfileQuery = {
-  Response: GetProfile200;
-  Errors: GetProfile404;
-};
+  Response: GetProfile200
+  Errors: GetProfile404
+}

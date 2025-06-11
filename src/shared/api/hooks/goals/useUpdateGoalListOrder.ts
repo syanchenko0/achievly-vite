@@ -3,29 +3,15 @@
  * Do not edit manually.
  */
 
-import client from "@/shared/api/axios-client";
-import type {
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@/shared/api/axios-client";
-import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
-import type {
-  UpdateGoalListOrderMutationRequest,
-  UpdateGoalListOrderMutationResponse,
-  UpdateGoalListOrder400,
-} from "../../models/goals/UpdateGoalListOrder";
-import { useMutation } from "@tanstack/react-query";
-import {
-  updateGoalListOrderMutationResponseSchema,
-  updateGoalListOrderMutationRequestSchema,
-} from "../../zod/goals/updateGoalListOrderSchema";
+import client from '@/shared/api/axios-client'
+import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
+import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import type { UpdateGoalListOrderMutationRequest, UpdateGoalListOrderMutationResponse, UpdateGoalListOrder400 } from '../../models/goals/UpdateGoalListOrder.ts'
+import { useMutation } from '@tanstack/react-query'
 
-export const updateGoalListOrderMutationKey = () =>
-  [{ url: "/goals/list_order" }] as const;
+export const updateGoalListOrderMutationKey = () => [{ url: '/goals/list_order' }] as const
 
-export type UpdateGoalListOrderMutationKey = ReturnType<
-  typeof updateGoalListOrderMutationKey
->;
+export type UpdateGoalListOrderMutationKey = ReturnType<typeof updateGoalListOrderMutationKey>
 
 /**
  * @summary Update goal list order
@@ -33,23 +19,17 @@ export type UpdateGoalListOrderMutationKey = ReturnType<
  */
 export async function updateGoalListOrder(
   { data }: { data?: UpdateGoalListOrderMutationRequest },
-  config: Partial<RequestConfig<UpdateGoalListOrderMutationRequest>> & {
-    client?: typeof client;
-  } = {},
+  config: Partial<RequestConfig<UpdateGoalListOrderMutationRequest>> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config;
+  const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    UpdateGoalListOrderMutationResponse,
-    ResponseErrorConfig<UpdateGoalListOrder400>,
-    UpdateGoalListOrderMutationRequest
-  >({
-    method: "POST",
+  const res = await request<UpdateGoalListOrderMutationResponse, ResponseErrorConfig<UpdateGoalListOrder400>, UpdateGoalListOrderMutationRequest>({
+    method: 'POST',
     url: `/goals/list_order`,
-    data: updateGoalListOrderMutationRequestSchema.parse(data),
+    data,
     ...requestConfig,
-  });
-  return updateGoalListOrderMutationResponseSchema.parse(res.data);
+  })
+  return res.data
 }
 
 /**
@@ -63,30 +43,22 @@ export function useUpdateGoalListOrder<TContext>(
       ResponseErrorConfig<UpdateGoalListOrder400>,
       { data?: UpdateGoalListOrderMutationRequest },
       TContext
-    > & { client?: QueryClient };
-    client?: Partial<RequestConfig<UpdateGoalListOrderMutationRequest>> & {
-      client?: typeof client;
-    };
+    > & { client?: QueryClient }
+    client?: Partial<RequestConfig<UpdateGoalListOrderMutationRequest>> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {};
-  const { client: queryClient, ...mutationOptions } = mutation;
-  const mutationKey =
-    mutationOptions.mutationKey ?? updateGoalListOrderMutationKey();
+  const { mutation = {}, client: config = {} } = options ?? {}
+  const { client: queryClient, ...mutationOptions } = mutation
+  const mutationKey = mutationOptions.mutationKey ?? updateGoalListOrderMutationKey()
 
-  return useMutation<
-    UpdateGoalListOrderMutationResponse,
-    ResponseErrorConfig<UpdateGoalListOrder400>,
-    { data?: UpdateGoalListOrderMutationRequest },
-    TContext
-  >(
+  return useMutation<UpdateGoalListOrderMutationResponse, ResponseErrorConfig<UpdateGoalListOrder400>, { data?: UpdateGoalListOrderMutationRequest }, TContext>(
     {
       mutationFn: async ({ data }) => {
-        return updateGoalListOrder({ data }, config);
+        return updateGoalListOrder({ data }, config)
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  );
+  )
 }

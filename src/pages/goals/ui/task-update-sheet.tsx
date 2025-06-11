@@ -5,7 +5,6 @@ import {
   getGoalsQueryKey,
   getTasksQueryKey,
   type GoalBodyTask,
-  goalBodyTaskSchema,
   type TaskDto,
   useDeleteTask,
   useUpdateTask,
@@ -40,6 +39,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
+import { goalBodyTaskSchema } from "@/shared/zod/goalBodyTaskSchema";
 
 function TaskUpdateSheet({
   open,
