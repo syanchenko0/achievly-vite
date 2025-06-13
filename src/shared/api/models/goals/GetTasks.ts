@@ -3,24 +3,24 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { TaskDto } from '../TaskDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { TaskDto } from "../TaskDto";
 
 export type GetTasksQueryParams = {
   /**
    * @type string
    */
-  status?: string | null
-}
+  status?: string | null;
+};
 
-export type GetTasks200 = TaskDto[]
+export type GetTasks200 = TaskDto[];
 
-export type GetTasks400 = BadRequest
+export type GetTasks400 = BadRequest;
 
-export type GetTasksQueryResponse = GetTasks200
+export type GetTasksQueryResponse = GetTasks200;
 
 export type GetTasksQuery = {
-  Response: GetTasks200
-  QueryParams: GetTasksQueryParams
-  Errors: GetTasks400
-}
+  Response: GetTasks200;
+  QueryParams: GetTasksQueryParams;
+  Errors: GetTasks400;
+};

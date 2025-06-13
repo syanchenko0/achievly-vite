@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { ProjectDto } from '../ProjectDto.ts'
-import type { UpdateProjectBody } from '../UpdateProjectBody.ts'
+import type { BadRequest } from "../BadRequest";
+import type { ProjectDto } from "../ProjectDto";
+import type { UpdateProjectBody } from "../UpdateProjectBody";
 
 export type UpdateProjectPathParams = {
   /**
    * @type number
    */
-  project_id: number
-}
+  project_id: number;
+};
 
-export type UpdateProject200 = ProjectDto
+export type UpdateProject200 = ProjectDto;
 
-export type UpdateProject400 = BadRequest
+export type UpdateProject400 = BadRequest;
 
-export type UpdateProjectMutationRequest = UpdateProjectBody
+export type UpdateProjectMutationRequest = UpdateProjectBody;
 
-export type UpdateProjectMutationResponse = UpdateProject200
+export type UpdateProjectMutationResponse = UpdateProject200;
 
 export type UpdateProjectMutation = {
-  Response: UpdateProject200
-  Request: UpdateProjectMutationRequest
-  PathParams: UpdateProjectPathParams
-  Errors: UpdateProject400
-}
+  Response: UpdateProject200;
+  Request: UpdateProjectMutationRequest;
+  PathParams: UpdateProjectPathParams;
+  Errors: UpdateProject400;
+};

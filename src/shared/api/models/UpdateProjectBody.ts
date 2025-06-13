@@ -3,17 +3,17 @@
  * Do not edit manually.
  */
 
-import type { ProjectColumn } from './ProjectColumn.ts'
+import type { ProjectColumn } from "./ProjectColumn";
 
 export type UpdateProjectBody = {
   /**
    * @description Название проекта
    * @type string
    */
-  name?: string | null
+  name?: string | null;
   /**
    * @description Описание проекта
    * @type array
    */
-  columns?: ProjectColumn[] | null
-}
+  columns?: ProjectColumn[] | null;
+};

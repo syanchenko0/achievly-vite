@@ -3,16 +3,16 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { GoalDto } from '../GoalDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { GoalDto } from "../GoalDto";
 
-export type GetGoalsGeneralInfo200 = GoalDto[]
+export type GetGoalsGeneralInfo200 = GoalDto[];
 
-export type GetGoalsGeneralInfo400 = BadRequest
+export type GetGoalsGeneralInfo400 = BadRequest;
 
-export type GetGoalsGeneralInfoQueryResponse = GetGoalsGeneralInfo200
+export type GetGoalsGeneralInfoQueryResponse = GetGoalsGeneralInfo200;
 
 export type GetGoalsGeneralInfoQuery = {
-  Response: GetGoalsGeneralInfo200
-  Errors: GetGoalsGeneralInfo400
-}
+  Response: GetGoalsGeneralInfo200;
+  Errors: GetGoalsGeneralInfo400;
+};

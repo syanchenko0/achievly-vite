@@ -3,24 +3,24 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { ProjectDto } from '../ProjectDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { ProjectDto } from "../ProjectDto";
 
 export type GetProjectPathParams = {
   /**
    * @type string
    */
-  project_id: string
-}
+  project_id: string;
+};
 
-export type GetProject200 = ProjectDto
+export type GetProject200 = ProjectDto;
 
-export type GetProject400 = BadRequest
+export type GetProject400 = BadRequest;
 
-export type GetProjectQueryResponse = GetProject200
+export type GetProjectQueryResponse = GetProject200;
 
 export type GetProjectQuery = {
-  Response: GetProject200
-  PathParams: GetProjectPathParams
-  Errors: GetProject400
-}
+  Response: GetProject200;
+  PathParams: GetProjectPathParams;
+  Errors: GetProject400;
+};

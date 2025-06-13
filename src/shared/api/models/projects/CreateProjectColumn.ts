@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { CreateProjectColumnBody } from '../CreateProjectColumnBody.ts'
-import type { ProjectColumn } from '../ProjectColumn.ts'
+import type { BadRequest } from "../BadRequest";
+import type { CreateProjectColumnBody } from "../CreateProjectColumnBody";
+import type { ProjectColumn } from "../ProjectColumn";
 
 export type CreateProjectColumnPathParams = {
   /**
    * @type number
    */
-  project_id: number
-}
+  project_id: number;
+};
 
-export type CreateProjectColumn200 = ProjectColumn
+export type CreateProjectColumn200 = ProjectColumn;
 
-export type CreateProjectColumn400 = BadRequest
+export type CreateProjectColumn400 = BadRequest;
 
-export type CreateProjectColumnMutationRequest = CreateProjectColumnBody
+export type CreateProjectColumnMutationRequest = CreateProjectColumnBody;
 
-export type CreateProjectColumnMutationResponse = CreateProjectColumn200
+export type CreateProjectColumnMutationResponse = CreateProjectColumn200;
 
 export type CreateProjectColumnMutation = {
-  Response: CreateProjectColumn200
-  Request: CreateProjectColumnMutationRequest
-  PathParams: CreateProjectColumnPathParams
-  Errors: CreateProjectColumn400
-}
+  Response: CreateProjectColumn200;
+  Request: CreateProjectColumnMutationRequest;
+  PathParams: CreateProjectColumnPathParams;
+  Errors: CreateProjectColumn400;
+};

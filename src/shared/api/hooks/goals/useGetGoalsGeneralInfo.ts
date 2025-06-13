@@ -3,40 +3,67 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
-import type { GetGoalsGeneralInfoQueryResponse, GetGoalsGeneralInfo400 } from '../../models/goals/GetGoalsGeneralInfo.ts'
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type {
+  QueryKey,
+  QueryClient,
+  QueryObserverOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import type {
+  GetGoalsGeneralInfoQueryResponse,
+  GetGoalsGeneralInfo400,
+} from "../../models/goals/GetGoalsGeneralInfo";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
-export const getGoalsGeneralInfoQueryKey = () => [{ url: '/goals/general_info' }] as const
+export const getGoalsGeneralInfoQueryKey = () =>
+  [{ url: "/goals/general_info" }] as const;
 
-export type GetGoalsGeneralInfoQueryKey = ReturnType<typeof getGoalsGeneralInfoQueryKey>
+export type GetGoalsGeneralInfoQueryKey = ReturnType<
+  typeof getGoalsGeneralInfoQueryKey
+>;
 
 /**
  * @summary Get goals general info
  * {@link /goals/general_info}
  */
-export async function getGoalsGeneralInfo(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const { client: request = client, ...requestConfig } = config
+export async function getGoalsGeneralInfo(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<GetGoalsGeneralInfoQueryResponse, ResponseErrorConfig<GetGoalsGeneralInfo400>, unknown>({
-    method: 'GET',
+  const res = await request<
+    GetGoalsGeneralInfoQueryResponse,
+    ResponseErrorConfig<GetGoalsGeneralInfo400>,
+    unknown
+  >({
+    method: "GET",
     url: `/goals/general_info`,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
-export function getGoalsGeneralInfoQueryOptions(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const queryKey = getGoalsGeneralInfoQueryKey()
-  return queryOptions<GetGoalsGeneralInfoQueryResponse, ResponseErrorConfig<GetGoalsGeneralInfo400>, GetGoalsGeneralInfoQueryResponse, typeof queryKey>({
+export function getGoalsGeneralInfoQueryOptions(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const queryKey = getGoalsGeneralInfoQueryKey();
+  return queryOptions<
+    GetGoalsGeneralInfoQueryResponse,
+    ResponseErrorConfig<GetGoalsGeneralInfo400>,
+    GetGoalsGeneralInfoQueryResponse,
+    typeof queryKey
+  >({
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal
-      return getGoalsGeneralInfo(config)
+      config.signal = signal;
+      return getGoalsGeneralInfo(config);
     },
-  })
+  });
 }
 
 /**
@@ -49,25 +76,40 @@ export function useGetGoalsGeneralInfo<
   TQueryKey extends QueryKey = GetGoalsGeneralInfoQueryKey,
 >(
   options: {
-    query?: Partial<QueryObserverOptions<GetGoalsGeneralInfoQueryResponse, ResponseErrorConfig<GetGoalsGeneralInfo400>, TData, TQueryData, TQueryKey>> & {
-      client?: QueryClient
-    }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    query?: Partial<
+      QueryObserverOptions<
+        GetGoalsGeneralInfoQueryResponse,
+        ResponseErrorConfig<GetGoalsGeneralInfo400>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & {
+      client?: QueryClient;
+    };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? getGoalsGeneralInfoQueryKey()
+  const {
+    query: { client: queryClient, ...queryOptions } = {},
+    client: config = {},
+  } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGoalsGeneralInfoQueryKey();
 
   const query = useQuery(
     {
-      ...(getGoalsGeneralInfoQueryOptions(config) as unknown as QueryObserverOptions),
+      ...(getGoalsGeneralInfoQueryOptions(
+        config,
+      ) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetGoalsGeneralInfo400>> & { queryKey: TQueryKey }
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetGoalsGeneralInfo400>> & {
+    queryKey: TQueryKey;
+  };
 
-  query.queryKey = queryKey as TQueryKey
+  query.queryKey = queryKey as TQueryKey;
 
-  return query
+  return query;
 }

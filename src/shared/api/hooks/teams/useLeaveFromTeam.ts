@@ -3,32 +3,46 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { LeaveFromTeamMutationResponse, LeaveFromTeamPathParams, LeaveFromTeam400 } from '../../models/teams/LeaveFromTeam.ts'
-import { useMutation } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  LeaveFromTeamMutationResponse,
+  LeaveFromTeamPathParams,
+  LeaveFromTeam400,
+} from "../../models/teams/LeaveFromTeam";
+import { useMutation } from "@tanstack/react-query";
 
-export const leaveFromTeamMutationKey = () => [{ url: '/teams/{team_id}/leave' }] as const
+export const leaveFromTeamMutationKey = () =>
+  [{ url: "/teams/{team_id}/leave" }] as const;
 
-export type LeaveFromTeamMutationKey = ReturnType<typeof leaveFromTeamMutationKey>
+export type LeaveFromTeamMutationKey = ReturnType<
+  typeof leaveFromTeamMutationKey
+>;
 
 /**
  * @summary Leave from team
  * {@link /teams/:team_id/leave}
  */
 export async function leaveFromTeam(
-  { team_id }: { team_id: LeaveFromTeamPathParams['team_id'] },
+  { team_id }: { team_id: LeaveFromTeamPathParams["team_id"] },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<LeaveFromTeamMutationResponse, ResponseErrorConfig<LeaveFromTeam400>, unknown>({
-    method: 'POST',
+  const res = await request<
+    LeaveFromTeamMutationResponse,
+    ResponseErrorConfig<LeaveFromTeam400>,
+    unknown
+  >({
+    method: "POST",
     url: `/teams/${team_id}/leave`,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 /**
@@ -40,24 +54,29 @@ export function useLeaveFromTeam<TContext>(
     mutation?: UseMutationOptions<
       LeaveFromTeamMutationResponse,
       ResponseErrorConfig<LeaveFromTeam400>,
-      { team_id: LeaveFromTeamPathParams['team_id'] },
+      { team_id: LeaveFromTeamPathParams["team_id"] },
       TContext
-    > & { client?: QueryClient }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? leaveFromTeamMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? leaveFromTeamMutationKey();
 
-  return useMutation<LeaveFromTeamMutationResponse, ResponseErrorConfig<LeaveFromTeam400>, { team_id: LeaveFromTeamPathParams['team_id'] }, TContext>(
+  return useMutation<
+    LeaveFromTeamMutationResponse,
+    ResponseErrorConfig<LeaveFromTeam400>,
+    { team_id: LeaveFromTeamPathParams["team_id"] },
+    TContext
+  >(
     {
       mutationFn: async ({ team_id }) => {
-        return leaveFromTeam({ team_id }, config)
+        return leaveFromTeam({ team_id }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

@@ -3,38 +3,38 @@
  * Do not edit manually.
  */
 
-import type { ProjectColumn } from './ProjectColumn.ts'
-import type { ProjectRightsDto } from './ProjectRightsDto.ts'
-import type { ProjectTaskDto } from './ProjectTaskDto.ts'
-import type { TeamDto } from './TeamDto.ts'
+import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectRightsDto } from "./ProjectRightsDto";
+import type { ProjectTaskDto } from "./ProjectTaskDto";
+import type { TeamDto } from "./TeamDto";
 
 export type ProjectDto = {
   /**
    * @description ID проекта
    * @type number
    */
-  id: number
+  id: number;
   /**
    * @description Название проекта
    * @type string
    */
-  name: string
+  name: string;
   /**
    * @description Столбцы проекта
    * @type array
    */
-  columns: ProjectColumn[]
+  columns: ProjectColumn[];
   /**
    * @description Команда проекта
    */
-  team: TeamDto
+  team: TeamDto;
   /**
    * @description Права пользователя в текущем проекте
    */
-  user_project_rights?: ProjectRightsDto
+  user_project_rights?: ProjectRightsDto;
   /**
    * @description Команда проекта
    * @type array
    */
-  project_tasks?: ProjectTaskDto[] | null
-}
+  project_tasks?: ProjectTaskDto[] | null;
+};

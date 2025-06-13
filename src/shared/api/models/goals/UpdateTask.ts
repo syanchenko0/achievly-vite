@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { UpdateResult } from '../UpdateResult.ts'
-import type { UpdateTaskBody } from '../UpdateTaskBody.ts'
+import type { BadRequest } from "../BadRequest";
+import type { UpdateResult } from "../UpdateResult";
+import type { UpdateTaskBody } from "../UpdateTaskBody";
 
 export type UpdateTaskPathParams = {
   /**
    * @type string
    */
-  task_id: string
-}
+  task_id: string;
+};
 
-export type UpdateTask200 = UpdateResult
+export type UpdateTask200 = UpdateResult;
 
-export type UpdateTask400 = BadRequest
+export type UpdateTask400 = BadRequest;
 
-export type UpdateTaskMutationRequest = UpdateTaskBody
+export type UpdateTaskMutationRequest = UpdateTaskBody;
 
-export type UpdateTaskMutationResponse = UpdateTask200
+export type UpdateTaskMutationResponse = UpdateTask200;
 
 export type UpdateTaskMutation = {
-  Response: UpdateTask200
-  Request: UpdateTaskMutationRequest
-  PathParams: UpdateTaskPathParams
-  Errors: UpdateTask400
-}
+  Response: UpdateTask200;
+  Request: UpdateTaskMutationRequest;
+  PathParams: UpdateTaskPathParams;
+  Errors: UpdateTask400;
+};

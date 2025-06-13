@@ -3,20 +3,26 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import type {
   UpdateTeamMemberMutationRequest,
   UpdateTeamMemberMutationResponse,
   UpdateTeamMemberPathParams,
   UpdateTeamMember400,
-} from '../../models/teams/UpdateTeamMember.ts'
-import { useMutation } from '@tanstack/react-query'
+} from "../../models/teams/UpdateTeamMember";
+import { useMutation } from "@tanstack/react-query";
 
-export const updateTeamMemberMutationKey = () => [{ url: '/teams/{team_id}/members/{member_id}' }] as const
+export const updateTeamMemberMutationKey = () =>
+  [{ url: "/teams/{team_id}/members/{member_id}" }] as const;
 
-export type UpdateTeamMemberMutationKey = ReturnType<typeof updateTeamMemberMutationKey>
+export type UpdateTeamMemberMutationKey = ReturnType<
+  typeof updateTeamMemberMutationKey
+>;
 
 /**
  * @summary Update team member
@@ -27,18 +33,28 @@ export async function updateTeamMember(
     member_id,
     team_id,
     data,
-  }: { member_id: UpdateTeamMemberPathParams['member_id']; team_id: UpdateTeamMemberPathParams['team_id']; data: UpdateTeamMemberMutationRequest },
-  config: Partial<RequestConfig<UpdateTeamMemberMutationRequest>> & { client?: typeof client } = {},
+  }: {
+    member_id: UpdateTeamMemberPathParams["member_id"];
+    team_id: UpdateTeamMemberPathParams["team_id"];
+    data: UpdateTeamMemberMutationRequest;
+  },
+  config: Partial<RequestConfig<UpdateTeamMemberMutationRequest>> & {
+    client?: typeof client;
+  } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<UpdateTeamMemberMutationResponse, ResponseErrorConfig<UpdateTeamMember400>, UpdateTeamMemberMutationRequest>({
-    method: 'PATCH',
+  const res = await request<
+    UpdateTeamMemberMutationResponse,
+    ResponseErrorConfig<UpdateTeamMember400>,
+    UpdateTeamMemberMutationRequest
+  >({
+    method: "PATCH",
     url: `/teams/${team_id}/members/${member_id}`,
     data,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 /**
@@ -50,29 +66,40 @@ export function useUpdateTeamMember<TContext>(
     mutation?: UseMutationOptions<
       UpdateTeamMemberMutationResponse,
       ResponseErrorConfig<UpdateTeamMember400>,
-      { member_id: UpdateTeamMemberPathParams['member_id']; team_id: UpdateTeamMemberPathParams['team_id']; data: UpdateTeamMemberMutationRequest },
+      {
+        member_id: UpdateTeamMemberPathParams["member_id"];
+        team_id: UpdateTeamMemberPathParams["team_id"];
+        data: UpdateTeamMemberMutationRequest;
+      },
       TContext
-    > & { client?: QueryClient }
-    client?: Partial<RequestConfig<UpdateTeamMemberMutationRequest>> & { client?: typeof client }
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<UpdateTeamMemberMutationRequest>> & {
+      client?: typeof client;
+    };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? updateTeamMemberMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? updateTeamMemberMutationKey();
 
   return useMutation<
     UpdateTeamMemberMutationResponse,
     ResponseErrorConfig<UpdateTeamMember400>,
-    { member_id: UpdateTeamMemberPathParams['member_id']; team_id: UpdateTeamMemberPathParams['team_id']; data: UpdateTeamMemberMutationRequest },
+    {
+      member_id: UpdateTeamMemberPathParams["member_id"];
+      team_id: UpdateTeamMemberPathParams["team_id"];
+      data: UpdateTeamMemberMutationRequest;
+    },
     TContext
   >(
     {
       mutationFn: async ({ member_id, team_id, data }) => {
-        return updateTeamMember({ member_id, team_id, data }, config)
+        return updateTeamMember({ member_id, team_id, data }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

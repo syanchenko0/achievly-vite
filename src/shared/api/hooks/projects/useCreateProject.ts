@@ -3,39 +3,53 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import type {
   CreateProjectMutationRequest,
   CreateProjectMutationResponse,
   CreateProjectQueryParams,
   CreateProject400,
-} from '../../models/projects/CreateProject.ts'
-import { useMutation } from '@tanstack/react-query'
+} from "../../models/projects/CreateProject";
+import { useMutation } from "@tanstack/react-query";
 
-export const createProjectMutationKey = () => [{ url: '/projects' }] as const
+export const createProjectMutationKey = () => [{ url: "/projects" }] as const;
 
-export type CreateProjectMutationKey = ReturnType<typeof createProjectMutationKey>
+export type CreateProjectMutationKey = ReturnType<
+  typeof createProjectMutationKey
+>;
 
 /**
  * @summary Create project
  * {@link /projects}
  */
 export async function createProject(
-  { data, params }: { data: CreateProjectMutationRequest; params: CreateProjectQueryParams },
-  config: Partial<RequestConfig<CreateProjectMutationRequest>> & { client?: typeof client } = {},
+  {
+    data,
+    params,
+  }: { data: CreateProjectMutationRequest; params: CreateProjectQueryParams },
+  config: Partial<RequestConfig<CreateProjectMutationRequest>> & {
+    client?: typeof client;
+  } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<CreateProjectMutationResponse, ResponseErrorConfig<CreateProject400>, CreateProjectMutationRequest>({
-    method: 'POST',
+  const res = await request<
+    CreateProjectMutationResponse,
+    ResponseErrorConfig<CreateProject400>,
+    CreateProjectMutationRequest
+  >({
+    method: "POST",
     url: `/projects`,
     params,
     data,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 /**
@@ -49,13 +63,15 @@ export function useCreateProject<TContext>(
       ResponseErrorConfig<CreateProject400>,
       { data: CreateProjectMutationRequest; params: CreateProjectQueryParams },
       TContext
-    > & { client?: QueryClient }
-    client?: Partial<RequestConfig<CreateProjectMutationRequest>> & { client?: typeof client }
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<CreateProjectMutationRequest>> & {
+      client?: typeof client;
+    };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? createProjectMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? createProjectMutationKey();
 
   return useMutation<
     CreateProjectMutationResponse,
@@ -65,11 +81,11 @@ export function useCreateProject<TContext>(
   >(
     {
       mutationFn: async ({ data, params }) => {
-        return createProject({ data, params }, config)
+        return createProject({ data, params }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

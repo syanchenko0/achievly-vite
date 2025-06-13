@@ -3,23 +3,23 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
+import type { BadRequest } from "../BadRequest";
 
 export type GetTeamJoinLinkPathParams = {
   /**
    * @type string
    */
-  team_id: string
-}
+  team_id: string;
+};
 
-export type GetTeamJoinLink200 = string
+export type GetTeamJoinLink200 = string;
 
-export type GetTeamJoinLink400 = BadRequest
+export type GetTeamJoinLink400 = BadRequest;
 
-export type GetTeamJoinLinkQueryResponse = GetTeamJoinLink200
+export type GetTeamJoinLinkQueryResponse = GetTeamJoinLink200;
 
 export type GetTeamJoinLinkQuery = {
-  Response: GetTeamJoinLink200
-  PathParams: GetTeamJoinLinkPathParams
-  Errors: GetTeamJoinLink400
-}
+  Response: GetTeamJoinLink200;
+  PathParams: GetTeamJoinLinkPathParams;
+  Errors: GetTeamJoinLink400;
+};

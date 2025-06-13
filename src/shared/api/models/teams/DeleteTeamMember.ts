@@ -3,27 +3,27 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
+import type { BadRequest } from "../BadRequest";
 
 export type DeleteTeamMemberPathParams = {
   /**
    * @type string
    */
-  member_id: string
+  member_id: string;
   /**
    * @type string
    */
-  team_id: string
-}
+  team_id: string;
+};
 
-export type DeleteTeamMember200 = unknown
+export type DeleteTeamMember200 = unknown;
 
-export type DeleteTeamMember400 = BadRequest
+export type DeleteTeamMember400 = BadRequest;
 
-export type DeleteTeamMemberMutationResponse = DeleteTeamMember200
+export type DeleteTeamMemberMutationResponse = DeleteTeamMember200;
 
 export type DeleteTeamMemberMutation = {
-  Response: DeleteTeamMember200
-  PathParams: DeleteTeamMemberPathParams
-  Errors: DeleteTeamMember400
-}
+  Response: DeleteTeamMember200;
+  PathParams: DeleteTeamMemberPathParams;
+  Errors: DeleteTeamMember400;
+};

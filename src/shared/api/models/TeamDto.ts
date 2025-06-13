@@ -3,33 +3,33 @@
  * Do not edit manually.
  */
 
-import type { MemberDto } from './MemberDto.ts'
-import type { ProjectRightsDto } from './ProjectRightsDto.ts'
+import type { MemberDto } from "./MemberDto";
+import type { ProjectRightsDto } from "./ProjectRightsDto";
 
 export type TeamDto = {
   /**
    * @description ID команды
    * @type number
    */
-  id: number
+  id: number;
   /**
    * @description Наименование команды
    * @type string
    */
-  name: string
+  name: string;
   /**
    * @description Роль пользователя в команде
    * @type string
    */
-  user_role: string
+  user_role: string;
   /**
    * @description Массив прав в проектах
    * @type array | undefined
    */
-  user_projects_rights?: ProjectRightsDto[]
+  user_projects_rights?: ProjectRightsDto[];
   /**
    * @description Участники команды
    * @type array
    */
-  members: MemberDto[]
-}
+  members: MemberDto[];
+};

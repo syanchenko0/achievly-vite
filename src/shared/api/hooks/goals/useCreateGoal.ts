@@ -3,15 +3,22 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { CreateGoalMutationRequest, CreateGoalMutationResponse, CreateGoal400 } from '../../models/goals/CreateGoal.ts'
-import { useMutation } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  CreateGoalMutationRequest,
+  CreateGoalMutationResponse,
+  CreateGoal400,
+} from "../../models/goals/CreateGoal";
+import { useMutation } from "@tanstack/react-query";
 
-export const createGoalMutationKey = () => [{ url: '/goals' }] as const
+export const createGoalMutationKey = () => [{ url: "/goals" }] as const;
 
-export type CreateGoalMutationKey = ReturnType<typeof createGoalMutationKey>
+export type CreateGoalMutationKey = ReturnType<typeof createGoalMutationKey>;
 
 /**
  * @summary Create goal
@@ -19,17 +26,23 @@ export type CreateGoalMutationKey = ReturnType<typeof createGoalMutationKey>
  */
 export async function createGoal(
   { data }: { data: CreateGoalMutationRequest },
-  config: Partial<RequestConfig<CreateGoalMutationRequest>> & { client?: typeof client } = {},
+  config: Partial<RequestConfig<CreateGoalMutationRequest>> & {
+    client?: typeof client;
+  } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<CreateGoalMutationResponse, ResponseErrorConfig<CreateGoal400>, CreateGoalMutationRequest>({
-    method: 'POST',
+  const res = await request<
+    CreateGoalMutationResponse,
+    ResponseErrorConfig<CreateGoal400>,
+    CreateGoalMutationRequest
+  >({
+    method: "POST",
     url: `/goals`,
     data,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 /**
@@ -38,24 +51,36 @@ export async function createGoal(
  */
 export function useCreateGoal<TContext>(
   options: {
-    mutation?: UseMutationOptions<CreateGoalMutationResponse, ResponseErrorConfig<CreateGoal400>, { data: CreateGoalMutationRequest }, TContext> & {
-      client?: QueryClient
-    }
-    client?: Partial<RequestConfig<CreateGoalMutationRequest>> & { client?: typeof client }
+    mutation?: UseMutationOptions<
+      CreateGoalMutationResponse,
+      ResponseErrorConfig<CreateGoal400>,
+      { data: CreateGoalMutationRequest },
+      TContext
+    > & {
+      client?: QueryClient;
+    };
+    client?: Partial<RequestConfig<CreateGoalMutationRequest>> & {
+      client?: typeof client;
+    };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? createGoalMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? createGoalMutationKey();
 
-  return useMutation<CreateGoalMutationResponse, ResponseErrorConfig<CreateGoal400>, { data: CreateGoalMutationRequest }, TContext>(
+  return useMutation<
+    CreateGoalMutationResponse,
+    ResponseErrorConfig<CreateGoal400>,
+    { data: CreateGoalMutationRequest },
+    TContext
+  >(
     {
       mutationFn: async ({ data }) => {
-        return createGoal({ data }, config)
+        return createGoal({ data }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

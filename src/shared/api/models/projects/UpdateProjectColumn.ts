@@ -3,32 +3,32 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { ProjectColumn } from '../ProjectColumn.ts'
-import type { ProjectDto } from '../ProjectDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { ProjectColumn } from "../ProjectColumn";
+import type { ProjectDto } from "../ProjectDto";
 
 export type UpdateProjectColumnPathParams = {
   /**
    * @type string
    */
-  column_id: string
+  column_id: string;
   /**
    * @type number
    */
-  project_id: number
-}
+  project_id: number;
+};
 
-export type UpdateProjectColumn200 = ProjectDto
+export type UpdateProjectColumn200 = ProjectDto;
 
-export type UpdateProjectColumn400 = BadRequest
+export type UpdateProjectColumn400 = BadRequest;
 
-export type UpdateProjectColumnMutationRequest = ProjectColumn
+export type UpdateProjectColumnMutationRequest = ProjectColumn;
 
-export type UpdateProjectColumnMutationResponse = UpdateProjectColumn200
+export type UpdateProjectColumnMutationResponse = UpdateProjectColumn200;
 
 export type UpdateProjectColumnMutation = {
-  Response: UpdateProjectColumn200
-  Request: UpdateProjectColumnMutationRequest
-  PathParams: UpdateProjectColumnPathParams
-  Errors: UpdateProjectColumn400
-}
+  Response: UpdateProjectColumn200;
+  Request: UpdateProjectColumnMutationRequest;
+  PathParams: UpdateProjectColumnPathParams;
+  Errors: UpdateProjectColumn400;
+};

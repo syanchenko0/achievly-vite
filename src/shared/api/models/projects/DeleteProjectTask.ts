@@ -3,28 +3,28 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { ProjectTaskDto } from '../ProjectTaskDto.ts'
+import type { BadRequest } from "../BadRequest";
+import type { ProjectTaskDto } from "../ProjectTaskDto";
 
 export type DeleteProjectTaskPathParams = {
   /**
    * @type number
    */
-  task_id: number
+  task_id: number;
   /**
    * @type string
    */
-  project_id: string
-}
+  project_id: string;
+};
 
-export type DeleteProjectTask200 = ProjectTaskDto
+export type DeleteProjectTask200 = ProjectTaskDto;
 
-export type DeleteProjectTask400 = BadRequest
+export type DeleteProjectTask400 = BadRequest;
 
-export type DeleteProjectTaskMutationResponse = DeleteProjectTask200
+export type DeleteProjectTaskMutationResponse = DeleteProjectTask200;
 
 export type DeleteProjectTaskMutation = {
-  Response: DeleteProjectTask200
-  PathParams: DeleteProjectTaskPathParams
-  Errors: DeleteProjectTask400
-}
+  Response: DeleteProjectTask200;
+  PathParams: DeleteProjectTaskPathParams;
+  Errors: DeleteProjectTask400;
+};

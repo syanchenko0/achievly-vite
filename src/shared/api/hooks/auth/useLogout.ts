@@ -3,25 +3,37 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { LogoutMutationResponse, Logout400 } from '../../models/auth/Logout.ts'
-import { useMutation } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  LogoutMutationResponse,
+  Logout400,
+} from "../../models/auth/Logout";
+import { useMutation } from "@tanstack/react-query";
 
-export const logoutMutationKey = () => [{ url: '/auth/logout' }] as const
+export const logoutMutationKey = () => [{ url: "/auth/logout" }] as const;
 
-export type LogoutMutationKey = ReturnType<typeof logoutMutationKey>
+export type LogoutMutationKey = ReturnType<typeof logoutMutationKey>;
 
 /**
  * @summary logout
  * {@link /auth/logout}
  */
-export async function logout(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const { client: request = client, ...requestConfig } = config
+export async function logout(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<LogoutMutationResponse, ResponseErrorConfig<Logout400>, unknown>({ method: 'POST', url: `/auth/logout`, ...requestConfig })
-  return res.data
+  const res = await request<
+    LogoutMutationResponse,
+    ResponseErrorConfig<Logout400>,
+    unknown
+  >({ method: "POST", url: `/auth/logout`, ...requestConfig });
+  return res.data;
 }
 
 /**
@@ -30,22 +42,32 @@ export async function logout(config: Partial<RequestConfig> & { client?: typeof 
  */
 export function useLogout<TContext>(
   options: {
-    mutation?: UseMutationOptions<LogoutMutationResponse, ResponseErrorConfig<Logout400>, void, TContext> & { client?: QueryClient }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    mutation?: UseMutationOptions<
+      LogoutMutationResponse,
+      ResponseErrorConfig<Logout400>,
+      void,
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? logoutMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? logoutMutationKey();
 
-  return useMutation<LogoutMutationResponse, ResponseErrorConfig<Logout400>, void, TContext>(
+  return useMutation<
+    LogoutMutationResponse,
+    ResponseErrorConfig<Logout400>,
+    void,
+    TContext
+  >(
     {
       mutationFn: async () => {
-        return logout(config)
+        return logout(config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

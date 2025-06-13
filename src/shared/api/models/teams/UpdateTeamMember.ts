@@ -3,31 +3,31 @@
  * Do not edit manually.
  */
 
-import type { BadRequest } from '../BadRequest.ts'
-import type { UpdateTeamMemberBody } from '../UpdateTeamMemberBody.ts'
+import type { BadRequest } from "../BadRequest";
+import type { UpdateTeamMemberBody } from "../UpdateTeamMemberBody";
 
 export type UpdateTeamMemberPathParams = {
   /**
    * @type string
    */
-  member_id: string
+  member_id: string;
   /**
    * @type string
    */
-  team_id: string
-}
+  team_id: string;
+};
 
-export type UpdateTeamMember200 = unknown
+export type UpdateTeamMember200 = unknown;
 
-export type UpdateTeamMember400 = BadRequest
+export type UpdateTeamMember400 = BadRequest;
 
-export type UpdateTeamMemberMutationRequest = UpdateTeamMemberBody
+export type UpdateTeamMemberMutationRequest = UpdateTeamMemberBody;
 
-export type UpdateTeamMemberMutationResponse = UpdateTeamMember200
+export type UpdateTeamMemberMutationResponse = UpdateTeamMember200;
 
 export type UpdateTeamMemberMutation = {
-  Response: UpdateTeamMember200
-  Request: UpdateTeamMemberMutationRequest
-  PathParams: UpdateTeamMemberPathParams
-  Errors: UpdateTeamMember400
-}
+  Response: UpdateTeamMember200;
+  Request: UpdateTeamMemberMutationRequest;
+  PathParams: UpdateTeamMemberPathParams;
+  Errors: UpdateTeamMember400;
+};

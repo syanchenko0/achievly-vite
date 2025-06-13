@@ -3,61 +3,102 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
-import type { CheckAuthQueryResponse, CheckAuth401 } from '../../models/auth/CheckAuth.ts'
-import { queryOptions, useQuery } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type {
+  QueryKey,
+  QueryClient,
+  QueryObserverOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import type {
+  CheckAuthQueryResponse,
+  CheckAuth401,
+} from "../../models/auth/CheckAuth";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
-export const checkAuthQueryKey = () => [{ url: '/auth/check' }] as const
+export const checkAuthQueryKey = () => [{ url: "/auth/check" }] as const;
 
-export type CheckAuthQueryKey = ReturnType<typeof checkAuthQueryKey>
+export type CheckAuthQueryKey = ReturnType<typeof checkAuthQueryKey>;
 
 /**
  * @summary Проверка авторизации
  * {@link /auth/check}
  */
-export async function checkAuth(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const { client: request = client, ...requestConfig } = config
+export async function checkAuth(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<CheckAuthQueryResponse, ResponseErrorConfig<CheckAuth401>, unknown>({ method: 'GET', url: `/auth/check`, ...requestConfig })
-  return res.data
+  const res = await request<
+    CheckAuthQueryResponse,
+    ResponseErrorConfig<CheckAuth401>,
+    unknown
+  >({ method: "GET", url: `/auth/check`, ...requestConfig });
+  return res.data;
 }
 
-export function checkAuthQueryOptions(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
-  const queryKey = checkAuthQueryKey()
-  return queryOptions<CheckAuthQueryResponse, ResponseErrorConfig<CheckAuth401>, CheckAuthQueryResponse, typeof queryKey>({
+export function checkAuthQueryOptions(
+  config: Partial<RequestConfig> & { client?: typeof client } = {},
+) {
+  const queryKey = checkAuthQueryKey();
+  return queryOptions<
+    CheckAuthQueryResponse,
+    ResponseErrorConfig<CheckAuth401>,
+    CheckAuthQueryResponse,
+    typeof queryKey
+  >({
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal
-      return checkAuth(config)
+      config.signal = signal;
+      return checkAuth(config);
     },
-  })
+  });
 }
 
 /**
  * @summary Проверка авторизации
  * {@link /auth/check}
  */
-export function useCheckAuth<TData = CheckAuthQueryResponse, TQueryData = CheckAuthQueryResponse, TQueryKey extends QueryKey = CheckAuthQueryKey>(
+export function useCheckAuth<
+  TData = CheckAuthQueryResponse,
+  TQueryData = CheckAuthQueryResponse,
+  TQueryKey extends QueryKey = CheckAuthQueryKey,
+>(
   options: {
-    query?: Partial<QueryObserverOptions<CheckAuthQueryResponse, ResponseErrorConfig<CheckAuth401>, TData, TQueryData, TQueryKey>> & { client?: QueryClient }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    query?: Partial<
+      QueryObserverOptions<
+        CheckAuthQueryResponse,
+        ResponseErrorConfig<CheckAuth401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? checkAuthQueryKey()
+  const {
+    query: { client: queryClient, ...queryOptions } = {},
+    client: config = {},
+  } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? checkAuthQueryKey();
 
   const query = useQuery(
     {
       ...(checkAuthQueryOptions(config) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<CheckAuth401>> & { queryKey: TQueryKey }
+  ) as UseQueryResult<TData, ResponseErrorConfig<CheckAuth401>> & {
+    queryKey: TQueryKey;
+  };
 
-  query.queryKey = queryKey as TQueryKey
+  query.queryKey = queryKey as TQueryKey;
 
-  return query
+  return query;
 }

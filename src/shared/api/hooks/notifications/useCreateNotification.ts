@@ -3,19 +3,25 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import type {
   CreateNotificationMutationRequest,
   CreateNotificationMutationResponse,
   CreateNotification400,
-} from '../../models/notifications/CreateNotification.ts'
-import { useMutation } from '@tanstack/react-query'
+} from "../../models/notifications/CreateNotification";
+import { useMutation } from "@tanstack/react-query";
 
-export const createNotificationMutationKey = () => [{ url: '/notifications' }] as const
+export const createNotificationMutationKey = () =>
+  [{ url: "/notifications" }] as const;
 
-export type CreateNotificationMutationKey = ReturnType<typeof createNotificationMutationKey>
+export type CreateNotificationMutationKey = ReturnType<
+  typeof createNotificationMutationKey
+>;
 
 /**
  * @summary Create notification
@@ -23,17 +29,23 @@ export type CreateNotificationMutationKey = ReturnType<typeof createNotification
  */
 export async function createNotification(
   { data }: { data: CreateNotificationMutationRequest },
-  config: Partial<RequestConfig<CreateNotificationMutationRequest>> & { client?: typeof client } = {},
+  config: Partial<RequestConfig<CreateNotificationMutationRequest>> & {
+    client?: typeof client;
+  } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<CreateNotificationMutationResponse, ResponseErrorConfig<CreateNotification400>, CreateNotificationMutationRequest>({
-    method: 'POST',
+  const res = await request<
+    CreateNotificationMutationResponse,
+    ResponseErrorConfig<CreateNotification400>,
+    CreateNotificationMutationRequest
+  >({
+    method: "POST",
     url: `/notifications`,
     data,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 /**
@@ -47,22 +59,30 @@ export function useCreateNotification<TContext>(
       ResponseErrorConfig<CreateNotification400>,
       { data: CreateNotificationMutationRequest },
       TContext
-    > & { client?: QueryClient }
-    client?: Partial<RequestConfig<CreateNotificationMutationRequest>> & { client?: typeof client }
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<CreateNotificationMutationRequest>> & {
+      client?: typeof client;
+    };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? createNotificationMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? createNotificationMutationKey();
 
-  return useMutation<CreateNotificationMutationResponse, ResponseErrorConfig<CreateNotification400>, { data: CreateNotificationMutationRequest }, TContext>(
+  return useMutation<
+    CreateNotificationMutationResponse,
+    ResponseErrorConfig<CreateNotification400>,
+    { data: CreateNotificationMutationRequest },
+    TContext
+  >(
     {
       mutationFn: async ({ data }) => {
-        return createNotification({ data }, config)
+        return createNotification({ data }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

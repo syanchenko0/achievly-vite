@@ -3,32 +3,52 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { UseMutationOptions, QueryClient } from '@tanstack/react-query'
-import type { DeleteTeamMemberMutationResponse, DeleteTeamMemberPathParams, DeleteTeamMember400 } from '../../models/teams/DeleteTeamMember.ts'
-import { useMutation } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
+import type {
+  DeleteTeamMemberMutationResponse,
+  DeleteTeamMemberPathParams,
+  DeleteTeamMember400,
+} from "../../models/teams/DeleteTeamMember";
+import { useMutation } from "@tanstack/react-query";
 
-export const deleteTeamMemberMutationKey = () => [{ url: '/teams/{team_id}/members/{member_id}' }] as const
+export const deleteTeamMemberMutationKey = () =>
+  [{ url: "/teams/{team_id}/members/{member_id}" }] as const;
 
-export type DeleteTeamMemberMutationKey = ReturnType<typeof deleteTeamMemberMutationKey>
+export type DeleteTeamMemberMutationKey = ReturnType<
+  typeof deleteTeamMemberMutationKey
+>;
 
 /**
  * @summary Delete team member
  * {@link /teams/:team_id/members/:member_id}
  */
 export async function deleteTeamMember(
-  { member_id, team_id }: { member_id: DeleteTeamMemberPathParams['member_id']; team_id: DeleteTeamMemberPathParams['team_id'] },
+  {
+    member_id,
+    team_id,
+  }: {
+    member_id: DeleteTeamMemberPathParams["member_id"];
+    team_id: DeleteTeamMemberPathParams["team_id"];
+  },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<DeleteTeamMemberMutationResponse, ResponseErrorConfig<DeleteTeamMember400>, unknown>({
-    method: 'DELETE',
+  const res = await request<
+    DeleteTeamMemberMutationResponse,
+    ResponseErrorConfig<DeleteTeamMember400>,
+    unknown
+  >({
+    method: "DELETE",
     url: `/teams/${team_id}/members/${member_id}`,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 /**
@@ -40,29 +60,36 @@ export function useDeleteTeamMember<TContext>(
     mutation?: UseMutationOptions<
       DeleteTeamMemberMutationResponse,
       ResponseErrorConfig<DeleteTeamMember400>,
-      { member_id: DeleteTeamMemberPathParams['member_id']; team_id: DeleteTeamMemberPathParams['team_id'] },
+      {
+        member_id: DeleteTeamMemberPathParams["member_id"];
+        team_id: DeleteTeamMemberPathParams["team_id"];
+      },
       TContext
-    > & { client?: QueryClient }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { mutation = {}, client: config = {} } = options ?? {}
-  const { client: queryClient, ...mutationOptions } = mutation
-  const mutationKey = mutationOptions.mutationKey ?? deleteTeamMemberMutationKey()
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteTeamMemberMutationKey();
 
   return useMutation<
     DeleteTeamMemberMutationResponse,
     ResponseErrorConfig<DeleteTeamMember400>,
-    { member_id: DeleteTeamMemberPathParams['member_id']; team_id: DeleteTeamMemberPathParams['team_id'] },
+    {
+      member_id: DeleteTeamMemberPathParams["member_id"];
+      team_id: DeleteTeamMemberPathParams["team_id"];
+    },
     TContext
   >(
     {
       mutationFn: async ({ member_id, team_id }) => {
-        return deleteTeamMember({ member_id, team_id }, config)
+        return deleteTeamMember({ member_id, team_id }, config);
       },
       mutationKey,
       ...mutationOptions,
     },
     queryClient,
-  )
+  );
 }

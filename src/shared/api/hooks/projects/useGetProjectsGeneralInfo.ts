@@ -3,20 +3,31 @@
  * Do not edit manually.
  */
 
-import client from '@/shared/api/axios-client'
-import type { RequestConfig, ResponseErrorConfig } from '@/shared/api/axios-client'
-import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
+import client from "@/shared/api/axios-client";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@/shared/api/axios-client";
+import type {
+  QueryKey,
+  QueryClient,
+  QueryObserverOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import type {
   GetProjectsGeneralInfoQueryResponse,
   GetProjectsGeneralInfoQueryParams,
   GetProjectsGeneralInfo400,
-} from '../../models/projects/GetProjectsGeneralInfo.ts'
-import { queryOptions, useQuery } from '@tanstack/react-query'
+} from "../../models/projects/GetProjectsGeneralInfo";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
-export const getProjectsGeneralInfoQueryKey = (params: GetProjectsGeneralInfoQueryParams) =>
-  [{ url: '/projects/general_info' }, ...(params ? [params] : [])] as const
+export const getProjectsGeneralInfoQueryKey = (
+  params: GetProjectsGeneralInfoQueryParams,
+) => [{ url: "/projects/general_info" }, ...(params ? [params] : [])] as const;
 
-export type GetProjectsGeneralInfoQueryKey = ReturnType<typeof getProjectsGeneralInfoQueryKey>
+export type GetProjectsGeneralInfoQueryKey = ReturnType<
+  typeof getProjectsGeneralInfoQueryKey
+>;
 
 /**
  * @summary Get projects general info
@@ -26,22 +37,26 @@ export async function getProjectsGeneralInfo(
   { params }: { params: GetProjectsGeneralInfoQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const { client: request = client, ...requestConfig } = config
+  const { client: request = client, ...requestConfig } = config;
 
-  const res = await request<GetProjectsGeneralInfoQueryResponse, ResponseErrorConfig<GetProjectsGeneralInfo400>, unknown>({
-    method: 'GET',
+  const res = await request<
+    GetProjectsGeneralInfoQueryResponse,
+    ResponseErrorConfig<GetProjectsGeneralInfo400>,
+    unknown
+  >({
+    method: "GET",
     url: `/projects/general_info`,
     params,
     ...requestConfig,
-  })
-  return res.data
+  });
+  return res.data;
 }
 
 export function getProjectsGeneralInfoQueryOptions(
   { params }: { params: GetProjectsGeneralInfoQueryParams },
   config: Partial<RequestConfig> & { client?: typeof client } = {},
 ) {
-  const queryKey = getProjectsGeneralInfoQueryKey(params)
+  const queryKey = getProjectsGeneralInfoQueryKey(params);
   return queryOptions<
     GetProjectsGeneralInfoQueryResponse,
     ResponseErrorConfig<GetProjectsGeneralInfo400>,
@@ -51,10 +66,10 @@ export function getProjectsGeneralInfoQueryOptions(
     enabled: !!params,
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal
-      return getProjectsGeneralInfo({ params }, config)
+      config.signal = signal;
+      return getProjectsGeneralInfo({ params }, config);
     },
-  })
+  });
 }
 
 /**
@@ -68,25 +83,42 @@ export function useGetProjectsGeneralInfo<
 >(
   { params }: { params: GetProjectsGeneralInfoQueryParams },
   options: {
-    query?: Partial<QueryObserverOptions<GetProjectsGeneralInfoQueryResponse, ResponseErrorConfig<GetProjectsGeneralInfo400>, TData, TQueryData, TQueryKey>> & {
-      client?: QueryClient
-    }
-    client?: Partial<RequestConfig> & { client?: typeof client }
+    query?: Partial<
+      QueryObserverOptions<
+        GetProjectsGeneralInfoQueryResponse,
+        ResponseErrorConfig<GetProjectsGeneralInfo400>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & {
+      client?: QueryClient;
+    };
+    client?: Partial<RequestConfig> & { client?: typeof client };
   } = {},
 ) {
-  const { query: { client: queryClient, ...queryOptions } = {}, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? getProjectsGeneralInfoQueryKey(params)
+  const {
+    query: { client: queryClient, ...queryOptions } = {},
+    client: config = {},
+  } = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getProjectsGeneralInfoQueryKey(params);
 
   const query = useQuery(
     {
-      ...(getProjectsGeneralInfoQueryOptions({ params }, config) as unknown as QueryObserverOptions),
+      ...(getProjectsGeneralInfoQueryOptions(
+        { params },
+        config,
+      ) as unknown as QueryObserverOptions),
       queryKey,
-      ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
+      ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
     },
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetProjectsGeneralInfo400>> & { queryKey: TQueryKey }
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetProjectsGeneralInfo400>> & {
+    queryKey: TQueryKey;
+  };
 
-  query.queryKey = queryKey as TQueryKey
+  query.queryKey = queryKey as TQueryKey;
 
-  return query
+  return query;
 }
