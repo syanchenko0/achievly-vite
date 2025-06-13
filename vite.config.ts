@@ -13,6 +13,6 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ["test.achievly.ru", "localhost"],
+    allowedHosts: ["achievly.ru", "localhost"],
   },
 });
