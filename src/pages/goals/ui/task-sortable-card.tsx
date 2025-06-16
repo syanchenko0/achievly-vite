@@ -50,29 +50,39 @@ function TaskSortableCard({
           <span className="text-left text-base font-medium">{task.title}</span>
           <div className="flex items-center gap-x-2">
             <CalendarIcon className="size-4" />
-            <span className="text-xs">
-              {isTaskOverdue && task.deadline_date && !task?.done_date && (
-                <span className="text-red-400">
-                  Просрочена на{" "}
-                  {(taskOverdue?.days ?? 0) > 0 &&
-                    `${taskOverdue?.days ?? 0} ${declension(
-                      taskOverdue?.days ?? 0,
-                      ["день", "дня", "дней"],
-                    )}`}{" "}
-                  {(taskOverdue?.hours ?? 0) > 0 &&
-                    `${taskOverdue?.hours ?? 0} ${declension(
-                      taskOverdue?.hours ?? 0,
-                      ["час", "часа", "часов"],
-                    )}`}{" "}
-                </span>
-              )}
-              {!isTaskOverdue &&
-                task.deadline_date &&
-                format(new Date(task.deadline_date), "PPPP", {
+            {task.done_date && (
+              <span className="text-xs">
+                Задача выполнена{" "}
+                {format(new Date(task.done_date), "P", {
                   locale: ru,
                 })}
-              {!task.deadline_date && "Дата окончания задачи не указана"}
-            </span>
+              </span>
+            )}
+            {!task?.done_date && (
+              <span className="text-xs">
+                {isTaskOverdue && task.deadline_date && (
+                  <span className="text-red-400">
+                    Просрочена на{" "}
+                    {(taskOverdue?.days ?? 0) > 0 &&
+                      `${taskOverdue?.days ?? 0} ${declension(
+                        taskOverdue?.days ?? 0,
+                        ["день", "дня", "дней"],
+                      )}`}{" "}
+                    {(taskOverdue?.hours ?? 0) > 0 &&
+                      `${taskOverdue?.hours ?? 0} ${declension(
+                        taskOverdue?.hours ?? 0,
+                        ["час", "часа", "часов"],
+                      )}`}{" "}
+                  </span>
+                )}
+                {!isTaskOverdue &&
+                  task.deadline_date &&
+                  format(new Date(task.deadline_date), "PPPP", {
+                    locale: ru,
+                  })}
+                {!task.deadline_date && "Дата окончания задачи не указана"}
+              </span>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-x-2">
