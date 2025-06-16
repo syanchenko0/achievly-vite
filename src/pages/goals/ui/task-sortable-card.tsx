@@ -51,7 +51,7 @@ function TaskSortableCard({
           <div className="flex items-center gap-x-2">
             <CalendarIcon className="size-4" />
             <span className="text-xs">
-              {isTaskOverdue && task.deadline_date && (
+              {isTaskOverdue && task.deadline_date && !task?.done_date && (
                 <span className="text-red-400">
                   Просрочена на{" "}
                   {(taskOverdue?.days ?? 0) > 0 &&
