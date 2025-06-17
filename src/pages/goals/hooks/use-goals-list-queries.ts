@@ -1,6 +1,7 @@
 import {
   getGoalsGeneralInfoQueryKey,
   getGoalsQueryKey,
+  getTasksQueryKey,
   type GoalDto,
   type TaskDto,
   useGetGoals,
@@ -44,6 +45,8 @@ const useGoalsListQueries = () => {
             return goal;
           }),
         );
+
+        queryClient.invalidateQueries({ queryKey: getTasksQueryKey() }).then();
 
         return { previousGoals };
       },

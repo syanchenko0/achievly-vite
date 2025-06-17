@@ -200,7 +200,7 @@ function Content({
           </AlertDialog>
 
           <Button
-            disabled={updateTaskPending}
+            disabled={updateTaskPending || !!task?.goal?.achieved_date}
             onClick={form.handleSubmit(onSubmit)}
             className="flex-1"
           >

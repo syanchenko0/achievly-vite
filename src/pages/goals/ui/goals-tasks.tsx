@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DragDropProvider, useDroppable } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { CollisionPriority } from "@dnd-kit/abstract";
@@ -27,6 +27,8 @@ function GoalsTasks() {
     done: [],
   });
 
+  const previousTasks = useRef<TasksState>(tasks);
+
   const { initialTasks, allTasksLoading, updateTask, updateTaskListOrder } =
     useGoalsTasksQueries();
 
@@ -51,6 +53,9 @@ function GoalsTasks() {
 
   return (
     <DragDropProvider
+      onDragStart={() => {
+        previousTasks.current = tasks;
+      }}
       onDragOver={(event) => {
         setTasks((tasks) => {
           const state = move(tasks, event);
@@ -70,8 +75,6 @@ function GoalsTasks() {
           list_order: index,
         }));
 
-        updateTaskListOrder({ data: list });
-
         if (initialTasks.active.length !== tasks.active.length) {
           const activeTask = tasks.active.find(
             (task) =>
@@ -79,10 +82,15 @@ function GoalsTasks() {
           );
 
           if (activeTask) {
-            updateTask({
-              task_id: String(activeTask.id),
-              data: { ...activeTask, done_date: null },
-            });
+            if (!activeTask?.goal?.achieved_date) {
+              updateTaskListOrder({ data: list });
+              updateTask({
+                task_id: String(activeTask.id),
+                data: { ...activeTask, done_date: null },
+              });
+            } else {
+              setTasks(previousTasks.current);
+            }
           } else {
             const doneTask = tasks.done.find(
               (task) =>
@@ -90,13 +98,18 @@ function GoalsTasks() {
             );
 
             if (doneTask) {
-              updateTask({
-                task_id: String(doneTask.id),
-                data: {
-                  ...doneTask,
-                  done_date: format(new Date(), "yyyy-MM-dd"),
-                },
-              });
+              if (!doneTask?.goal?.achieved_date) {
+                updateTaskListOrder({ data: list });
+                updateTask({
+                  task_id: String(doneTask.id),
+                  data: {
+                    ...doneTask,
+                    done_date: format(new Date(), "yyyy-MM-dd"),
+                  },
+                });
+              } else {
+                setTasks(previousTasks.current);
+              }
             }
           }
         }
@@ -147,7 +160,6 @@ function GoalsTasks() {
       <TaskUpdateSheet
         open={openSheet}
         task={taskForUpdate}
-        goalDeadlineDate={taskForUpdate?.goal?.deadline_date}
         onOpenChange={(value) => {
           setOpenSheet(value);
           searchParams.delete("task_id");
