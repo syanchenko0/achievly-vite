@@ -7,7 +7,11 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isSuccess, isLoading } = useCheckAuth();
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="flex h-screen flex-col items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return isSuccess ? children : <Navigate to={ROUTES.auth} replace />;
