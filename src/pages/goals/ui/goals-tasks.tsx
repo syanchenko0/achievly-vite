@@ -147,6 +147,7 @@ function GoalsTasks() {
       <TaskUpdateSheet
         open={openSheet}
         task={taskForUpdate}
+        goalDeadlineDate={taskForUpdate?.goal?.deadline_date}
         onOpenChange={(value) => {
           setOpenSheet(value);
           searchParams.delete("task_id");

@@ -144,6 +144,12 @@ function Content({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
                 id={field.field_id}
                 index={index}
                 task={field as TaskDto}
+                error={
+                  !field?.done_date
+                    ? form.formState.errors?.tasks?.[index]?.deadline_date
+                        ?.message
+                    : undefined
+                }
                 onClick={() => {
                   setIndexTaskForUpdate(index);
                   setOpenTaskCreateSheet(true);
@@ -164,6 +170,7 @@ function Content({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
               setIndexTaskForUpdate(undefined);
             }}
             task={form.getValues(`tasks.${indexTaskForUpdate as number}`)}
+            goalDeadlineDate={form.getValues("deadline_date")}
             onCreate={(data) => {
               if (indexTaskForUpdate === undefined) {
                 append(data);
@@ -181,7 +188,7 @@ function Content({ onOpenChange }: { onOpenChange: (open: boolean) => void }) {
 
       <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
         <Button
-          disabled={createGoalPending}
+          disabled={createGoalPending || !form.formState.isValid}
           onClick={form.handleSubmit(handleCreateGoal)}
         >
           {createGoalPending ? (

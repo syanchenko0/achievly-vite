@@ -156,6 +156,11 @@ function Content({
         <DeadlineDateField
           control={form.control}
           label="Дата окончания задачи"
+          maxDate={
+            task?.goal?.deadline_date
+              ? new Date(task?.goal?.deadline_date)
+              : undefined
+          }
         />
         <NoteField control={form.control} label="Примечание к задаче" />
       </div>

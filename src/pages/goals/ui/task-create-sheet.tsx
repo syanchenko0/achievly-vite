@@ -20,12 +20,14 @@ import { goalBodyTaskSchema } from "@/shared/zod/goalBodyTaskSchema";
 function TaskCreateSheet({
   open,
   task,
+  goalDeadlineDate,
   onOpenChange,
   onCreate,
   onUpdate,
 }: {
   open: boolean;
   task?: GoalBodyTask;
+  goalDeadlineDate?: string | null;
   onOpenChange: (open: boolean) => void;
   onCreate?: (data: GoalBodyTask) => void;
   onUpdate?: (data: GoalBodyTask) => void;
@@ -35,6 +37,7 @@ function TaskCreateSheet({
       <SheetContent className="w-[400px] sm:w-[580px] sm:max-w-[580px]">
         <Content
           task={task}
+          goalDeadlineDate={goalDeadlineDate}
           onOpenChange={onOpenChange}
           onCreate={onCreate}
           onUpdate={onUpdate}
@@ -46,11 +49,13 @@ function TaskCreateSheet({
 
 function Content({
   task,
+  goalDeadlineDate,
   onOpenChange,
   onCreate,
   onUpdate,
 }: {
   task?: GoalBodyTask;
+  goalDeadlineDate?: string | null;
   onOpenChange: (open: boolean) => void;
   onCreate?: (data: GoalBodyTask) => void;
   onUpdate?: (data: GoalBodyTask) => void;
@@ -89,6 +94,7 @@ function Content({
         <DeadlineDateField
           control={form.control}
           label="Дата окончания задачи"
+          maxDate={goalDeadlineDate ? new Date(goalDeadlineDate) : undefined}
         />
         <NoteField control={form.control} label="Примечание к задаче" />
       </div>

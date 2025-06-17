@@ -3,7 +3,7 @@ import { useSortable } from "@dnd-kit/react/sortable";
 import { CalendarIcon, GripVertical, Trash2 } from "lucide-react";
 import { format, intervalToDuration } from "date-fns";
 import { ru } from "date-fns/locale";
-import { declension } from "@/app/lib/utils";
+import { cn, declension } from "@/app/lib/utils";
 import { Button } from "@/shared/ui/button";
 
 function TaskSortableCard({
@@ -13,6 +13,7 @@ function TaskSortableCard({
   group,
   type,
   accept,
+  error,
   onClick,
   onDelete,
 }: {
@@ -22,6 +23,7 @@ function TaskSortableCard({
   group?: string;
   type?: string;
   accept?: string[];
+  error?: string;
   onClick: () => void;
   onDelete?: () => void;
 }) {
@@ -39,68 +41,75 @@ function TaskSortableCard({
     : null;
 
   return (
-    <div
-      ref={ref}
-      className="bg-sidebar relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2"
-      onClick={onClick}
-    >
-      <div className="flex justify-between">
-        <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
-        <div className="flex flex-col gap-y-2">
-          <span className="text-left text-base font-medium">{task.title}</span>
-          <div className="flex items-center gap-x-2">
-            <CalendarIcon className="size-4" />
-            {task.done_date && (
-              <span className="text-xs">
-                Задача выполнена{" "}
-                {format(new Date(task.done_date), "P", {
-                  locale: ru,
-                })}
-              </span>
-            )}
-            {!task?.done_date && (
-              <span className="text-xs">
-                {isTaskOverdue && task.deadline_date && (
-                  <span className="text-red-400">
-                    Просрочена на{" "}
-                    {(taskOverdue?.days ?? 0) > 0 &&
-                      `${taskOverdue?.days ?? 0} ${declension(
-                        taskOverdue?.days ?? 0,
-                        ["день", "дня", "дней"],
-                      )}`}{" "}
-                    {(taskOverdue?.hours ?? 0) > 0 &&
-                      `${taskOverdue?.hours ?? 0} ${declension(
-                        taskOverdue?.hours ?? 0,
-                        ["час", "часа", "часов"],
-                      )}`}{" "}
-                  </span>
-                )}
-                {!isTaskOverdue &&
-                  task.deadline_date &&
-                  format(new Date(task.deadline_date), "PPPP", {
+    <div ref={ref} className="flex flex-col">
+      <div
+        className={cn(
+          "bg-sidebar relative w-full cursor-pointer overflow-hidden rounded-md border px-3 py-2",
+          { ["border-red-500"]: !!error },
+        )}
+        onClick={onClick}
+      >
+        <div className="flex justify-between">
+          <div className="absolute top-0 left-0 h-full w-1 bg-sky-600" />
+          <div className="flex flex-col gap-y-2">
+            <span className="text-left text-base font-medium">
+              {task.title}
+            </span>
+            <div className="flex items-center gap-x-2">
+              <CalendarIcon className="size-4" />
+              {task.done_date && (
+                <span className="text-xs">
+                  Задача выполнена{" "}
+                  {format(new Date(task.done_date), "P", {
                     locale: ru,
                   })}
-                {!task.deadline_date && "Дата окончания задачи не указана"}
-              </span>
+                </span>
+              )}
+              {!task?.done_date && (
+                <span className="text-xs">
+                  {isTaskOverdue && task.deadline_date && (
+                    <span className="text-red-400">
+                      Просрочена на{" "}
+                      {(taskOverdue?.days ?? 0) > 0 &&
+                        `${taskOverdue?.days ?? 0} ${declension(
+                          taskOverdue?.days ?? 0,
+                          ["день", "дня", "дней"],
+                        )}`}{" "}
+                      {(taskOverdue?.hours ?? 0) > 0 &&
+                        `${taskOverdue?.hours ?? 0} ${declension(
+                          taskOverdue?.hours ?? 0,
+                          ["час", "часа", "часов"],
+                        )}`}{" "}
+                    </span>
+                  )}
+                  {!isTaskOverdue &&
+                    task.deadline_date &&
+                    format(new Date(task.deadline_date), "PPPP", {
+                      locale: ru,
+                    })}
+                  {!task.deadline_date && "Дата окончания задачи не указана"}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-x-2">
+            {onDelete && (
+              <Button
+                size="icon"
+                variant="destructive"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
+              >
+                <Trash2 />
+              </Button>
             )}
+            <GripVertical className="text-neutral-400" />
           </div>
         </div>
-        <div className="flex items-center gap-x-2">
-          {onDelete && (
-            <Button
-              size="icon"
-              variant="destructive"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete();
-              }}
-            >
-              <Trash2 />
-            </Button>
-          )}
-          <GripVertical className="text-neutral-400" />
-        </div>
       </div>
+      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   );
 }

@@ -185,6 +185,12 @@ function Content({
                 id={field.field_id}
                 index={index}
                 task={field as TaskDto}
+                error={
+                  !field?.done_date
+                    ? form.formState.errors?.tasks?.[index]?.deadline_date
+                        ?.message
+                    : undefined
+                }
                 onClick={() => {
                   setIndexTaskForUpdate(index);
                   setOpenTaskCreateSheet(true);
@@ -202,6 +208,7 @@ function Content({
           <TaskCreateSheet
             open={openTaskCreateSheet}
             task={form.getValues(`tasks.${indexTaskForUpdate as number}`)}
+            goalDeadlineDate={form.getValues("deadline_date")}
             onOpenChange={(value) => setOpenTaskCreateSheet(value)}
             onCreate={(data) => {
               if (indexTaskForUpdate === undefined) {

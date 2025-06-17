@@ -7,26 +7,46 @@ import { goalBodyTaskSchema } from "./goalBodyTaskSchema";
 import { z } from "zod";
 import { ZOD_ERROR } from "@/shared/constants/errors";
 
-export const updateGoalBodySchema = z.object({
-  title: z.string(ZOD_ERROR).describe("Заголовок цели").optional(),
-  category: z.string(ZOD_ERROR).describe("Категория цели").optional(),
-  status: z.string(ZOD_ERROR).describe("Статус цели").optional(),
-  deadline_date: z
-    .string(ZOD_ERROR)
-    .describe("Дата окончания цели")
-    .nullable()
-    .nullish(),
-  note: z.string(ZOD_ERROR).describe("Примечание к цели").nullable().nullish(),
-  achieved_date: z
-    .string(ZOD_ERROR)
-    .describe("Дата выполнения цели")
-    .nullable()
-    .nullish(),
-  tasks: z
-    .array(z.lazy(() => goalBodyTaskSchema))
-    .describe("Задачи цели")
-    .nullable()
-    .nullish(),
-});
+export const updateGoalBodySchema = z
+  .object({
+    title: z.string(ZOD_ERROR).describe("Заголовок цели").optional(),
+    category: z.string(ZOD_ERROR).describe("Категория цели").optional(),
+    status: z.string(ZOD_ERROR).describe("Статус цели").optional(),
+    deadline_date: z
+      .string(ZOD_ERROR)
+      .describe("Дата окончания цели")
+      .nullable()
+      .nullish(),
+    note: z
+      .string(ZOD_ERROR)
+      .describe("Примечание к цели")
+      .nullable()
+      .nullish(),
+    achieved_date: z
+      .string(ZOD_ERROR)
+      .describe("Дата выполнения цели")
+      .nullable()
+      .nullish(),
+    tasks: z
+      .array(z.lazy(() => goalBodyTaskSchema))
+      .describe("Задачи цели")
+      .nullable()
+      .nullish(),
+  })
+  .superRefine((data, ctx) => {
+    if (data?.tasks?.length && data?.deadline_date) {
+      data?.tasks?.forEach((task, index) => {
+        if (task?.deadline_date && data?.deadline_date && !task?.done_date) {
+          if (new Date(task?.deadline_date) > new Date(data?.deadline_date)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Дата окончания задачи не может быть больше даты окончания цели`,
+              path: ["tasks", index, "deadline_date"],
+            });
+          }
+        }
+      });
+    }
+  });
 
 export type UpdateGoalBodySchema = z.infer<typeof updateGoalBodySchema>;
