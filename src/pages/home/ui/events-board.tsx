@@ -11,8 +11,8 @@ function EventsBoard() {
   const { eventsToday } = useHomeQueries();
 
   return (
-    <div className="flex size-full max-h-full min-h-0 max-w-[35%] flex-col gap-y-4">
-      <div className="h-full max-h-full min-h-0 flex-1 rounded-md border p-4 pr-1">
+    <div className="flex size-full flex-col gap-y-4 md:max-h-full md:min-h-0 md:max-w-[35%]">
+      <div className="h-full max-h-full min-h-0 flex-1 rounded-md border p-4 pr-4 md:pr-1">
         <div className="flex h-full max-h-full min-h-0 flex-col">
           <h3 className="mb-4 text-base font-medium">События на сегодня</h3>
           {!eventsToday?.length && (
@@ -25,7 +25,7 @@ function EventsBoard() {
               </Alert>
             </div>
           )}
-          <div className="scroll mb-2 min-h-0 flex-1 overflow-y-auto pr-1">
+          <div className="scroll mb-2 min-h-0 flex-1 overflow-y-auto md:pr-1">
             <div className="flex flex-col gap-y-2">
               {eventsToday?.map((event) => (
                 <div key={event.id} className="rounded-md border p-2">
@@ -49,7 +49,7 @@ function EventsBoard() {
             </div>
           </div>
 
-          <Link to={ROUTES.events_calendar} className="pr-3">
+          <Link to={ROUTES.events_calendar} className="md:pr-3">
             <Button variant="outline" className="w-full">
               Перейти к календарю
             </Button>

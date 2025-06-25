@@ -19,9 +19,13 @@ import {
   ContextMenuTrigger,
 } from "@/shared/ui/context-menu";
 import { useEventsCalendarQueries } from "@/pages/events/hooks/use-events-calendar-queries";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 function EventsCalendar() {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { isMobile, loading } = useIsMobile();
 
   const [period, setPeriod] = useState([
     format(startOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd"),
@@ -59,6 +63,10 @@ function EventsCalendar() {
     setSearchParams(searchParams);
   }, [period]);
 
+  if (loading) {
+    return <Skeleton className="size-full" />;
+  }
+
   return (
     <div className="bg-sidebar flex size-full flex-col gap-y-4 rounded-md border p-4">
       <FullCalendar
@@ -70,11 +78,11 @@ function EventsCalendar() {
         initialDate={new Date().toISOString()}
         plugins={[timeGridPlugin, interactionPlugin]}
         slotMinTime={"00:00:00"}
-        initialView="timeGridWeek"
+        initialView={isMobile ? "timeGridDay" : "timeGridWeek"}
         headerToolbar={{
           left: "prev,next",
           center: "title",
-          right: "timeGridWeek,timeGridDay",
+          right: isMobile ? "" : "timeGridWeek,timeGridDay",
         }}
         events={events?.map((event) => ({
           id: event.id.toString(),

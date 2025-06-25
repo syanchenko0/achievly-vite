@@ -10,6 +10,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/shared/ui/sidebar";
 import {
   Collapsible,
@@ -19,6 +20,8 @@ import {
 
 function PersonalGroup() {
   const { pathname } = useLocation();
+
+  const { isMobile, setOpenMobile } = useSidebar();
 
   const items = [
     {
@@ -47,7 +50,12 @@ function PersonalGroup() {
         {items.map((item) => {
           if (!item?.items) {
             return (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem
+                key={item.title}
+                onClick={() => {
+                  if (isMobile) setOpenMobile(false);
+                }}
+              >
                 <Link to={item.link} className="w-full">
                   <SidebarMenuButton
                     tooltip={item.title}
@@ -83,7 +91,12 @@ function PersonalGroup() {
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {item.items?.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.label}>
+                      <SidebarMenuSubItem
+                        key={subItem.label}
+                        onClick={() => {
+                          if (isMobile) setOpenMobile(false);
+                        }}
+                      >
                         <SidebarMenuSubButton
                           asChild
                           isActive={!!matchPath(subItem.link, pathname)}

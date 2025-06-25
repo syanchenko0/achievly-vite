@@ -19,7 +19,7 @@ function ProjectsBoard() {
   const { projectsGeneralInfo, projectsGeneralInfoError } = useHomeQueries();
 
   return (
-    <div className="h-full max-h-full min-h-0 flex-1 rounded-md border p-4 pr-2">
+    <div className="h-full flex-1 rounded-md border p-4 pr-2 md:max-h-full md:min-h-0">
       <div className="flex h-full max-h-full min-h-0 flex-col">
         <h3 className="mb-1 text-base font-medium">Сводка по проектам</h3>
 

@@ -16,11 +16,14 @@ import { useGetProfile, useLogout } from "@/shared/api";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 function UserDropdown() {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const { data: profile, isLoading: profileLoading } = useGetProfile();
+
+  const { isMobile } = useIsMobile();
 
   const { mutate: logout, isPending: logoutPending } = useLogout({
     mutation: {
@@ -69,7 +72,7 @@ function UserDropdown() {
           <DropdownMenuContent
             className="min-w-56 rounded-lg"
             align="end"
-            side="right"
+            side={isMobile ? "top" : "right"}
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground flex items-center justify-between text-xs">

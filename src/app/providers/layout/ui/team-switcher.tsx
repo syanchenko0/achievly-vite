@@ -21,6 +21,7 @@ import { useNavigate } from "react-router";
 import { ROUTES } from "@/shared/constants/router";
 import { replacePathParams } from "@/app/lib/utils";
 import { TeamCreateDialog } from "@/features/teams/ui/team-create-dialog";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 function TeamSwitcher() {
   const activeTeamId = useTeamSettingsStore((store) => store.activeTeamId);
@@ -36,6 +37,8 @@ function TeamSwitcher() {
   const { data: teams, isLoading } = useGetTeams();
 
   const navigate = useNavigate();
+
+  const { isMobile } = useIsMobile();
 
   const activeTeam = useMemo(
     () => teams?.find((team) => team.id === Number(activeTeamId)),
@@ -92,7 +95,7 @@ function TeamSwitcher() {
           <DropdownMenuContent
             className="min-w-56 rounded-lg"
             align="start"
-            side="right"
+            side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground flex items-center justify-between text-xs">

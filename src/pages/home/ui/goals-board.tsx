@@ -10,7 +10,7 @@ function GoalsBoard() {
   const { goalsGeneralInfo } = useHomeQueries();
 
   return (
-    <div className="h-full max-h-full min-h-0 flex-1 rounded-md border p-4 pr-2">
+    <div className="h-full flex-1 rounded-md border p-4 pr-2 md:max-h-full md:min-h-0">
       <div className="flex h-full max-h-full min-h-0 flex-col">
         <h3 className="mb-1 text-base font-medium">Сводка по целям</h3>
         {!!goalsGeneralInfo?.length && (
@@ -74,8 +74,10 @@ function GoalsBoard() {
           </div>
         </div>
         {!goalsGeneralInfo?.every((goal) => !goal?.tasks?.length) && (
-          <Link to={ROUTES.goals_tasks}>
-            <Button variant="outline">Перейти к задачам</Button>
+          <Link to={ROUTES.goals_tasks} className="pr-2 md:pr-0">
+            <Button variant="outline" className="w-full md:w-fit">
+              Перейти к задачам
+            </Button>
           </Link>
         )}
         {goalsGeneralInfo?.every((goal) => !goal?.tasks?.length) && (

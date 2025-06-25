@@ -4,8 +4,8 @@ import { ProjectsBoard } from "@/pages/home/ui/projects-board";
 
 function Home() {
   return (
-    <div className="bg-sidebar size-full rounded-md border p-4">
-      <div className="flex size-full gap-x-4">
+    <div className="bg-sidebar size-full max-h-full overflow-y-auto rounded-md border p-4 md:overflow-y-hidden">
+      <div className="flex size-full flex-col gap-4 md:flex-row">
         <EventsBoard />
 
         <div className="flex size-full flex-col gap-y-4">

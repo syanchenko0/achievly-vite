@@ -5,8 +5,6 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
 } from "@/shared/ui/sidebar";
@@ -17,9 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Separator } from "@/shared/ui/separator";
-import { Link, matchPath, Outlet, useLocation } from "react-router";
+import { matchPath, Outlet, useLocation } from "react-router";
 import { RequireAuth } from "@/shared/ui/require-auth";
-import { Home, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useState } from "react";
 import { ROUTE_LABELS, ROUTES } from "@/shared/constants/router";
@@ -30,6 +28,8 @@ import { TeamSwitcher } from "@/app/providers/layout/ui/team-switcher";
 import { ProjectsGroup } from "@/app/providers/layout/ui/projects-group";
 import { PersonalGroup } from "@/app/providers/layout/ui/personal-group";
 import { UserDropdown } from "@/app/providers/layout/ui/user-dropdown";
+import { HomeItem } from "@/app/providers/layout/ui/home-item";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 function Layout() {
   const [openCreateGoalSheet, setOpenCreateGoalSheet] =
@@ -40,6 +40,8 @@ function Layout() {
     useState<boolean>(false);
 
   const { pathname } = useLocation();
+
+  const { isMobile } = useIsMobile();
 
   const route = Object.values(ROUTES).find((route) => {
     return matchPath(route, pathname);
@@ -62,20 +64,7 @@ function Layout() {
           <div className="h-full max-h-full min-h-0 flex-1">
             <SidebarContent className="flex h-full max-h-full min-h-0 flex-col">
               <SidebarMenu className="px-2">
-                <SidebarMenuItem>
-                  <Link to={ROUTES.home} className="w-full">
-                    <SidebarMenuButton
-                      tooltip={"Главная"}
-                      isActive={!!matchPath(ROUTES.home, pathname)}
-                      className="cursor-pointer"
-                    >
-                      {<Home />}
-                      <span className="w-full">
-                        {ROUTE_LABELS[ROUTES.home]}
-                      </span>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
+                <HomeItem />
               </SidebarMenu>
               <PersonalGroup />
               <ProjectsGroup />
@@ -85,7 +74,7 @@ function Layout() {
             <UserDropdown />
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset className="h-svh max-h-svh gap-y-4 p-2 pr-2">
+        <SidebarInset className="h-svh gap-y-4 p-2 pr-2 md:max-h-svh">
           <header className="bg-sidebar sticky top-0 mr-1 flex h-14 items-center justify-between gap-2 rounded-md border px-4">
             <div className="flex shrink-0 items-center gap-2">
               <SidebarTrigger />
@@ -106,7 +95,7 @@ function Layout() {
                 <DropdownMenuTrigger asChild>
                   <Button>
                     <Plus />
-                    Добавить событие
+                    {!isMobile && "Добавить событие"}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
