@@ -24,7 +24,7 @@ import {
   TitleField,
 } from "@/shared/ui/goals-fields";
 import { useQueryClient } from "@tanstack/react-query";
-import { InfoIcon, Loader2, Save, Trash2 } from "lucide-react";
+import { Check, InfoIcon, Loader2, Save, Trash2, X } from "lucide-react";
 import { Link } from "react-router";
 import { ROUTES } from "@/shared/constants/router";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
@@ -40,6 +40,8 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { goalBodyTaskSchema } from "@/shared/zod/goalBodyTaskSchema";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { format } from "date-fns";
 
 function TaskUpdateSheet({
   open,
@@ -78,6 +80,8 @@ function Content({
   });
 
   const queryClient = useQueryClient();
+
+  const { isMobile } = useIsMobile();
 
   const { mutate: updateTask, isPending: updateTaskPending } = useUpdateTask({
     mutation: {
@@ -118,6 +122,18 @@ function Content({
       },
     },
   });
+
+  const handleDoneTask = async () => {
+    if (task?.id !== undefined)
+      updateTask({
+        task_id: String(task.id),
+        data: {
+          ...form.getValues(),
+          id: task.id,
+          done_date: task?.done_date ? null : format(new Date(), "yyyy-MM-dd"),
+        },
+      });
+  };
 
   const onSubmit = async (data: GoalBodyTask) => {
     if (task?.id !== undefined)
@@ -166,16 +182,20 @@ function Content({
       </div>
 
       <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
-        <div className="flex items-center justify-between gap-x-4">
+        <div className="flex flex-col justify-between gap-y-2 md:flex-row md:items-center md:gap-x-4 md:gap-y-0">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
                 disabled={deleteTaskPending}
                 variant="destructive"
-                size="icon"
+                size={isMobile ? "default" : "icon"}
               >
-                <Trash2 />
-                {deleteTaskPending && <Loader2 className="animate-spin" />}
+                {deleteTaskPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <Trash2 />
+                )}
+                {isMobile && "Удалить задачу"}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -198,6 +218,24 @@ function Content({
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+
+          {isMobile && (
+            <Button
+              onClick={handleDoneTask}
+              disabled={updateTaskPending || !!task?.goal?.achieved_date}
+            >
+              {updateTaskPending ? (
+                <Loader2 className="animate-spin" />
+              ) : task?.done_date ? (
+                <X />
+              ) : (
+                <Check />
+              )}
+              {task?.done_date
+                ? "Отметить как невыполненное"
+                : "Отметить как выполненное"}
+            </Button>
+          )}
 
           <Button
             disabled={updateTaskPending || !!task?.goal?.achieved_date}

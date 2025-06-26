@@ -37,12 +37,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shared/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { Check, Loader2, Plus, Save, Trash2, X } from "lucide-react";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useState } from "react";
 import { updateGoalBodySchema } from "@/shared/zod/updateGoalBodySchema";
 import { TaskSortableCard } from "@/pages/goals/ui/task-sortable-card";
 import { TaskCreateSheet } from "@/pages/goals/ui/task-create-sheet";
+import { format } from "date-fns";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 function GoalUpdateSheet({
   open,
@@ -92,6 +94,8 @@ function Content({
     keyName: "field_id",
   });
 
+  const { isMobile } = useIsMobile();
+
   const queryClient = useQueryClient();
 
   const { mutate: updateGoal, isPending: updateGoalPending } = useUpdateGoal({
@@ -129,6 +133,19 @@ function Content({
       },
     },
   });
+
+  const handleToggleAchievedGoal = async () => {
+    if (goal?.id !== undefined)
+      updateGoal({
+        goal_id: String(goal.id),
+        data: {
+          ...form.getValues(),
+          achieved_date: goal?.achieved_date
+            ? null
+            : format(new Date(), "yyyy-MM-dd"),
+        },
+      });
+  };
 
   const handleUpdateGoal = async (data: UpdateGoalBody) => {
     if (goal?.id !== undefined)
@@ -226,16 +243,20 @@ function Content({
       </div>
 
       <SheetFooter className="bg-background sticky bottom-0 w-full pb-6">
-        <div className="flex items-center justify-between gap-x-4">
+        <div className="flex flex-col justify-between gap-y-2 md:flex-row md:items-center md:gap-x-4 md:gap-y-0">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
                 disabled={deleteGoalPending}
                 variant="destructive"
-                size="icon"
+                size={isMobile ? "default" : "icon"}
               >
-                <Trash2 />
-                {deleteGoalPending && <Loader2 className="animate-spin" />}
+                {deleteGoalPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <Trash2 />
+                )}
+                {isMobile && "Удалить цель"}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -258,6 +279,24 @@ function Content({
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+
+          {isMobile && (
+            <Button
+              onClick={handleToggleAchievedGoal}
+              disabled={updateGoalPending}
+            >
+              {updateGoalPending ? (
+                <Loader2 className="animate-spin" />
+              ) : goal?.achieved_date ? (
+                <X />
+              ) : (
+                <Check />
+              )}
+              {goal?.achieved_date
+                ? "Отметить как невыполненное"
+                : "Отметить как выполненное"}
+            </Button>
+          )}
 
           <Button
             disabled={updateGoalPending}
