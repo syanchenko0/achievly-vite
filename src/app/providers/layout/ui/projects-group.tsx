@@ -6,6 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/shared/ui/sidebar";
 import { FolderX, Plus } from "lucide-react";
 import { useTeamSettingsStore } from "@/app/store/team";
@@ -59,6 +60,8 @@ function ProjectsGroup() {
 
   const queryClient = useQueryClient();
 
+  const { isMobile, setOpenMobile } = useSidebar();
+
   useEffect(() => {
     socket.on("projects_list_invalidation", () => {
       queryClient
@@ -109,7 +112,14 @@ function ProjectsGroup() {
             </div>
           )}
           {items.map((item) => (
-            <SidebarMenuItem key={item.id}>
+            <SidebarMenuItem
+              key={item.id}
+              onClick={() => {
+                if (isMobile) {
+                  setOpenMobile(false);
+                }
+              }}
+            >
               <SidebarMenuButton
                 tooltip={item.label}
                 isActive={!!matchPath(item.link, pathname)}

@@ -59,7 +59,10 @@ function ProjectSortableColumn({
   const { deleteProjectColumn } = useProjectQueries();
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col items-center gap-2" ref={ref}>
+    <div
+      className="flex flex-1 flex-col items-center gap-2 md:min-w-0"
+      ref={ref}
+    >
       <div className="flex size-full flex-col gap-y-4">
         <div className="bg-sidebar flex cursor-pointer items-center justify-between rounded-md border px-4 py-2">
           <h3 className="text-base font-medium">{column.name}</h3>

@@ -32,9 +32,10 @@ function EventsCalendar() {
     format(endOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd"),
   ]);
 
-  const { events, updateEvent, deleteEvent } = useEventsCalendarQueries({
-    period,
-  });
+  const { events, createEvents, updateEvent, deleteEvent } =
+    useEventsCalendarQueries({
+      period,
+    });
 
   const handleEventUpdate = (info: EventDropArg | EventResizeDoneArg) => {
     updateEvent({
@@ -57,6 +58,20 @@ function EventsCalendar() {
     deleteEvent({ event_id: info.event.id });
   };
 
+  const handleCopy = async (info: EventContentArg) => {
+    await createEvents({
+      data: {
+        events: [
+          {
+            title: info.event.title,
+            start_timestamp: info.event.start?.getTime() ?? 0,
+            end_timestamp: info.event.end?.getTime() ?? 0,
+          },
+        ],
+      },
+    });
+  };
+
   useEffect(() => {
     searchParams.set("start-period", period[0]);
     searchParams.set("end-period", period[1]);
@@ -75,6 +90,9 @@ function EventsCalendar() {
         height="100%"
         allDaySlot={false}
         locale={ru}
+        longPressDelay={50}
+        eventLongPressDelay={50}
+        selectLongPressDelay={50}
         initialDate={new Date().toISOString()}
         plugins={[timeGridPlugin, interactionPlugin]}
         slotMinTime={"00:00:00"}
@@ -113,7 +131,10 @@ function EventsCalendar() {
             </ContextMenuTrigger>
             <ContextMenuContent>
               <ContextMenuItem onClick={() => handleDelete(info)}>
-                Удалить событие
+                Удалить
+              </ContextMenuItem>
+              <ContextMenuItem onClick={() => handleCopy(info)}>
+                Копировать
               </ContextMenuItem>
             </ContextMenuContent>
           </ContextMenu>

@@ -8,12 +8,7 @@ import {
 } from "@/shared/ui/dialog";
 import { TitleField } from "@/shared/ui/goals-fields";
 import { FormProvider, useForm } from "react-hook-form";
-import {
-  type CreateEventBody,
-  type EventDto,
-  getEventsQueryKey,
-  useCreateEvents,
-} from "@/shared/api";
+import { type CreateEventBody } from "@/shared/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   endOfWeek,
@@ -25,9 +20,9 @@ import {
 } from "date-fns";
 import { Button } from "@/shared/ui/button";
 import { useSearchParams } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { createEventBodySchema } from "@/shared/zod/createEventBodySchema";
+import { useEventCreateQuery } from "@/features/events/hooks/use-event-create-queries";
 
 function EventCreateDialog({
   open,
@@ -70,44 +65,10 @@ const Content = ({
       format(endOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd"),
   ];
 
-  const queryClient = useQueryClient();
+  const { createEvents, createEventsPending } = useEventCreateQuery({ period });
 
-  const { mutate: createEvents, isPending: createEventsPending } =
-    useCreateEvents({
-      mutation: {
-        onSettled: async (newEvents) => {
-          await queryClient.cancelQueries({
-            queryKey: getEventsQueryKey({
-              start_period: period[0],
-              end_period: period[1],
-            }),
-          });
-
-          const previousEvents = queryClient.getQueryData<EventDto[]>(
-            getEventsQueryKey({
-              start_period: period[0],
-              end_period: period[1],
-            }),
-          );
-
-          queryClient.setQueryData(
-            getEventsQueryKey({
-              start_period: period[0],
-              end_period: period[1],
-            }),
-            [...(previousEvents || []), ...(newEvents || [])],
-          );
-
-          onOpenChange(false);
-          form.reset();
-
-          return { previousEvents };
-        },
-      },
-    });
-
-  const handleCreateEvents = (data: CreateEventBody) => {
-    createEvents({
+  const handleCreateEvents = async (data: CreateEventBody) => {
+    await createEvents({
       data: {
         events: [
           {
@@ -118,6 +79,8 @@ const Content = ({
         ],
       },
     });
+
+    onOpenChange(false);
   };
 
   return (

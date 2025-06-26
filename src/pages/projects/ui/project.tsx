@@ -254,8 +254,8 @@ function Project() {
           }
         }}
       >
-        <div className="bg-sidebar size-full rounded-md border p-4">
-          <div className="flex flex-col gap-y-4">
+        <div className="bg-sidebar size-full max-h-full overflow-y-hidden rounded-md border p-4">
+          <div className="flex max-h-full min-h-0 flex-col gap-y-4">
             <div className="flex items-center justify-between rounded-md border p-4">
               <span className="ml-1 text-base font-bold">{project.name}</span>
               {project?.team.user_role === "owner" && (
@@ -274,7 +274,7 @@ function Project() {
                 </Button>
               )}
             </div>
-            <div className="flex size-full gap-x-4">
+            <div className="scroll flex size-full max-h-full gap-x-4 overflow-x-auto overflow-y-auto md:overflow-x-hidden">
               {columns.map((column, columnIndex) => (
                 <ProjectSortableColumn
                   key={column.id}

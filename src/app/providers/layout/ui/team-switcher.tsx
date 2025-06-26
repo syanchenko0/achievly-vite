@@ -2,6 +2,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/shared/ui/sidebar";
 import {
   DropdownMenu,
@@ -39,6 +40,8 @@ function TeamSwitcher() {
   const navigate = useNavigate();
 
   const { isMobile } = useIsMobile();
+
+  const { setOpenMobile } = useSidebar();
 
   const activeTeam = useMemo(
     () => teams?.find((team) => team.id === Number(activeTeamId)),
@@ -117,6 +120,9 @@ function TeamSwitcher() {
                     size="icon"
                     variant="ghost"
                     onClick={() => {
+                      if (isMobile) {
+                        setOpenMobile(false);
+                      }
                       navigate(
                         replacePathParams(ROUTES.team_settings, {
                           team_id: team.id,

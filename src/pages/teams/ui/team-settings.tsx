@@ -65,6 +65,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 function TeamSettings() {
   const { team_id } = useParams<{ team_id: string }>();
@@ -105,7 +106,7 @@ function TeamSettings() {
     <div className="bg-sidebar flex size-full flex-col gap-y-4 rounded-md border p-4">
       <div className="flex items-center justify-between rounded-md border p-4">
         <div className="flex gap-x-3">
-          <div className="flex size-16 items-center justify-center rounded-md bg-blue-600 p-3">
+          <div className="flex size-12 items-center justify-center rounded-md bg-blue-600 p-3 md:size-16">
             <Users />
           </div>
           <div className="flex flex-col">
@@ -269,7 +270,9 @@ function TeamControls({
 }
 
 function UsersTable({ team }: { team: TeamDto }) {
-  const { data: profile } = useGetProfile();
+  const { isMobile } = useIsMobile();
+
+  const { data: profile, isLoading: profileLoading } = useGetProfile();
 
   const { data, columns } = useTableData(team, profile?.id);
 
@@ -311,6 +314,10 @@ function UsersTable({ team }: { team: TeamDto }) {
       data: { member_ids: ids },
     });
   };
+
+  if (profileLoading) {
+    return <Skeleton className="my-4 h-12 w-full" />;
+  }
 
   return (
     <div className="w-full">
@@ -397,7 +404,7 @@ function UsersTable({ team }: { team: TeamDto }) {
                 ) : (
                   <>
                     <UserX />
-                    <span>Исключить выделенных участников</span>
+                    {!isMobile && <span>Исключить выделенных участников</span>}
                   </>
                 )}
               </Button>

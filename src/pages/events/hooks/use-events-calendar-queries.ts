@@ -1,14 +1,18 @@
 import {
   type EventDto,
   getEventsQueryKey,
+  useCreateEvents,
   useDeleteEvent,
   useGetEvents,
   useUpdateEvent,
 } from "@/shared/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 const useEventsCalendarQueries = ({ period }: { period: string[] }) => {
+  const { isMobile } = useIsMobile();
+
   const queryClient = useQueryClient();
 
   const { data: events } = useGetEvents({
@@ -18,15 +22,48 @@ const useEventsCalendarQueries = ({ period }: { period: string[] }) => {
     },
   });
 
+  const { mutateAsync: createEvents, isPending: createEventsPending } =
+    useCreateEvents({
+      mutation: {
+        onSettled: async (newEvents) => {
+          await queryClient.cancelQueries({
+            queryKey: getEventsQueryKey({
+              start_period: period[0],
+              end_period: period[1],
+            }),
+          });
+
+          const previousEvents = queryClient.getQueryData<EventDto[]>(
+            getEventsQueryKey({
+              start_period: period[0],
+              end_period: period[1],
+            }),
+          );
+
+          queryClient.setQueryData(
+            getEventsQueryKey({
+              start_period: period[0],
+              end_period: period[1],
+            }),
+            [...(previousEvents || []), ...(newEvents || [])],
+          );
+
+          return { previousEvents };
+        },
+      },
+    });
+
   const { mutate: updateEvent } = useUpdateEvent({
     mutation: {
       onMutate: async (updated) => {
-        await queryClient.invalidateQueries({
-          queryKey: getEventsQueryKey({
-            start_period: format(new Date(), "yyyy-MM-dd"),
-            end_period: format(addDays(new Date(), 1), "yyyy-MM-dd"),
-          }),
-        });
+        if (!isMobile) {
+          await queryClient.invalidateQueries({
+            queryKey: getEventsQueryKey({
+              start_period: format(new Date(), "yyyy-MM-dd"),
+              end_period: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+            }),
+          });
+        }
 
         await queryClient.cancelQueries({
           queryKey: getEventsQueryKey({
@@ -104,7 +141,13 @@ const useEventsCalendarQueries = ({ period }: { period: string[] }) => {
     },
   });
 
-  return { events, updateEvent, deleteEvent };
+  return {
+    events,
+    createEvents,
+    createEventsPending,
+    updateEvent,
+    deleteEvent,
+  };
 };
 
 export { useEventsCalendarQueries };

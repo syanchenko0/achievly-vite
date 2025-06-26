@@ -6,13 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog";
-import {
-  type EventDto,
-  getEventsQueryKey,
-  type TaskDto,
-  useCreateEvents,
-  useGetTasks,
-} from "@/shared/api";
+import { type TaskDto, useGetTasks } from "@/shared/api";
 import {
   endOfWeek,
   format,
@@ -23,11 +17,11 @@ import {
 } from "date-fns";
 import { Button } from "@/shared/ui/button";
 import { useSearchParams } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { ru } from "date-fns/locale";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { useState } from "react";
+import { useEventCreateQuery } from "@/features/events/hooks/use-event-create-queries";
 
 function EventCreateFromTasksDialog({
   open,
@@ -63,41 +57,7 @@ function Content({
       format(endOfWeek(new Date(), { weekStartsOn: 1 }), "yyyy-MM-dd"),
   ];
 
-  const queryClient = useQueryClient();
-
-  const { mutate: createEvents, isPending: createEventsPending } =
-    useCreateEvents({
-      mutation: {
-        onSettled: async (newEvents) => {
-          await queryClient.cancelQueries({
-            queryKey: getEventsQueryKey({
-              start_period: period[0],
-              end_period: period[1],
-            }),
-          });
-
-          const previousEvents = queryClient.getQueryData<EventDto[]>(
-            getEventsQueryKey({
-              start_period: period[0],
-              end_period: period[1],
-            }),
-          );
-
-          queryClient.setQueryData(
-            getEventsQueryKey({
-              start_period: period[0],
-              end_period: period[1],
-            }),
-            [...(previousEvents || []), ...(newEvents || [])],
-          );
-
-          onOpenChange(false);
-          setSelectedTasks([]);
-
-          return { previousEvents };
-        },
-      },
-    });
+  const { createEvents, createEventsPending } = useEventCreateQuery({ period });
 
   const { data: tasks, isLoading: tasksLoading } = useGetTasks(
     {
@@ -113,8 +73,8 @@ function Content({
     end_timestamp: getTime(setMinutes(setHours(period[0], 9), 30)),
   };
 
-  const handleCreateEvents = () => {
-    createEvents({
+  const handleCreateEvents = async () => {
+    await createEvents({
       data: {
         events: selectedTasks.map((task) => ({
           title: task.title,
@@ -122,6 +82,8 @@ function Content({
         })),
       },
     });
+
+    onOpenChange(false);
   };
 
   const handleSelectTask = (task: TaskDto) => {
