@@ -8,6 +8,7 @@ const ROUTES = {
   team_join: "/teams/:team_id/join",
   team_settings: "/teams/:team_id/settings",
   project: "/projects/:project_id",
+  budget_accounting: "/budget/accounting",
 };
 
 const ROUTE_LABELS = {
@@ -19,6 +20,7 @@ const ROUTE_LABELS = {
   [ROUTES.team_join]: "Присоединиться к команде",
   [ROUTES.team_settings]: "Настройки команды",
   [ROUTES.project]: "Страница проекта",
+  [ROUTES.budget_accounting]: "Учёт бюджета",
 };
 
 export { ROUTES, ROUTE_LABELS };

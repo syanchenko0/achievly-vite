@@ -1,5 +1,5 @@
 import { Link, matchPath, useLocation } from "react-router";
-import { CalendarRange, ChevronRight, Goal } from "lucide-react";
+import { CalendarRange, ChevronRight, Goal, Wallet } from "lucide-react";
 import { ROUTES } from "@/shared/constants/router";
 import {
   SidebarGroup,
@@ -40,6 +40,11 @@ function PersonalGroup() {
       title: "Календарь",
       icon: CalendarRange,
       link: ROUTES.events_calendar,
+    },
+    {
+      title: "Бюджет",
+      icon: Wallet,
+      items: [{ label: "Учёт", link: ROUTES.budget_accounting }],
     },
   ];
 

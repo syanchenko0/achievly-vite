@@ -4,12 +4,16 @@ export type { CreateEventsMutationKey } from "./hooks/events/useCreateEvents";
 export type { DeleteEventMutationKey } from "./hooks/events/useDeleteEvent";
 export type { GetEventsQueryKey } from "./hooks/events/useGetEvents";
 export type { UpdateEventMutationKey } from "./hooks/events/useUpdateEvent";
+export type { CreateBudgetAccountingMutationKey } from "./hooks/goals/useCreateBudgetAccounting";
 export type { CreateGoalMutationKey } from "./hooks/goals/useCreateGoal";
+export type { DeleteBudgetAccountingMutationKey } from "./hooks/goals/useDeleteBudgetAccounting";
 export type { DeleteGoalMutationKey } from "./hooks/goals/useDeleteGoal";
 export type { DeleteTaskMutationKey } from "./hooks/goals/useDeleteTask";
+export type { GetBudgetAccountingQueryKey } from "./hooks/goals/useGetBudgetAccounting";
 export type { GetGoalsQueryKey } from "./hooks/goals/useGetGoals";
 export type { GetGoalsGeneralInfoQueryKey } from "./hooks/goals/useGetGoalsGeneralInfo";
 export type { GetTasksQueryKey } from "./hooks/goals/useGetTasks";
+export type { UpdateBudgetAccountingMutationKey } from "./hooks/goals/useUpdateBudgetAccounting";
 export type { UpdateGoalMutationKey } from "./hooks/goals/useUpdateGoal";
 export type { UpdateGoalListOrderMutationKey } from "./hooks/goals/useUpdateGoalListOrder";
 export type { UpdateTaskMutationKey } from "./hooks/goals/useUpdateTask";
@@ -54,6 +58,11 @@ export type {
   LogoutMutation,
 } from "./models/auth/Logout";
 export type { BadRequest } from "./models/BadRequest";
+export type { BudgetAccountingCreateBodySchema } from "./models/BudgetAccountingCreateBodySchema";
+export type { BudgetAccountingDataSchema } from "./models/BudgetAccountingDataSchema";
+export type { BudgetAccountingMetaSchema } from "./models/BudgetAccountingMetaSchema";
+export type { BudgetAccountingResponseSchema } from "./models/BudgetAccountingResponseSchema";
+export type { BudgetAccountingSchema } from "./models/BudgetAccountingSchema";
 export type { CreateEventBody } from "./models/CreateEventBody";
 export type { CreateEventsBody } from "./models/CreateEventsBody";
 export type { CreateGoalBody } from "./models/CreateGoalBody";
@@ -97,12 +106,26 @@ export type { GeneralInfoProjectDto } from "./models/GeneralInfoProjectDto";
 export type { GoalBodyTask } from "./models/GoalBodyTask";
 export type { GoalDto } from "./models/GoalDto";
 export type {
+  CreateBudgetAccounting200,
+  CreateBudgetAccounting404,
+  CreateBudgetAccountingMutationRequest,
+  CreateBudgetAccountingMutationResponse,
+  CreateBudgetAccountingMutation,
+} from "./models/goals/CreateBudgetAccounting";
+export type {
   CreateGoal200,
   CreateGoal400,
   CreateGoalMutationRequest,
   CreateGoalMutationResponse,
   CreateGoalMutation,
 } from "./models/goals/CreateGoal";
+export type {
+  DeleteBudgetAccountingPathParams,
+  DeleteBudgetAccounting200,
+  DeleteBudgetAccounting404,
+  DeleteBudgetAccountingMutationResponse,
+  DeleteBudgetAccountingMutation,
+} from "./models/goals/DeleteBudgetAccounting";
 export type {
   DeleteGoalPathParams,
   DeleteGoal200,
@@ -117,6 +140,13 @@ export type {
   DeleteTaskMutationResponse,
   DeleteTaskMutation,
 } from "./models/goals/DeleteTask";
+export type {
+  GetBudgetAccountingQueryParams,
+  GetBudgetAccounting200,
+  GetBudgetAccounting404,
+  GetBudgetAccountingQueryResponse,
+  GetBudgetAccountingQuery,
+} from "./models/goals/GetBudgetAccounting";
 export type {
   GetGoalsQueryParams,
   GetGoals200,
@@ -137,6 +167,13 @@ export type {
   GetTasksQueryResponse,
   GetTasksQuery,
 } from "./models/goals/GetTasks";
+export type {
+  UpdateBudgetAccounting200,
+  UpdateBudgetAccounting404,
+  UpdateBudgetAccountingMutationRequest,
+  UpdateBudgetAccountingMutationResponse,
+  UpdateBudgetAccountingMutation,
+} from "./models/goals/UpdateBudgetAccounting";
 export type {
   UpdateGoalPathParams,
   UpdateGoal200,
@@ -415,10 +452,20 @@ export {
   useUpdateEvent,
 } from "./hooks/events/useUpdateEvent";
 export {
+  createBudgetAccountingMutationKey,
+  createBudgetAccounting,
+  useCreateBudgetAccounting,
+} from "./hooks/goals/useCreateBudgetAccounting";
+export {
   createGoalMutationKey,
   createGoal,
   useCreateGoal,
 } from "./hooks/goals/useCreateGoal";
+export {
+  deleteBudgetAccountingMutationKey,
+  deleteBudgetAccounting,
+  useDeleteBudgetAccounting,
+} from "./hooks/goals/useDeleteBudgetAccounting";
 export {
   deleteGoalMutationKey,
   deleteGoal,
@@ -429,6 +476,12 @@ export {
   deleteTask,
   useDeleteTask,
 } from "./hooks/goals/useDeleteTask";
+export {
+  getBudgetAccountingQueryKey,
+  getBudgetAccounting,
+  getBudgetAccountingQueryOptions,
+  useGetBudgetAccounting,
+} from "./hooks/goals/useGetBudgetAccounting";
 export {
   getGoalsQueryKey,
   getGoals,
@@ -447,6 +500,11 @@ export {
   getTasksQueryOptions,
   useGetTasks,
 } from "./hooks/goals/useGetTasks";
+export {
+  updateBudgetAccountingMutationKey,
+  updateBudgetAccounting,
+  useUpdateBudgetAccounting,
+} from "./hooks/goals/useUpdateBudgetAccounting";
 export {
   updateGoalMutationKey,
   updateGoal,

@@ -51,6 +51,11 @@ const ProjectPage = lazy(() =>
     default: module.Project,
   })),
 );
+const BudgetAccountingPage = lazy(() =>
+  import("@/pages/budget").then((module) => ({
+    default: module.BudgetAccounting,
+  })),
+);
 
 const router = createBrowserRouter([
   {
@@ -141,6 +146,16 @@ const router = createBrowserRouter([
           <Suspense fallback={<PageLoader />}>
             <RequireAuth>
               <ProjectPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.budget_accounting,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <BudgetAccountingPage />
             </RequireAuth>
           </Suspense>
         ),

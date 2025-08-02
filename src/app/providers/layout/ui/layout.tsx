@@ -113,7 +113,7 @@ function Layout() {
               </DropdownMenu>
             )}
           </header>
-          <div className="flex-1 overflow-y-auto pr-1">
+          <div className="relative flex-1 overflow-y-auto pr-1">
             <Outlet />
           </div>
         </SidebarInset>
