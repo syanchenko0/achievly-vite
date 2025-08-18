@@ -68,7 +68,7 @@ function ActualTabContent() {
             variant="income"
           />
 
-          <div className="size-full max-h-full min-h-0 flex-1 p-4 pt-0 pr-1">
+          <div className="size-full max-h-full min-h-0 flex-1 p-4 pr-1">
             <div className="flex size-full flex-col gap-y-4">
               <BudgetAccountingItems
                 data={(budgetAccounting?.data?.income ?? []).filter(
@@ -96,7 +96,7 @@ function ActualTabContent() {
             variant="expense"
           />
 
-          <div className="size-full max-h-full min-h-0 flex-1 p-4 pt-0 pr-1">
+          <div className="size-full max-h-full min-h-0 flex-1 p-4 pr-1">
             <div className="flex size-full flex-col gap-y-4">
               <BudgetAccountingItems
                 data={(budgetAccounting?.data?.expense ?? []).filter(

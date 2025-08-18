@@ -25,7 +25,7 @@ function BudgetAccountingItems({
   if (!data?.length) {
     return (
       <div className="size-full min-h-0 flex-1">
-        <div className="mt-4 mr-3 block">
+        <div className="mr-3 block">
           <Alert>
             <AlertTitle>Отсутствуют записи</AlertTitle>
             <AlertDescription>

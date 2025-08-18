@@ -58,7 +58,7 @@ function PlannedTabContent() {
       <div className="flex size-full max-h-full min-h-0 flex-col gap-y-4">
         <div className="flex size-full max-h-full min-h-0 gap-x-4">
           <div className="flex size-full flex-col rounded-md border">
-            <div className="size-full max-h-full min-h-0 flex-1 p-4 pt-0 pr-1">
+            <div className="size-full max-h-full min-h-0 flex-1 p-4 pr-1">
               <div className="flex size-full flex-col gap-y-4">
                 <BudgetAccountingItems
                   data={(budgetAccounting?.data?.income ?? []).filter(
@@ -76,7 +76,7 @@ function PlannedTabContent() {
           </div>
 
           <div className="flex size-full flex-col rounded-md border">
-            <div className="size-full max-h-full min-h-0 flex-1 p-4 pt-0 pr-1">
+            <div className="size-full max-h-full min-h-0 flex-1 p-4 pr-1">
               <div className="flex size-full flex-col gap-y-4">
                 <BudgetAccountingItems
                   data={(budgetAccounting?.data?.expense ?? []).filter(
