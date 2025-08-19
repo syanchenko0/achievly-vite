@@ -12,11 +12,7 @@ import {
   PROJECT_TASK_GROUP_BY_LABELS,
 } from "@/shared/constants/projects";
 
-function GroupByDropdown({
-  callback,
-}: {
-  callback: (groupBy: string) => void;
-}) {
+function GroupByDropdown() {
   const groupBy = useProjectStore((store) => store.groupBy);
   const setGroupBy = useProjectStore((store) => store.setGroupBy);
 
@@ -39,7 +35,6 @@ function GroupByDropdown({
             key={value}
             onClick={() => {
               setGroupBy(value);
-              callback(value);
             }}
           >
             {PROJECT_TASK_GROUP_BY_LABELS[value]}

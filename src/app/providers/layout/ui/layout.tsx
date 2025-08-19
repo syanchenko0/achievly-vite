@@ -30,6 +30,7 @@ import { PersonalGroup } from "@/app/providers/layout/ui/personal-group";
 import { UserDropdown } from "@/app/providers/layout/ui/user-dropdown";
 import { HomeItem } from "@/app/providers/layout/ui/home-item";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { ProjectParentTaskCreateDialog } from "@/features/projects";
 
 function Layout() {
   const [openCreateGoalSheet, setOpenCreateGoalSheet] =
@@ -38,6 +39,10 @@ function Layout() {
     useState<boolean>(false);
   const [openCreateEventFromTasksDialog, setOpenCreateEventFromTasksDialog] =
     useState<boolean>(false);
+  const [
+    openCreateProjectParentTaskSheet,
+    setOpenCreateProjectParentTaskSheet,
+  ] = useState<boolean>(false);
 
   const { pathname } = useLocation();
 
@@ -53,6 +58,8 @@ function Layout() {
     route === ROUTES.goals_statistics;
 
   const isEvents = route === ROUTES.events_calendar;
+
+  const isProjectParentTasks = route === ROUTES.project_parent_tasks;
 
   return (
     <RequireAuth>
@@ -112,6 +119,13 @@ function Layout() {
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
+
+            {isProjectParentTasks && (
+              <Button onClick={() => setOpenCreateProjectParentTaskSheet(true)}>
+                <Plus />
+                Создать родительскую задачу
+              </Button>
+            )}
           </header>
           <div className="relative flex-1 overflow-y-auto pr-1">
             <Outlet />
@@ -131,6 +145,11 @@ function Layout() {
         <EventCreateFromTasksDialog
           open={openCreateEventFromTasksDialog}
           onOpenChange={setOpenCreateEventFromTasksDialog}
+        />
+
+        <ProjectParentTaskCreateDialog
+          open={openCreateProjectParentTaskSheet}
+          onOpenChange={setOpenCreateProjectParentTaskSheet}
         />
       </SidebarProvider>
     </RequireAuth>

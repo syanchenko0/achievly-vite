@@ -17,6 +17,7 @@ import {
   DescriptionField,
   ExecutorField,
   NameField,
+  ParentTaskField,
   PriorityField,
 } from "@/shared/ui/projects-fields";
 import { useParams } from "react-router";
@@ -62,7 +63,11 @@ function ProjectTaskEditSheetContent({
   const { project_id } = useParams<{ project_id: string }>();
 
   const form = useForm<UpdateProjectTaskBody>({
-    defaultValues: { ...task, executor_member_id: task?.executor?.id },
+    defaultValues: {
+      ...task,
+      executor_member_id: task?.executor?.id,
+      parent_task_id: task?.parent_task?.id,
+    },
     resolver: zodResolver(updateProjectTaskBodySchema),
     mode: "onBlur",
     reValidateMode: "onBlur",
@@ -138,6 +143,11 @@ function ProjectTaskEditSheetContent({
             label="Исполнитель"
             className="w-full"
             disabled={!project?.user_project_rights?.update}
+          />
+          <ParentTaskField
+            control={form.control}
+            label="Родительская задача"
+            className="w-full"
           />
           <DeadlineDateField
             control={form.control}

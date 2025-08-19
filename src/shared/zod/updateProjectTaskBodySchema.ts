@@ -33,6 +33,11 @@ export const updateProjectTaskBodySchema = z.object({
     .describe("ID исполнителя задачи")
     .nullable()
     .nullish(),
+  parent_task_id: z
+    .number()
+    .describe("ID родительской задачи")
+    .nullable()
+    .nullish(),
   deadline_date: z
     .string(ZOD_ERROR)
     .describe("Дедлайн задачи")

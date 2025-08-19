@@ -1,0 +1,68 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/shared/ui/alert-dialog";
+
+function DeleteColumnAlertDialog({
+  open,
+  is_removable,
+  has_rights,
+  onConfirm,
+  onOpenChange,
+}: {
+  open: boolean;
+  is_removable: boolean;
+  has_rights: boolean;
+  onConfirm: () => void;
+  onOpenChange: (value: boolean) => void;
+}) {
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            {is_removable && has_rights
+              ? "Подтвердите действие"
+              : "Недостаточно прав"}
+          </AlertDialogTitle>
+          <AlertDialogDescription className="flex flex-col">
+            {!has_rights && (
+              <span>
+                У вас нет прав на удаление данных в проекте.
+                <br />
+                Запросите доступ у создателя проекта
+              </span>
+            )}
+            {!is_removable && has_rights && (
+              <span>
+                Данный столбец нельзя удалить из-за его настроек. <br />
+                Вы можете изменить настройки столбца, если у вас есть права на
+                редактирование. <br />В ином случае, обратитесь к создателю
+                проекта
+              </span>
+            )}
+            {is_removable && has_rights && (
+              <span>Вы уверены, что хотите удалить столбец?</span>
+            )}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Закрыть</AlertDialogCancel>
+          {is_removable && has_rights && (
+            <AlertDialogAction onClick={onConfirm}>
+              Подтвердить
+            </AlertDialogAction>
+          )}
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+export { DeleteColumnAlertDialog };

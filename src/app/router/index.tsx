@@ -56,6 +56,11 @@ const BudgetAccountingPage = lazy(() =>
     default: module.BudgetAccounting,
   })),
 );
+const ParentTasksPage = lazy(() =>
+  import("@/pages/projects").then((module) => ({
+    default: module.ParentTasks,
+  })),
+);
 
 const router = createBrowserRouter([
   {
@@ -146,6 +151,16 @@ const router = createBrowserRouter([
           <Suspense fallback={<PageLoader />}>
             <RequireAuth>
               <ProjectPage />
+            </RequireAuth>
+          </Suspense>
+        ),
+      },
+      {
+        path: ROUTES.project_parent_tasks,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RequireAuth>
+              <ParentTasksPage />
             </RequireAuth>
           </Suspense>
         ),

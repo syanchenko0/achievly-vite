@@ -391,13 +391,13 @@ function ParentTaskField<T extends FieldValues, K extends Path<T>>({
   return (
     <FormField
       control={control}
-      name={"parent_task" as UseControllerProps<T, K>["name"]}
+      name={"parent_task_id" as UseControllerProps<T, K>["name"]}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <Select
             onValueChange={(value) => field.onChange(Number(value))}
-            defaultValue={field.value}
+            defaultValue={String(field.value)}
           >
             <FormControl>
               <SelectTrigger disabled={disabled} className={className}>

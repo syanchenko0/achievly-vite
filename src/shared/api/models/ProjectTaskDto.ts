@@ -5,6 +5,7 @@
 
 import type { MemberDto } from "./MemberDto";
 import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectParentTaskDto } from "./ProjectParentTaskDto";
 
 export type ProjectTaskDto = {
   /**
@@ -49,4 +50,8 @@ export type ProjectTaskDto = {
    * @type string
    */
   done_date?: string | null;
+  /**
+   * @description Родительская задача
+   */
+  parent_task?: ProjectParentTaskDto | null;
 };
