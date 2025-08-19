@@ -7,7 +7,7 @@ import {
 import { Skeleton } from "@/shared/ui/skeleton";
 import { DragDropProvider } from "@dnd-kit/react";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { AlertCircle, Plus, Trash2 } from "lucide-react";
+import { AlertCircle, FilePlus2, Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { move } from "@dnd-kit/helpers";
 import { format } from "date-fns";
@@ -24,6 +24,7 @@ import { ForbiddenCreateAlertDialog } from "@/pages/projects/ui/forbidden-create
 import { ProjectDeleteAlertDialog } from "@/pages/projects/ui/project-delete-alert-dialog";
 import { ForbiddenDeleteAlertDialog } from "@/pages/projects/ui/forbidden-delete-alert-dialog";
 import { useQueryClient } from "@tanstack/react-query";
+
 import { socket } from "@/app/lib/socket";
 
 function Project() {
@@ -258,23 +259,40 @@ function Project() {
           <div className="flex max-h-full min-h-0 flex-col gap-y-4">
             <div className="flex items-center justify-between rounded-md border p-4">
               <span className="ml-1 text-base font-bold">{project.name}</span>
-              {project?.team.user_role === "owner" && (
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => {
-                    if (!project?.user_project_rights?.delete) {
-                      setOpenForbiddenDeleteAlertDialog(true);
-                    } else {
-                      setOpenDeleteAlertDialog(true);
-                    }
-                  }}
-                >
-                  <Trash2 />
-                </Button>
-              )}
+
+              <div className="flex items-center gap-x-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="secondary">
+                      <FilePlus2 />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Добавить родительскую задачу</TooltipContent>
+                </Tooltip>
+
+                {project?.team.user_role === "owner" && (
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => {
+                      if (!project?.user_project_rights?.delete) {
+                        setOpenForbiddenDeleteAlertDialog(true);
+                      } else {
+                        setOpenDeleteAlertDialog(true);
+                      }
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                )}
+              </div>
             </div>
-            <div className="scroll flex size-full max-h-full gap-x-4 overflow-x-auto overflow-y-auto md:overflow-x-hidden">
+
+            {/*<div className="flex items-center gap-x-2">*/}
+            {/*  <GroupByDropdown />*/}
+            {/*</div>*/}
+
+            <div className="scroll flex size-full max-h-full gap-x-4 overflow-x-auto overflow-y-auto">
               {columns.map((column, columnIndex) => (
                 <ProjectSortableColumn
                   key={column.id}

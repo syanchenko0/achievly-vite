@@ -16,6 +16,7 @@ import {
   DescriptionField,
   ExecutorField,
   NameField,
+  ParentTaskField,
   PriorityField,
 } from "@/shared/ui/projects-fields";
 import { useParams } from "react-router";
@@ -87,6 +88,11 @@ function Content({
           <ExecutorField
             control={form.control}
             label="Исполнитель"
+            className="w-full"
+          />
+          <ParentTaskField
+            control={form.control}
+            label="Родительская задача"
             className="w-full"
           />
           <DeadlineDateField control={form.control} label="Дата дедлайна" />

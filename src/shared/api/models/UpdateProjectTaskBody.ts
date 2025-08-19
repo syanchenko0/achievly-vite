@@ -40,4 +40,9 @@ export type UpdateProjectTaskBody = {
    * @type string
    */
   done_date?: string | null;
+  /**
+   * @description ID родительской задачи
+   * @type number
+   */
+  parent_task_id?: number | null;
 };

@@ -74,7 +74,7 @@ function Layout() {
             <UserDropdown />
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset className="h-svh gap-y-4 p-2 pr-2 md:max-h-svh">
+        <SidebarInset className="h-svh gap-y-4 p-2 pr-2 md:max-h-svh md:max-w-full md:min-w-0">
           <header className="bg-sidebar sticky top-0 mr-1 flex h-14 items-center justify-between gap-2 rounded-md border px-4">
             <div className="flex shrink-0 items-center gap-2">
               <SidebarTrigger />

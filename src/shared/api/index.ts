@@ -21,15 +21,18 @@ export type { UpdateTaskListOrderMutationKey } from "./hooks/goals/useUpdateTask
 export type { CreateNotificationMutationKey } from "./hooks/notifications/useCreateNotification";
 export type { CreateProjectMutationKey } from "./hooks/projects/useCreateProject";
 export type { CreateProjectColumnMutationKey } from "./hooks/projects/useCreateProjectColumn";
+export type { CreateProjectParentTaskMutationKey } from "./hooks/projects/useCreateProjectParentTask";
 export type { CreateProjectTaskMutationKey } from "./hooks/projects/useCreateProjectTask";
 export type { DeleteProjectMutationKey } from "./hooks/projects/useDeleteProject";
 export type { DeleteProjectColumnMutationKey } from "./hooks/projects/useDeleteProjectColumn";
+export type { DeleteProjectParentTaskMutationKey } from "./hooks/projects/useDeleteProjectParentTask";
 export type { DeleteProjectTaskMutationKey } from "./hooks/projects/useDeleteProjectTask";
 export type { GetProjectQueryKey } from "./hooks/projects/useGetProject";
 export type { GetProjectsQueryKey } from "./hooks/projects/useGetProjects";
 export type { GetProjectsGeneralInfoQueryKey } from "./hooks/projects/useGetProjectsGeneralInfo";
 export type { UpdateProjectMutationKey } from "./hooks/projects/useUpdateProject";
 export type { UpdateProjectColumnMutationKey } from "./hooks/projects/useUpdateProjectColumn";
+export type { UpdateProjectParentTaskMutationKey } from "./hooks/projects/useUpdateProjectParentTask";
 export type { UpdateProjectTaskMutationKey } from "./hooks/projects/useUpdateProjectTask";
 export type { UpdateProjectTaskListOrderMutationKey } from "./hooks/projects/useUpdateProjectTaskListOrder";
 export type { CreateTeamMutationKey } from "./hooks/teams/useCreateTeam";
@@ -69,6 +72,7 @@ export type { CreateGoalBody } from "./models/CreateGoalBody";
 export type { CreateNotificationBody } from "./models/CreateNotificationBody";
 export type { CreateProjectBody } from "./models/CreateProjectBody";
 export type { CreateProjectColumnBody } from "./models/CreateProjectColumnBody";
+export type { CreateProjectParentTaskBody } from "./models/CreateProjectParentTaskBody";
 export type { CreateProjectTaskBody } from "./models/CreateProjectTaskBody";
 export type { CreateTeamBody } from "./models/CreateTeamBody";
 export type { DeleteTeamMembersBody } from "./models/DeleteTeamMembersBody";
@@ -217,6 +221,7 @@ export type {
 export type { ProfileDto } from "./models/ProfileDto";
 export type { ProjectColumn } from "./models/ProjectColumn";
 export type { ProjectDto } from "./models/ProjectDto";
+export type { ProjectParentTaskDto } from "./models/ProjectParentTaskDto";
 export type { ProjectRightsDto } from "./models/ProjectRightsDto";
 export type {
   CreateProjectQueryParams,
@@ -234,6 +239,14 @@ export type {
   CreateProjectColumnMutationResponse,
   CreateProjectColumnMutation,
 } from "./models/projects/CreateProjectColumn";
+export type {
+  CreateProjectParentTaskPathParams,
+  CreateProjectParentTask200,
+  CreateProjectParentTask400,
+  CreateProjectParentTaskMutationRequest,
+  CreateProjectParentTaskMutationResponse,
+  CreateProjectParentTaskMutation,
+} from "./models/projects/CreateProjectParentTask";
 export type {
   CreateProjectTaskPathParams,
   CreateProjectTask200,
@@ -256,6 +269,13 @@ export type {
   DeleteProjectColumnMutationResponse,
   DeleteProjectColumnMutation,
 } from "./models/projects/DeleteProjectColumn";
+export type {
+  DeleteProjectParentTaskPathParams,
+  DeleteProjectParentTask200,
+  DeleteProjectParentTask400,
+  DeleteProjectParentTaskMutationResponse,
+  DeleteProjectParentTaskMutation,
+} from "./models/projects/DeleteProjectParentTask";
 export type {
   DeleteProjectTaskPathParams,
   DeleteProjectTask200,
@@ -300,6 +320,14 @@ export type {
   UpdateProjectColumnMutationResponse,
   UpdateProjectColumnMutation,
 } from "./models/projects/UpdateProjectColumn";
+export type {
+  UpdateProjectParentTaskPathParams,
+  UpdateProjectParentTask200,
+  UpdateProjectParentTask400,
+  UpdateProjectParentTaskMutationRequest,
+  UpdateProjectParentTaskMutationResponse,
+  UpdateProjectParentTaskMutation,
+} from "./models/projects/UpdateProjectParentTask";
 export type {
   UpdateProjectTaskPathParams,
   UpdateProjectTask200,
@@ -404,6 +432,7 @@ export type { UpdateEventBody } from "./models/UpdateEventBody";
 export type { UpdateGoalBody } from "./models/UpdateGoalBody";
 export type { UpdateGoalListOrderBody } from "./models/UpdateGoalListOrderBody";
 export type { UpdateProjectBody } from "./models/UpdateProjectBody";
+export type { UpdateProjectParentTaskBody } from "./models/UpdateProjectParentTaskBody";
 export type { UpdateProjectTaskBody } from "./models/UpdateProjectTaskBody";
 export type { UpdateProjectTaskListOrderBody } from "./models/UpdateProjectTaskListOrderBody";
 export type { UpdateResult } from "./models/UpdateResult";
@@ -541,6 +570,11 @@ export {
   useCreateProjectColumn,
 } from "./hooks/projects/useCreateProjectColumn";
 export {
+  createProjectParentTaskMutationKey,
+  createProjectParentTask,
+  useCreateProjectParentTask,
+} from "./hooks/projects/useCreateProjectParentTask";
+export {
   createProjectTaskMutationKey,
   createProjectTask,
   useCreateProjectTask,
@@ -555,6 +589,11 @@ export {
   deleteProjectColumn,
   useDeleteProjectColumn,
 } from "./hooks/projects/useDeleteProjectColumn";
+export {
+  deleteProjectParentTaskMutationKey,
+  deleteProjectParentTask,
+  useDeleteProjectParentTask,
+} from "./hooks/projects/useDeleteProjectParentTask";
 export {
   deleteProjectTaskMutationKey,
   deleteProjectTask,
@@ -588,6 +627,11 @@ export {
   updateProjectColumn,
   useUpdateProjectColumn,
 } from "./hooks/projects/useUpdateProjectColumn";
+export {
+  updateProjectParentTaskMutationKey,
+  updateProjectParentTask,
+  useUpdateProjectParentTask,
+} from "./hooks/projects/useUpdateProjectParentTask";
 export {
   updateProjectTaskMutationKey,
   updateProjectTask,

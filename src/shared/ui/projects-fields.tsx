@@ -374,6 +374,62 @@ function DeadlineDateField<T extends FieldValues, K extends Path<T>>({
   );
 }
 
+function ParentTaskField<T extends FieldValues, K extends Path<T>>({
+  control,
+  label,
+  disabled,
+  className,
+}: FormFieldProps<T, K>) {
+  const { project_id } = useParams<{ project_id: string }>();
+
+  const { data: project } = useGetProject({ project_id: project_id as string });
+
+  if (!project) {
+    return null;
+  }
+
+  return (
+    <FormField
+      control={control}
+      name={"parent_task" as UseControllerProps<T, K>["name"]}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <Select
+            onValueChange={(value) => field.onChange(Number(value))}
+            defaultValue={field.value}
+          >
+            <FormControl>
+              <SelectTrigger disabled={disabled} className={className}>
+                <SelectValue placeholder="Выберите родительскую задачу" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {!project?.project_parent_tasks?.length && (
+                <div className="px-2 py-1">
+                  <span className="text-muted-foreground text-sm font-medium">
+                    Отсутствуют родительские задачи
+                  </span>
+                </div>
+              )}
+              {project?.project_parent_tasks?.map((parent_task) => (
+                <SelectItem key={parent_task.id} value={String(parent_task.id)}>
+                  <div className="flex items-center gap-x-2">
+                    <span className="text-sm font-medium">
+                      {parent_task.name}
+                    </span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
 export {
   NameField,
   PriorityField,
@@ -384,4 +440,5 @@ export {
   FinalStageField,
   AuthorField,
   TaskCreationAllowedField,
+  ParentTaskField,
 };

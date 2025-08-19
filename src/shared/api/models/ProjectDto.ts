@@ -4,6 +4,7 @@
  */
 
 import type { ProjectColumn } from "./ProjectColumn";
+import type { ProjectParentTaskDto } from "./ProjectParentTaskDto";
 import type { ProjectRightsDto } from "./ProjectRightsDto";
 import type { ProjectTaskDto } from "./ProjectTaskDto";
 import type { TeamDto } from "./TeamDto";
@@ -33,8 +34,13 @@ export type ProjectDto = {
    */
   user_project_rights?: ProjectRightsDto;
   /**
-   * @description Команда проекта
+   * @description Массив задач проекта
    * @type array
    */
   project_tasks?: ProjectTaskDto[] | null;
+  /**
+   * @description Массив родительских задач
+   * @type array
+   */
+  project_parent_tasks?: ProjectParentTaskDto[] | null;
 };
