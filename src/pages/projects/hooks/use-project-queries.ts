@@ -123,6 +123,20 @@ const useProjectQueries = () => {
           }),
           {
             ...previousProjectData,
+            project_parent_tasks: (
+              previousProjectData?.project_parent_tasks ?? []
+            ).map((parent_task) => {
+              if (parent_task.id === newProjectTask?.parent_task?.id) {
+                return {
+                  ...parent_task,
+                  project_tasks: [
+                    ...(parent_task.project_tasks ?? []),
+                    newProjectTask,
+                  ],
+                };
+              }
+              return parent_task;
+            }),
             project_tasks: [
               ...(previousProjectData?.project_tasks ?? []),
               newProjectTask,
@@ -470,6 +484,25 @@ const useProjectQueries = () => {
             }),
             {
               ...previousProjectData,
+              project_parent_tasks:
+                previousProjectData?.project_parent_tasks?.map(
+                  (parent_task) => {
+                    if (
+                      parent_task?.project_tasks?.some(
+                        (task) => task.id === Number(task_id),
+                      )
+                    ) {
+                      return {
+                        ...parent_task,
+                        project_tasks: parent_task?.project_tasks?.filter(
+                          (task) => task.id !== Number(task_id),
+                        ),
+                      };
+                    }
+
+                    return parent_task;
+                  },
+                ),
               project_tasks: previousProjectData?.project_tasks?.filter(
                 (task) => task.id !== Number(task_id),
               ),
