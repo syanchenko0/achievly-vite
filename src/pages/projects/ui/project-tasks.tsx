@@ -6,16 +6,19 @@ import { groupBy } from "@/app/lib/utils";
 import { ProjectSortableTask } from "@/pages/projects/ui/project-sortable-task";
 import type { ProjectColumn, ProjectTaskDto } from "@/shared/api";
 import { PROJECT_TASK_GROUP_BY } from "@/shared/constants/projects";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/shared/ui/accordion";
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { move } from "@dnd-kit/helpers";
 import { format } from "date-fns";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/shared/ui/collapsible";
+import { ChevronDownIcon, Maximize2, Minimize2 } from "lucide-react";
+import * as React from "react";
+import { Button } from "@/shared/ui/button";
 
 function ProjectTasks({
   onOpenTaskEditSheet,
@@ -24,6 +27,8 @@ function ProjectTasks({
   onOpenTaskEditSheet: (task: ProjectTaskDto) => void;
   onOpenForbiddenEditAlertDialog: () => void;
 }) {
+  const [openedGroups, setOpenedGroups] = useState<string[]>([]);
+
   const { project } = useProjectQueries();
 
   const group_by = useProjectStore((store) => store.groupBy);
@@ -61,6 +66,14 @@ function ProjectTasks({
     }
   };
 
+  const toggleOpenedGroup = (state: "open" | "close") => {
+    if (state === "open") {
+      setOpenedGroups(Object.keys(groupedByKey));
+    } else {
+      setOpenedGroups([]);
+    }
+  };
+
   if (group_by === PROJECT_TASK_GROUP_BY.NONE) {
     return (
       <GroupedByColumn
@@ -73,23 +86,59 @@ function ProjectTasks({
   }
 
   return (
-    <Accordion type="multiple">
+    <div className="flex max-h-full min-h-0 flex-1 flex-col gap-y-2">
+      <div className="flex">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() =>
+            toggleOpenedGroup(
+              openedGroups.length !== Object.keys(groupedByKey).length
+                ? "open"
+                : "close",
+            )
+          }
+        >
+          {openedGroups.length !== Object.keys(groupedByKey).length ? (
+            <Maximize2 />
+          ) : (
+            <Minimize2 />
+          )}
+          {openedGroups.length !== Object.keys(groupedByKey).length
+            ? "Развернуть все"
+            : "Свернуть все"}
+        </Button>
+      </div>
+
       {Object.entries(groupedByKey)?.map(([key, tasks]) => (
-        <AccordionItem key={key} value={key} className="max-w-none border-b-0">
-          <AccordionTrigger className="justify-baseline px-2">
-            {getGroupName(key)}
-          </AccordionTrigger>
-          <AccordionContent>
+        <Collapsible
+          open={openedGroups.includes(key)}
+          onOpenChange={() => {
+            setOpenedGroups((prev) => {
+              if (prev.includes(key)) {
+                return prev.filter((item) => item !== key);
+              } else {
+                return [...prev, key];
+              }
+            });
+          }}
+          key={key}
+        >
+          <CollapsibleTrigger className="flex flex-1 cursor-pointer items-start justify-between gap-4 rounded-md px-2 py-4 text-left text-sm font-medium transition-all outline-none disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180">
+            <span>{getGroupName(key)}</span>
+            <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
             <GroupedByColumn
               project_columns={project?.columns ?? []}
               project_tasks={tasks}
               onOpenTaskEditSheet={onOpenTaskEditSheet}
               onOpenForbiddenEditAlertDialog={onOpenForbiddenEditAlertDialog}
             />
-          </AccordionContent>
-        </AccordionItem>
+          </CollapsibleContent>
+        </Collapsible>
       ))}
-    </Accordion>
+    </div>
   );
 }
 

@@ -140,7 +140,7 @@ function Project() {
           </div>
 
           <div className="size-full max-h-full min-h-0 flex-1">
-            <div className="scroll flex min-h-full flex-col gap-y-4 md:overflow-x-auto">
+            <div className="scroll flex max-h-full min-h-full flex-col gap-y-4 overflow-y-auto md:overflow-x-auto">
               <ProjectColumns
                 onCreateColumn={() => {
                   if (!project?.user_project_rights?.create) {

@@ -1,4 +1,8 @@
-import type { FieldValues, Path, UseControllerProps } from "react-hook-form";
+import {
+  type FieldValues,
+  type Path,
+  type UseControllerProps,
+} from "react-hook-form";
 import {
   FormControl,
   FormDescription,
@@ -80,8 +84,14 @@ function PriorityField<T extends FieldValues, K extends Path<T>>({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <Select
-            onValueChange={field.onChange}
-            defaultValue={String(field.value)}
+            onValueChange={(value) => {
+              if (value !== "null") {
+                field.onChange(value);
+              } else {
+                field.onChange(null);
+              }
+            }}
+            defaultValue={field.value ? String(field.value) : undefined}
           >
             <FormControl>
               <SelectTrigger disabled={disabled} className={className}>
@@ -127,7 +137,7 @@ function ExecutorField<T extends FieldValues, K extends Path<T>>({
           <FormLabel>{label}</FormLabel>
           <Select
             onValueChange={(value) => field.onChange(Number(value))}
-            defaultValue={String(field.value)}
+            defaultValue={field.value ? String(field.value) : undefined}
           >
             <FormControl>
               <SelectTrigger disabled={disabled} className={className}>
@@ -396,8 +406,16 @@ function ParentTaskField<T extends FieldValues, K extends Path<T>>({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <Select
-            onValueChange={(value) => field.onChange(Number(value))}
-            defaultValue={String(field.value)}
+            onValueChange={(value) => {
+              if (value === "null") {
+                field.onChange(null);
+                return;
+              }
+              if (value) {
+                field.onChange(Number(value));
+              }
+            }}
+            defaultValue={field.value ? String(field.value) : undefined}
           >
             <FormControl>
               <SelectTrigger disabled={disabled} className={className}>
@@ -412,6 +430,13 @@ function ParentTaskField<T extends FieldValues, K extends Path<T>>({
                   </span>
                 </div>
               )}
+              <SelectItem value={String(null)}>
+                <div className="flex items-center gap-x-2">
+                  <span className="text-sm font-medium">
+                    Без родительской задачи
+                  </span>
+                </div>
+              </SelectItem>
               {project?.project_parent_tasks?.map((parent_task) => (
                 <SelectItem key={parent_task.id} value={String(parent_task.id)}>
                   <div className="flex items-center gap-x-2">

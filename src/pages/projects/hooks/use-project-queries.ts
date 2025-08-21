@@ -206,7 +206,7 @@ const useProjectQueries = () => {
     isPending: updateProjectTaskPending,
   } = useUpdateProjectTask({
     mutation: {
-      onSettled: async () => {
+      onMutate: async (updated) => {
         if (activeTeamId !== null) {
           await queryClient.invalidateQueries({
             queryKey: getProjectsGeneralInfoQueryKey({
@@ -215,11 +215,73 @@ const useProjectQueries = () => {
           });
         }
 
-        await queryClient.invalidateQueries({
+        await queryClient.cancelQueries({
           queryKey: getProjectQueryKey({
             project_id: project_id as string,
           }),
         });
+
+        const previousProjectData = queryClient.getQueryData<ProjectDto>(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+        );
+
+        const previousParentTask = previousProjectData?.project_tasks?.find(
+          (task) => task.id === updated.task_id,
+        )?.parent_task;
+
+        const parentTask = previousProjectData?.project_parent_tasks?.find(
+          (parent_task) => parent_task.id === updated.data?.parent_task_id,
+        );
+
+        const isDeleteParentTask =
+          typeof previousParentTask?.id === "number" &&
+          !updated.data?.parent_task_id;
+
+        const newProjectTasks = (previousProjectData?.project_tasks ?? []).map(
+          (task) => {
+            if (task.id === updated.task_id) {
+              return {
+                ...task,
+                ...updated.data,
+                executor:
+                  updated.data?.executor_member_id !== undefined
+                    ? previousProjectData?.team?.members?.find(
+                        (member) =>
+                          member.id === updated.data?.executor_member_id,
+                      )
+                    : task.executor,
+                parent_task: isDeleteParentTask
+                  ? null
+                  : (parentTask ?? task.parent_task),
+              };
+            }
+            return task;
+          },
+        );
+
+        queryClient.setQueryData(
+          getProjectQueryKey({
+            project_id: project_id as string,
+          }),
+          {
+            ...previousProjectData,
+            project_parent_tasks: (
+              previousProjectData?.project_parent_tasks ?? []
+            ).map((parent_task) => {
+              return {
+                ...parent_task,
+                project_tasks: newProjectTasks?.filter(
+                  (task) => task.parent_task?.id === parent_task.id,
+                ),
+              };
+            }),
+            project_tasks: newProjectTasks,
+          },
+        );
+
+        return { previousProjectData };
       },
       onSuccess: () => {
         const projectData = queryClient.getQueryData<ProjectDto>(

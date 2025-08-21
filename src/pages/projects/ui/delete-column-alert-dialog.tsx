@@ -13,12 +13,14 @@ function DeleteColumnAlertDialog({
   open,
   is_removable,
   has_rights,
+  has_tasks,
   onConfirm,
   onOpenChange,
 }: {
   open: boolean;
   is_removable: boolean;
   has_rights: boolean;
+  has_tasks: boolean;
   onConfirm: () => void;
   onOpenChange: (value: boolean) => void;
 }) {
@@ -27,12 +29,18 @@ function DeleteColumnAlertDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {is_removable && has_rights
-              ? "Подтвердите действие"
-              : "Недостаточно прав"}
+            {is_removable && has_rights && has_tasks && "Невозможно удалить"}
+            {is_removable && has_rights && !has_tasks && "Подтвердите действие"}
+            {is_removable && !has_rights && !has_tasks && "Недостаточно прав"}
           </AlertDialogTitle>
           <AlertDialogDescription className="flex flex-col">
-            {!has_rights && (
+            {has_rights && has_tasks && is_removable && (
+              <span>
+                Столбец с задачами нельзя удалить. <br /> Перенесите задачи в
+                другой столбец, чтобы удалить текущий столбец
+              </span>
+            )}
+            {!has_rights && !has_tasks && (
               <span>
                 У вас нет прав на удаление данных в проекте.
                 <br />
@@ -47,14 +55,14 @@ function DeleteColumnAlertDialog({
                 проекта
               </span>
             )}
-            {is_removable && has_rights && (
+            {is_removable && has_rights && !has_tasks && (
               <span>Вы уверены, что хотите удалить столбец?</span>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Закрыть</AlertDialogCancel>
-          {is_removable && has_rights && (
+          {is_removable && has_rights && !has_tasks && (
             <AlertDialogAction onClick={onConfirm}>
               Подтвердить
             </AlertDialogAction>

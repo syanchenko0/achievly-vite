@@ -127,13 +127,18 @@ function ProjectSortableColumn({
 
       <DeleteColumnAlertDialog
         open={openDeleteAlertDialog}
-        is_removable={!!column.is_removable}
+        has_tasks={
+          project?.project_tasks?.some(
+            (task) => task?.column?.id === column?.id,
+          ) ?? false
+        }
+        is_removable={!!column?.is_removable}
         has_rights={!!project?.user_project_rights?.delete}
         onConfirm={() => {
           if (project)
             deleteProjectColumn({
               project_id: project.id,
-              column_id: column.id,
+              column_id: column?.id,
             });
         }}
         onOpenChange={setOpenDeleteAlertDialog}
