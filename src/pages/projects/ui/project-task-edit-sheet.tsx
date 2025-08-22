@@ -87,6 +87,7 @@ function ProjectTaskEditSheetContent({
         task_id: task?.id,
         project_id: Number(project_id),
         data: {
+          ...task,
           ...data,
           priority: data.priority === "null" ? null : data.priority,
         },

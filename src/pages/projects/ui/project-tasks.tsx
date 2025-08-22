@@ -246,6 +246,7 @@ function GroupedByColumn({
                 project_id: Number(project_id),
                 task_id: task.id,
                 data: {
+                  ...task,
                   column,
                   done_date: column.is_final_stage
                     ? format(new Date(), "yyyy-MM-dd")
