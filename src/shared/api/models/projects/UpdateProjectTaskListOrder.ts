@@ -4,8 +4,8 @@
  */
 
 import type { BadRequest } from "../BadRequest";
+import type { ProjectTaskDto } from "../ProjectTaskDto";
 import type { UpdateProjectTaskListOrderBody } from "../UpdateProjectTaskListOrderBody";
-import type { UpdateResult } from "../UpdateResult";
 
 export type UpdateProjectTaskListOrderPathParams = {
   /**
@@ -14,7 +14,7 @@ export type UpdateProjectTaskListOrderPathParams = {
   project_id: number;
 };
 
-export type UpdateProjectTaskListOrder200 = UpdateResult;
+export type UpdateProjectTaskListOrder200 = ProjectTaskDto[];
 
 export type UpdateProjectTaskListOrder400 = BadRequest;
 
