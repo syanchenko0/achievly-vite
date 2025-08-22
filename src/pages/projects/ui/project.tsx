@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import {
   getProjectQueryKey,
   type ProjectColumn,
@@ -29,8 +29,6 @@ import { replacePathParams } from "@/app/lib/utils";
 function Project() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { project_id } = useParams<{ project_id: string }>();
-
   const [openColumnCreateDialog, setOpenColumnCreateDialog] =
     useState<boolean>(false);
   const [openColumnEditDialog, setOpenColumnEditDialog] =
@@ -54,11 +52,11 @@ function Project() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket.on("project_invalidation", () => {
+    socket.on("project_invalidation", (id: string) => {
       queryClient
         .invalidateQueries({
           queryKey: getProjectQueryKey({
-            project_id: project_id as string,
+            project_id: id,
           }),
         })
         .then();

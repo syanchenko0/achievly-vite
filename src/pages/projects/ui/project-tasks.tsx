@@ -197,7 +197,7 @@ function GroupedByColumn({
 
         setGroupedByColumn((prev) => move(prev, event));
       }}
-      onDragEnd={(event) => {
+      onDragEnd={async (event) => {
         const { source } = event.operation;
 
         if (event.canceled) {
@@ -236,13 +236,8 @@ function GroupedByColumn({
               list_order: index,
             }));
 
-            updateProjectTaskListOrder({
-              project_id: Number(project_id),
-              data: list,
-            });
-
-            if (task && task.column.id !== column.id)
-              updateProjectTask({
+            if (task && task.column.id !== column.id) {
+              await updateProjectTask({
                 project_id: Number(project_id),
                 task_id: task.id,
                 data: {
@@ -254,6 +249,12 @@ function GroupedByColumn({
                     : null,
                 },
               });
+            }
+
+            updateProjectTaskListOrder({
+              project_id: Number(project_id),
+              data: list,
+            });
           }
         }
       }}

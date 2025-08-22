@@ -63,10 +63,10 @@ function ProjectsGroup() {
   const { isMobile, setOpenMobile } = useSidebar();
 
   useEffect(() => {
-    socket.on("projects_list_invalidation", () => {
+    socket.on("projects_list_invalidation", (id: string) => {
       queryClient
         .invalidateQueries({
-          queryKey: getProjectsQueryKey({ team_id: String(activeTeamId) }),
+          queryKey: getProjectsQueryKey({ team_id: id }),
         })
         .then();
     });

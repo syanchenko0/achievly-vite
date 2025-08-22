@@ -93,6 +93,7 @@ const useProjectQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },
@@ -156,6 +157,7 @@ const useProjectQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },
@@ -209,6 +211,7 @@ const useProjectQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },
@@ -283,63 +286,66 @@ const useProjectQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },
   });
 
-  const { mutate: updateProjectTaskListOrder } = useUpdateProjectTaskListOrder({
-    mutation: {
-      onSettled: async (data) => {
-        if (activeTeamId !== null) {
-          await queryClient.invalidateQueries({
-            queryKey: getProjectsGeneralInfoQueryKey({
-              team_id: Number(activeTeamId),
+  const { mutateAsync: updateProjectTaskListOrder } =
+    useUpdateProjectTaskListOrder({
+      mutation: {
+        onSettled: async (data) => {
+          if (activeTeamId !== null) {
+            await queryClient.invalidateQueries({
+              queryKey: getProjectsGeneralInfoQueryKey({
+                team_id: Number(activeTeamId),
+              }),
+            });
+          }
+
+          await queryClient.cancelQueries({
+            queryKey: getProjectQueryKey({
+              project_id: project_id as string,
             }),
           });
-        }
 
-        await queryClient.cancelQueries({
-          queryKey: getProjectQueryKey({
-            project_id: project_id as string,
-          }),
-        });
+          const previousProjectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
 
-        const previousProjectData = queryClient.getQueryData<ProjectDto>(
-          getProjectQueryKey({
-            project_id: project_id as string,
-          }),
-        );
+          const otherProjectTasks = previousProjectData?.project_tasks?.filter(
+            (task) => !data?.map((d) => d.id).includes(task.id),
+          );
 
-        const otherProjectTasks = previousProjectData?.project_tasks?.filter(
-          (task) => !data?.map((d) => d.id).includes(task.id),
-        );
+          queryClient.setQueryData(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+            {
+              ...previousProjectData,
+              project_tasks: (otherProjectTasks ?? []).concat(data ?? []),
+            },
+          );
+        },
+        onSuccess: () => {
+          const projectData = queryClient.getQueryData<ProjectDto>(
+            getProjectQueryKey({
+              project_id: project_id as string,
+            }),
+          );
 
-        queryClient.setQueryData(
-          getProjectQueryKey({
-            project_id: project_id as string,
-          }),
-          {
-            ...previousProjectData,
-            project_tasks: (otherProjectTasks ?? []).concat(data ?? []),
-          },
-        );
+          socket.emit("project_invalidation", {
+            members: projectData?.team?.members?.map((member) =>
+              String(member.id),
+            ),
+            project_id,
+          });
+        },
       },
-      onSuccess: () => {
-        const projectData = queryClient.getQueryData<ProjectDto>(
-          getProjectQueryKey({
-            project_id: project_id as string,
-          }),
-        );
-
-        socket.emit("project_invalidation", {
-          members: projectData?.team?.members?.map((member) =>
-            String(member.id),
-          ),
-        });
-      },
-    },
-  });
+    });
 
   const {
     mutateAsync: updateProjectColumn,
@@ -400,6 +406,7 @@ const useProjectQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },
@@ -477,6 +484,7 @@ const useProjectQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },
@@ -533,6 +541,7 @@ const useProjectQueries = () => {
             members: projectData?.team?.members?.map((member) =>
               String(member.id),
             ),
+            project_id,
           });
         },
       },
@@ -598,12 +607,14 @@ const useProjectQueries = () => {
             members: projectData?.team?.members?.map((member) =>
               String(member.id),
             ),
+            project_id,
           });
 
           socket.emit("projects_list_invalidation", {
             members: projectData?.team?.members?.map((member) =>
               String(member.id),
             ),
+            team_id: String(projectData?.team?.id),
           });
         },
       },

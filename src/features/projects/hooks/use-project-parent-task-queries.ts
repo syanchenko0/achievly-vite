@@ -94,6 +94,7 @@ const useProjectParentTaskQueries = () => {
           members: projectData?.team?.members?.map((member) =>
             String(member.id),
           ),
+          project_id,
         });
       },
     },

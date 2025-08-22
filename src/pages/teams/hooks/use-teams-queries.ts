@@ -50,6 +50,7 @@ const useTeamsQueries = () => {
 
           socket.emit("projects_list_invalidation", {
             members: teamData?.members?.map((member) => String(member.id)),
+            team_id: String(team_id),
           });
         },
       },
