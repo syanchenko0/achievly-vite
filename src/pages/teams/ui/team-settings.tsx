@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   AlertCircle,
   ArrowLeft,
@@ -12,6 +12,7 @@ import {
   UserX,
 } from "lucide-react";
 import {
+  getTeamsQueryKey,
   type TeamDto,
   useDeleteTeam as useDeleteTeamQuery,
   useDeleteTeamMembers,
@@ -66,6 +67,8 @@ import {
 } from "@/shared/ui/alert-dialog";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { ROUTES } from "@/shared/constants/router";
+import { useQueryClient } from "@tanstack/react-query";
 
 function TeamSettings() {
   const { team_id } = useParams<{ team_id: string }>();
@@ -148,7 +151,19 @@ function TeamControls({
 }) {
   const [alertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
 
-  const { mutateAsync: deleteTeam } = useDeleteTeamQuery();
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteTeam } = useDeleteTeamQuery({
+    mutation: {
+      onSuccess: () => {
+        navigate(ROUTES.home);
+        queryClient.invalidateQueries({ queryKey: getTeamsQueryKey() });
+        localStorage.removeItem("active_team_id");
+      },
+    },
+  });
 
   const { mutateAsync: leaveFromTeam } = useLeaveFromTeam();
 
