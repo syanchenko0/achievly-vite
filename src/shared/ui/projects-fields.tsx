@@ -136,7 +136,9 @@ function ExecutorField<T extends FieldValues, K extends Path<T>>({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <Select
-            onValueChange={(value) => field.onChange(Number(value))}
+            onValueChange={(value) =>
+              field.onChange(value === "null" ? null : Number(value))
+            }
             defaultValue={field.value ? String(field.value) : undefined}
           >
             <FormControl>
@@ -145,6 +147,11 @@ function ExecutorField<T extends FieldValues, K extends Path<T>>({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
+              <SelectItem value={String(null)}>
+                <div className="flex items-center gap-x-2">
+                  <span className="text-sm font-medium">Без исполнителя</span>
+                </div>
+              </SelectItem>
               {project?.team.members.map((member) => (
                 <SelectItem key={member.id} value={String(member.id)}>
                   <div className="flex items-center gap-x-2">
