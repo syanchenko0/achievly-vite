@@ -46,7 +46,7 @@ function ProjectSortableColumn({
 
   return (
     <div
-      className="flex min-w-8/12 flex-1 flex-col items-center gap-2 md:min-w-1/4"
+      className="flex min-w-8/12 flex-1 flex-col items-center gap-2 md:min-w-1/5"
       ref={ref}
     >
       <div className="flex size-full flex-col gap-y-4">
