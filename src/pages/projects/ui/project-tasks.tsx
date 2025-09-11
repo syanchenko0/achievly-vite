@@ -7,6 +7,7 @@ import { ProjectSortableTask } from "@/pages/projects/ui/project-sortable-task";
 import type { ProjectColumn, ProjectTaskDto } from "@/shared/api";
 import { PROJECT_TASK_GROUP_BY } from "@/shared/constants/projects";
 
+import * as React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { move } from "@dnd-kit/helpers";
@@ -17,7 +18,6 @@ import {
   CollapsibleTrigger,
 } from "@/shared/ui/collapsible";
 import { ChevronDownIcon, Maximize2, Minimize2 } from "lucide-react";
-import * as React from "react";
 import { Button } from "@/shared/ui/button";
 
 function ProjectTasks({
@@ -243,6 +243,7 @@ function GroupedByColumn({
                 data: {
                   ...task,
                   parent_task_id: task?.parent_task?.id,
+                  executor_member_id: task?.executor?.id,
                   column,
                   done_date: column.is_final_stage
                     ? format(new Date(), "yyyy-MM-dd")
